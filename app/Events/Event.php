@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace livepos\Events;
 
 abstract class Event
 {
