@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->integer('selling_price')->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
         });
     }
 

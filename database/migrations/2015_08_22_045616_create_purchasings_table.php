@@ -15,12 +15,14 @@ class CreatePurchasingsTable extends Migration
         Schema::create('purchasings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('transaction_no', 20);
+            $table->string('bill_no', 30);
             $table->integer('supplier_id')->unsigned();
             $table->integer('amount')->unsigned();
             $table->integer('discount')->unsigned();
             $table->integer('total_amount')->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
         });
     }
 

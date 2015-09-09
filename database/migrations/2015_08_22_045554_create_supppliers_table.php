@@ -17,6 +17,7 @@ class CreateSupppliersTable extends Migration
             $table->string('name', 50);
             $table->timestamps();
             $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
         });
     }
 

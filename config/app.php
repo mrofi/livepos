@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -143,6 +143,8 @@ return [
         livepos\Providers\AppServiceProvider::class,
         livepos\Providers\EventServiceProvider::class,
         livepos\Providers\RouteServiceProvider::class,
+        livepos\Providers\AuthServiceProvider::class,
+        livepos\Providers\HelperServiceProvider::class,
 
     ],
 
@@ -191,6 +193,7 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+        'Gate'      => Illuminate\Support\Facades\Gate::class,
 
     ],
 

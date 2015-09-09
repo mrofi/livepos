@@ -19,6 +19,7 @@ class CreateCustomersTable extends Migration
             $table->string('id_type', '10');
             $table->timestamps();
             $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
         });
     }
 

@@ -11,10 +11,36 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api'], function()
+{
+    Route::resource('productCategory', 'ProductCategory'); 
+    
+    Route::resource('productMeta', 'ProductMeta'); 
+    
+    Route::resource('product', 'Product'); 
+        
+    Route::resource('purchasing', 'Purchasing'); 
+        
+    Route::resource('purchasingDetail', 'PurchasingDetail'); 
+        
+    Route::resource('selling', 'Selling'); 
+        
+    Route::resource('sellingDetail', 'SellingDetail'); 
+        
+    Route::resource('supplier', 'Supplier');
+    
+    Route::resource('customer', 'Customer');
+        
+    Route::resource('user', 'User'); 
 });
 
-Route::get('tes', function () {
-   return 'ok'; 
+
+Route::get('tes', function()
+{
+    DB::table('users')->insert([
+            'name' => 'Livepos Assistant',
+            'username' => 'livepos',
+            'email' => 'hiretweb+livepos@gmail.com',
+            'password' => livepos_password('admin'),
+        ]); 
 });

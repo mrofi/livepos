@@ -23,6 +23,7 @@ class CreateSellingDetailsTable extends Migration
             $table->integer('amount')->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
         });
     }
 

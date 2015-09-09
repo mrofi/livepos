@@ -16,6 +16,7 @@ class CreatePurchasingDetailsTable extends Migration
             $table->increments('id');
             $table->integer('purchasing_id')->unsigned();
             $table->integer('product_id')->unsigned();
+            $table->string('product_name', 50);
             $table->string('unit', 10);
             $table->integer('purchase_price')->unsigned();
             $table->integer('discount')->unsigned();
@@ -23,6 +24,7 @@ class CreatePurchasingDetailsTable extends Migration
             $table->integer('amount')->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
         });
     }
 

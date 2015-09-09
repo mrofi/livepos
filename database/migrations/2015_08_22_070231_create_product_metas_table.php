@@ -14,11 +14,12 @@ class CreateProductMetasTable extends Migration
     {
         Schema::create('product_metas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('product_id');
+            $table->integer('product_id')->unsigned();
             $table->string('meta_key', 255);
             $table->text('meta_value');
             $table->timestamps();
             $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
         });
     }
 

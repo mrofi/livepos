@@ -29,5 +29,6 @@ class Kernel extends HttpKernel
         'auth' => \livepos\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \livepos\Http\Middleware\RedirectIfAuthenticated::class,
+        'auth.api' => \livepos\Http\Middleware\ApiAuth::class,
     ];
 }
