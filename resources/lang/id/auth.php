@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'failed' => 'Maaf password Anda salah. Silakan cek kembali',
+    'throttle' => 'Anda sudah gagal login berkali-kali. Mohon tunggu :seconds detik untuk mengingat-ingat login Anda.',
+    'emptyCredential' => 'Maaf, :credential tidak boleh kosong',
+    'emptyPassword' => 'Maaf, password tidak boleh kosong',
 
 ];

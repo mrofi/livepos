@@ -27,28 +27,28 @@ class AdminUserSeeder extends Seeder
             'name' => 'Livepos Assistant',
             'username' => 'livepos',
             'email' => 'hiretweb+livepos@gmail.com',
-            'password' => livepos_password('su'),
+            'password' => bcrypt(livepos_password('12345')),
         ])->assignRole($roleSuper);
         
         User::create([
             'name' => 'Admin',
             'username' => 'admin',
             'email' => 'hiretweb+liveposAdmin@gmail.com',
-            'password' => livepos_password('12345'),
+            'password' => bcrypt(livepos_password('12345')),
         ])->assignRole($roleAdmin);
         
         User::create([
             'name' => 'Manager',
             'username' => 'manager',
             'email' => 'hiretweb+liveposManager@gmail.com',
-            'password' => livepos_password('12345'),
+            'password' => bcrypt(livepos_password('12345')),
         ])->assignRole($roleManager);
         
         User::create([
             'name' => 'Staff',
             'username' => 'staff',
             'email' => 'hiretweb+liveposStaff@gmail.com',
-            'password' => livepos_password('12345'),
+            'password' => bcrypt(livepos_password('12345')),
         ])->assignRole($roleStaff);
    
     }

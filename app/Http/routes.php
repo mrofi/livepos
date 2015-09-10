@@ -1,15 +1,26 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+Route::get('/', function()
+{
+    if (!config('livepos.frontend')) return redirect('dashboard');
+    
+    // frontend view        
+    return 'frontend';
+});
+
+Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function()
+{
+   Route::get('/', function()
+   {
+      return 'home'; 
+   });
+   
+   Route::get('tes', function()
+   {
+      return 'tes'; 
+   });
+ 
+});
 
 Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api'], function()
 {
@@ -34,13 +45,12 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
     Route::resource('user', 'User'); 
 });
 
+// Authentication routes...
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLoginProcess');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
-Route::get('tes', function()
-{
-    DB::table('users')->insert([
-            'name' => 'Livepos Assistant',
-            'username' => 'livepos',
-            'email' => 'hiretweb+livepos@gmail.com',
-            'password' => livepos_password('admin'),
-        ]); 
-});
+// Registration routes...
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');
+

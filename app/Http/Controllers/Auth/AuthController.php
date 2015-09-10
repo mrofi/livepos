@@ -2,8 +2,11 @@
 
 namespace livepos\Http\Controllers\Auth;
 
-use livepos\User;
+use Auth;
+use View;
 use Validator;
+use livepos\User;
+use Illuminate\Http\Request;
 use livepos\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -23,14 +26,24 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
+
+    protected $user;
+    
+    protected $username;
+    
+    protected $credentialText;
+    
     /**
      * Create a new authentication controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
+        $this->user = $user;
         $this->middleware('guest', ['except' => 'getLogout']);
+        $this->credentialText = 'username'.(config('livepos.useremail') ? ' / email' : '');
+        View::share('credentialText', $this->credentialText);
     }
 
     /**
@@ -41,11 +54,7 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+        return Validator::make($data, $this->user->get_rules(), $this->user->get_attributes());
     }
 
     /**
@@ -61,5 +70,28 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+    
+    public function postLoginProcess(Request $request)
+    {
+        $credential = $request->input('credential', '');
+        $thepassword = $request->input('thepassword', '');
+        $password = livepos_password($thepassword);
+        
+        if ($credential == '') return redirect($this->loginPath())->withInput($request->except('thepassword'))
+                        ->withErrors(['credential' => trans('auth.emptyCredential', ['credential' => $this->credentialText])]);
+                        
+        if ($thepassword == '') return redirect($this->loginPath())->withInput($request->except('thepassword'))
+                        ->withErrors(['credential' => trans('auth.emptyPassword')]);
+        
+        $validator = Validator::make($request->only('credential'), ['credential' => 'email']);
+        $this->username = $credential_type = (! $validator->fails() && config('livepos.useremail')) ? 'email' : 'username';
+        
+        $request->session()->flash('credential', $credential_type);
+        
+        $request->merge($credentials = [$credential_type => $credential, 'password' => $password]);
+        
+        // return $request->all();
+        return $this->postLogin($request);
     }
 }
