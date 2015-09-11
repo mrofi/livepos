@@ -1,25 +1,17 @@
 <?php
 
-Route::get('/', function()
+Route::get('/', ['as' => 'home', function()
 {
     if (!config('livepos.frontend')) return redirect('dashboard');
     
     // frontend view        
     return 'frontend';
-});
+}]);
 
-Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function()
+Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'Backend'], function()
 {
-   Route::get('/', function()
-   {
-      return 'home'; 
-   });
-   
-   Route::get('tes', function()
-   {
-      return 'tes'; 
-   });
- 
+    Route::controller('/', 'Dashboard');
+  
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api'], function()
@@ -46,11 +38,13 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
 });
 
 // Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLoginProcess');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+Route::controller('auth', 'Auth\AuthController');
 
-// Registration routes...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
+// Route::get('auth/login', 'Auth\AuthController@getLogin');
+// Route::post('auth/login', 'Auth\AuthController@postLoginProcess');
+// Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
+// // Registration routes...
+// Route::get('auth/register', 'Auth\AuthController@getRegister');
+// Route::post('auth/register', 'Auth\AuthController@postRegister');
 

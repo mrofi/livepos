@@ -35,7 +35,7 @@
         @if ($errors->any())
             {!! implode('', $errors->all('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-exclamation-circle"></i></strong> :message </div>')) !!}
         @endif
-        <form action="" method="post">
+        <form action="{{ livepos_asset('auth/logging') }}" method="post">
           {!! csrf_field() !!}
           <div class="form-group has-feedback">
             <input type="text" class="form-control" name="credential" placeholder="{{ ucwords($credentialText) }}" value="{{ old(session('credential', 'credential')) }}">

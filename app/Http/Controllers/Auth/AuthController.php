@@ -33,6 +33,8 @@ class AuthController extends Controller
     
     protected $credentialText;
     
+    protected $redirectTo = '/dashboard';
+    
     /**
      * Create a new authentication controller instance.
      *
@@ -72,7 +74,7 @@ class AuthController extends Controller
         ]);
     }
     
-    public function postLoginProcess(Request $request)
+    public function postLogging(Request $request)
     {
         $credential = $request->input('credential', '');
         $thepassword = $request->input('thepassword', '');
@@ -91,7 +93,6 @@ class AuthController extends Controller
         
         $request->merge($credentials = [$credential_type => $credential, 'password' => $password]);
         
-        // return $request->all();
         return $this->postLogin($request);
     }
 }

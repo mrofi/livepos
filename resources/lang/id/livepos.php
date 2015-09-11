@@ -8,4 +8,16 @@ return [
         'button' => 'Login',
     ],
     
+    'dashboard' => [
+        'name' => 'Dashboard',
+        'tagline' => 'Dashboard adalah tempat semua instrumen bisa dilihat',
+    ],
+    
+    'productCategory' => [
+        'general' => 'Umum',
+    ],
+    
+    'productBrand' => [
+        'generic' => 'Tanpa Merk',
+    ],
 ];  
