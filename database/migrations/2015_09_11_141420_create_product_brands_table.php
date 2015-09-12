@@ -15,6 +15,7 @@ class CreateProductBrandsTable extends Migration
         Schema::create('product_brands', function (Blueprint $table) {
             $table->increments('id');
             $table->string('brand', 30);
+            $table->tinyInteger('active')->default('1');
             $table->timestamps();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();

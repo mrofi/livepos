@@ -4,6 +4,7 @@ namespace livepos\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 
+use View;
 use livepos\Http\Requests;
 use livepos\Http\Controllers\BackendController;
 

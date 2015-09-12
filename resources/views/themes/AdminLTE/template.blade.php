@@ -16,11 +16,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/themes/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/themes/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="/themes/AdminLTE/dist/css/skins/_all-skins.min.css">
+    
+    <!--pace-->
+    <script src="/themes/AdminLTE/plugins/pace/pace.js"></script>
+    <link href="/themes/AdminLTE/plugins/pace/themes/pace-theme-minimal.css" rel="stylesheet" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -464,10 +470,16 @@
     <script src="/themes/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
     <script src="/themes/AdminLTE/plugins/fastclick/fastclick.min.js"></script>
+    <!-- DataTables -->
+    <script src="/themes/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/themes/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/themes/AdminLTE/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="/themes/AdminLTE/dist/js/demo.js"></script>
+    
+    <!-- Scripts -->
+    @stack('scriptJs')
 @endsection
 
 @section('bottom')

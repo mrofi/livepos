@@ -39,7 +39,7 @@ class ApiAuth
             $publicKey = $request->input('public_key', null);
             $apiKey = $request->input('api_key', null);
             $password = $request->input('password', null);
-            if ( ! $user = User::getUserByKey($publicKey, $apiKey, $password) ) return response('Unauthorized.', 401);
+            if ( ! $user = User::getUserByKey($publicKey, $apiKey, $password) ) return response(['error' => 'Unauthorized.'], 401);
             $this->auth->setUser($user);
         }
 

@@ -1,10 +1,5 @@
 @extends('master')
 
-
-
-@section('pageTitle', trans('livepos.dashboard.name'))
-@section('subTitle', trans('livepos.dashboard.tagline'))
-
 @section('contentMain')
     <!-- Main content -->
     <section class="content">

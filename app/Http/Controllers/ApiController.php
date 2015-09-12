@@ -24,7 +24,7 @@ class ApiController extends Controller
     {
         $class = new \ReflectionClass($this->model);
         $area = $class->getShortName().'.'.$method;
-        if (Gate::denies('api-authorization', $area)) return response('Unauthorized.', 401);
+        if (Gate::denies('api-authorization', $area)) return response(['error' => 'Unauthorized.'], 401);
         
         return $next();
     }

@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->tinyInteger('min_stock')->unsigned();
             $table->integer('puchase_price')->unsigned();
             $table->integer('selling_price')->unsigned();
+            $table->tinyInteger('active')->default('1');
             $table->timestamps();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();

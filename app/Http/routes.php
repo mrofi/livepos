@@ -10,6 +10,8 @@ Route::get('/', ['as' => 'home', function()
 
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'Backend'], function()
 {
+    Route::controller('product/category', 'Category');
+    
     Route::controller('/', 'Dashboard');
   
 });
