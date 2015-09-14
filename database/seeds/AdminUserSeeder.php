@@ -23,6 +23,15 @@ class AdminUserSeeder extends Seeder
         $roleManager = Role::create(['name' => 'Manager']);
         $roleStaff = Role::create(['name' => 'Staff', 'forbidden' => ['User.show']]);
         
+   
+        User::create([
+            'name' => 'Application',
+            'username' => 'abcxyz',
+            'email' => 'hiretweb+abcxyz@gmail.com',
+            'password' => bcrypt(livepos_password('12345')),
+            'badge' => 'Machine'
+        ])->assignRole($roleSuper);
+
         User::create([
             'name' => 'Livepos Assistant',
             'username' => 'livepos',
@@ -54,6 +63,5 @@ class AdminUserSeeder extends Seeder
             'password' => bcrypt(livepos_password('12345')),
             'badge' => 'Staff',
         ])->assignRole($roleStaff);
-   
     }
 }

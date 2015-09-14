@@ -10,7 +10,7 @@
               <div class="box box-solid">
                 <div class="box-header bg-gray-light">
                   <div class="box-title">
-                    <a href="#add" data-toggle="modal" data-target="#modal-add-edit" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.category.add')) }}</a>
+                    <a href="#add" data-toggle="modal" data-target="#modal-add-edit" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.supplier.add')) }}</a>
                   </div>
                   <div class="box-tools .pull-right">
                     <button class="btn bg-maroon btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
@@ -26,10 +26,13 @@
                 <!--  </div>-->
                 <!--</div>-->
                 <div class="box-footer">
-                  <table class="table table-hover" id="categories-table">
+                  <table class="table table-hover" id="supplier-table">
                       <thead>
                           <tr class="bg-navy">
-                              <th>{{ trans('livepos.category.name') }}</th>
+                              <th>{{ trans('livepos.supplier.name') }}</th>
+                              <th>{{ trans('livepos.supplier.address') }}</th>
+                              <th>{{ trans('livepos.supplier.contact1') }}</th>
+                              <th>{{ trans('livepos.supplier.contact2') }}</th>
                               <th></th>
                           </tr>
                       </thead>
@@ -47,7 +50,7 @@
         <div class="modal-content">
           <div class="modal-header bg-maroon">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title text-center">Category</h4>
+            <h4 class="modal-title text-center">supplier</h4>
           </div>
           <form class="form-horizontal" method="POST">
             <div class="modal-body">
@@ -57,9 +60,27 @@
                 <span class="message"></span>
               </div>
               <div class="form-group">
-                <label for="category" class="col-sm-3 control-label">{{ trans('livepos.category.name') }}</label>
+                <label for="supplier" class="col-sm-3 control-label">{{ trans('livepos.supplier.name') }}</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" id="category" name="category" autofocus placeholder="{{ trans('livepos.category.name') }}">
+                  <input type="text" class="form-control" id="supplier" name="supplier" autofocus placeholder="{{ trans('livepos.supplier.name') }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="address" name="address" class=col-sm-3 "control-label">{{ trans('livepos.supplier.address') }}</label>
+                <div class="col-sm-9">
+                  <textarea name="address" id="address" class="form-control" placeholder="{{ trans('livepos.supplier.address') }}"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contact1" name="contact1" class="col-sm-3 control-label">{{ trans('livepos.supplier.contact1') }}</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="contact1" name="contact1" autofocus placeholder="{{ trans('livepos.supplier.contact1') }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contact2" name="contact2" class="col-sm-3 control-label">{{ trans('livepos.supplier.contact2') }}</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="contact2" name="contact2" autofocus placeholder="{{ trans('livepos.supplier.contact2') }}">
                 </div>
               </div>
             </div>
@@ -79,7 +100,7 @@
         <div class="modal-content">
           <div class="modal-header bg-maroon">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title text-center">{{ trans('livepos.category.delete') }}</h4>
+            <h4 class="modal-title text-center">{{ trans('livepos.supplier.delete') }}</h4>
           </div>
           <form class="form-horizontal" method="POST">
             <div class="modal-body">
@@ -88,7 +109,7 @@
                 <h4><i class="icon fa fa-warning"></i> Alert!</h4>
                 <span class="message"></span>
               </div>
-              <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.category.name') }} <span id="category"></span> ?</p>
+              <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.supplier.name') }} <span id="supplier"></span> ?</p>
             </div>
             <div class="modal-footer">
               <input type="hidden" name="_method" id="method" value="delete">
@@ -106,12 +127,15 @@
 @push('scriptJs')
 <script>
 $(function() {
-    var dataTables = $('#categories-table').DataTable({
+    var dataTables = $('#supplier-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{!! action('Backend\Category@anyData') !!}',
+        ajax: '{!! action('Backend\Supplier@anyData') !!}',
         columns: [
-            { data: 'category', name: 'category' },
+            { data: 'supplier', name: 'supplier' },
+            { data: 'address', name: 'address' },
+            { data: 'contact1', name: 'contact1' },
+            { data: 'contact2', name: 'contact2' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });
@@ -119,25 +143,40 @@ $(function() {
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {
       var button = $(event.relatedTarget), 
-          title = '{{ trans('livepos.category.add') }}',
-          content = '',
-          action = "{{ livepos_asset('api/productCategory') }}";
+          title = '{{ trans('livepos.supplier.add') }}',
+          content = {supplier: '', address: '', contact1: '', contact2: ''},
+          action = "{{ livepos_asset('api/supplier') }}";
           method = 'POST';
       
       if (button.data('action') == 'edit') {
-        title = '{{ trans('livepos.category.edit') }}';
-        content = button.data('category');
+        title = '{{ trans('livepos.supplier.edit') }}';
+        content.supplier = button.data('supplier');
+        content.address = button.data('address');
+        content.contact1 = button.data('contact1');
+        content.contact2 = button.data('contact2');
         action += '/'+button.data('id');
         method = 'PUT';
       }
           
       modal.find('.modal-title').text(title);
-      modal.find('.modal-body #category').val(content);
+      modal.find('.modal-body #supplier').val(content);
       modal.find('.modal-footer #method').val(method);
       form.attr('action', action)
         .find('.error-label').remove().end()
         .find('.form-group').removeClass('has-warning').end()
         .find('.alert.cloned').remove();
+      for (x in content) {
+        cx = content[x];
+        c = modal.find('.modal-body #'+x);
+        if (c.is('select')) {
+          opt = c.find('option');
+          if (opt.attr('value') == cx) opt.attr('selected', 'selected');
+        } else if(c.is('input[type=checkbox]')) {
+          if (c.attr('value') == cx) c.attr('checked', 'checked');
+        } else {
+          c.val(cx)
+        }
+      }
 
     }).on('shown.bs.modal', function() {
       modal.find('.modal-body [autofocus]')[0].focus();
@@ -145,7 +184,7 @@ $(function() {
     
     modalDelete.on('show.bs.modal', function(event){
       var button = $(event.relatedTarget);
-      formDelete.attr('action', "{{ livepos_asset('api/productCategory') }}/"+button.data('id'))
+      formDelete.attr('action', "{{ livepos_asset('api/supplier') }}/"+button.data('id'))
         .find('.alert.cloned').remove();
       
     });

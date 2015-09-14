@@ -14,12 +14,13 @@ class CreatePurchasingsTable extends Migration
     {
         Schema::create('purchasings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('transaction_no', 20);
+            $table->string('transaction_no', 50)->unique();
             $table->string('bill_no', 30);
+            $table->date('bill_date');
             $table->integer('supplier_id')->unsigned();
-            $table->integer('amount')->unsigned();
-            $table->integer('discount')->unsigned();
-            $table->integer('total_amount')->unsigned();
+            $table->decimal('amount', 12, 2)->unsigned();
+            $table->decimal('discount', 5, 2)->unsigned();
+            $table->decimal('total_amount', 12, 2)->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();

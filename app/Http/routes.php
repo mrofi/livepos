@@ -11,7 +11,20 @@ Route::get('/', ['as' => 'home', function()
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'Backend'], function()
 {
     Route::controller('product/category', 'Category');
+
+    Route::controller('product/brand', 'Brand');
     
+    Route::controller('product/supplier', 'Supplier');
+
+    Route::controller('product', 'Product');
+    
+    Route::controller('customer', 'Customer');
+
+    Route::get('purchasing/{id}/detail', 'Purchasing@detail');
+
+    Route::controller('purchasing', 'Purchasing');
+
+
     Route::controller('/', 'Dashboard');
   
 });
@@ -19,6 +32,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'B
 Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api'], function()
 {
     Route::resource('productCategory', 'ProductCategory'); 
+
+    Route::resource('productBrand', 'ProductBrand'); 
     
     Route::resource('productMeta', 'ProductMeta'); 
     

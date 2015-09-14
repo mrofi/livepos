@@ -41,6 +41,7 @@ class User extends BaseModel implements AuthenticatableContract,
     
     public static function create(Array $data = array())
     {
+        if ($data == array()) return;
         $data['api_key'] = str_random(64);
         $data['public_key'] = 'KEY-'.str_random(64);
         

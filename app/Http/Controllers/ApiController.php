@@ -120,7 +120,7 @@ class ApiController extends Controller
             $delete = $this->model->find($id);
             if (! $delete) return ['error' => 'no data'];
             
-            $delete->delete($id);
+            $delete->delete();
             return ['message' => 'ok', 'deleted' => $delete];
         });
     }

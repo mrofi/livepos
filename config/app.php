@@ -197,6 +197,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Gate'      => Illuminate\Support\Facades\Gate::class,
         'Datatables' => yajra\Datatables\Datatables::class,
+        'Carbon'    => Carbon\Carbon::class,
 
     ],
 

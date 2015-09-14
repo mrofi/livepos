@@ -17,10 +17,10 @@ class CreateSellingDetailsTable extends Migration
             $table->integer('selling_id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->string('unit', 10);
-            $table->integer('selling_price')->unsigned();
-            $table->integer('discount')->unsigned();
-            $table->integer('quantity')->unsigned();
-            $table->integer('amount')->unsigned();
+            $table->decimal('selling_price', 12, 2)->unsigned();
+            $table->decimal('discount', 5, 2)->unsigned();
+            $table->decimal('quantity', 10, 3)->unsigned();
+            $table->decimal('amount', 12, 2)->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();

@@ -20,4 +20,13 @@ return [
     'productBrand' => [
         'generic' => 'Tanpa Merk',
     ],
+
+    'supplier' => [
+        'generic' => 'Tanpa Supplier',
+    ],
+
+    'transactionNumberFormat' => ':id/:type/:month/:year',
+    'purchasing' => [
+        'codeName' => 'INVOICE',
+    ],
 ];  

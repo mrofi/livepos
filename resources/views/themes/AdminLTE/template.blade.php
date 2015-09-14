@@ -16,8 +16,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="/themes/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <!-- datatables -->
+    <link rel="stylesheet" href="/themes/adminlte/plugins/datepicker/datepicker3.css">
+    <!-- datatables -->
+    <link rel="stylesheet" href="/themes/adminlte/plugins/datatables/datatables.bootstrap.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/themes/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -470,6 +472,9 @@
     <script src="/themes/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
     <script src="/themes/AdminLTE/plugins/fastclick/fastclick.min.js"></script>
+    <!-- date-range-picker -->
+    <script src="/themes/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="/themes/AdminLTE/plugins/datepicker/locales/bootstrap-datepicker.id.js" charset="UTF-8"></script>
     <!-- DataTables -->
     <script src="/themes/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/themes/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -477,6 +482,14 @@
     <script src="/themes/AdminLTE/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="/themes/AdminLTE/dist/js/demo.js"></script>
+
+    <script>
+      $(function() {
+        $.fn.datepicker.defaults.format = "{{ config('livepos.dateformat') }}";
+        $.fn.datepicker.defaults.language = "id";
+        $.fn.datepicker.defaults.todayHighlight = true;
+      })
+    </script>
     
     <!-- Scripts -->
     @stack('scriptJs')

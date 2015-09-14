@@ -11,4 +11,19 @@ class ProductCategory extends BaseModel
     protected $rules = ['category' => 'required|string|max:30|unique:product_categories,category,__id__'];
     
     protected $attributes = ['category' => 'Kategori'];
+
+    public function delete()
+    {
+    	if ($this->id == 1) return false;
+
+    	return parent::delete();
+    }
+
+    public function update(Array $attributes = array())
+    {
+    	if ($this->id == 1) return false;
+
+    	return parent::update($attributes);
+    }
 }
+
