@@ -10,47 +10,30 @@
               <div class="box box-solid">
                 <div class="box-header bg-gray-light">
                   <div class="row">
-                    <div class="col-sm-4">
-                      <div class="box-title">
-                        <a href="#add" data-toggle="modal" data-target="#modal-add-edit" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.purchasing.add')) }}</a>
+                    <div class="col-sm-4 col-md-5">
+                        <a href="#add" data-toggle="modal" data-target="#modal-add-edit" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> <span class="hidden-sm">{{ ucwords(trans('livepos.purchasing.add')) }}</span></a>
                         @if(isset($detail))
-                        <a href="#edit" data-toggle="modal" data-target="#modal-add-edit" data-action="edit" class="btn bg-maroon btn-round"><i class="fa fa-pencil"></i></a>
                         <a href="#" class="btn btn-round bg-maroon"><i class="fa fa-arrow-left"></i></a>
+                        <div class="pull-right">  
+                            <a href="#edit" data-toggle="modal" title="{{ ucwords(trans('livepos.edit')) }}" data-target="#modal-add-edit" data-action="edit" class="btn bg-maroon btn-round"><i class="fa fa-pencil"></i></a>
+                            <div class="visible-xs" style="width: 75px;">&nbsp;</div>
+                        </div>
                         @endif
-                      </div>
                     </div>
-                    <div class="col-sm-8 row">
+                    <div class="col-sm-8 col-md-7 row">
+                      <div class="row visible-xs">&nbsp;</div>
                       @if(isset($detail))
                       <div class="col-xs-5">
                         <div class="box-title">
-                          <i class="fa fa-calendar"></i> {{ $detail->bill_date }}
+                          <i class="fa fa-calendar hidden-xs"></i> {{ $detail->bill_date }}
                         </div>
                       </div>
                       <div class="col-xs-7">
                         <div class="box-title">
-                          <i class="fa fa-file-o"></i> {{ $detail->transaction_no }}
+                          <i class="fa fa-file-o hidden-xs"></i> {{ $detail->transaction_no }}
                         </div>
                       </div>
                       @endif
-                    </div>
-                    <div class="col-md-6 row">
-                      @if(isset($detail))
-                      <div class="col-sm-4 row">
-                        
-                        <h3>
-                          <small>Date </small> {{ $detail->bill_date }}  
-                        </h3>
-                      </div>
-                      <div class="col-sm-8 row">
-                        <h3>
-                          <small>Purchasing No.</small> {{ $detail->transaction_no }}
-                        </h3>
-                      </div>
-                      @endif
-                        
-                        
-                      <h3>
-                      </h3>
                     </div>
                   </div>
                       
@@ -61,11 +44,45 @@
               @if(isset($detail))
                 <div class="box-body bg-gray">
                   <div class="box-title row">
-                    <div class="col-md-6">
-                      
-                      {!! $detail->supplier->supplier !!}
+                    <div class="col-md-4">
+                      <div class="box-title">{{ trans('livepos.supplier.name') }}</div>
+                      <h3>
+                      {{ $detail->supplier->supplier }}
+                      </h3>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="box-title">{{ trans('livepos.purchasing.transactionNumber') }}</div>
+                      <h3>
+                      {{ $detail->bill_no }}
+                      </h3>
+                    </div>
+                    <div class="col-md-4 text-right">  
+                      <h1 id="total-amount-1" class="total-amount">
+                      {{ $detail->total_amount }}
+                      </h1>
                     </div>
                   </div>
+                </div>
+                <div class="box-body bg-navy">
+                  <div class="box-title row">
+                    <div class="col-sm-6 col-md-8">
+                      <label class="control-label">{{ trans('livepos.purchasing.chooseProduct') }}</label>
+                      <select id="input-product" class="input-lg form-control text-black">
+                        <option value>Pilih Produk untuk ditambahkan</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6 col-md-4 row">  
+                      <div class="col-xs-4">
+                        <label class="control-label">{{ trans('livepos.quantity') }}</label>
+                        <input type="text" id="input-quantity" class="input-lg form-control text-black" placeholder="Qty">
+                      </div>
+                      <div class="col-xs-8 text-right">  
+                        <label class="control-label">{{ trans('livepos.add') }}</label>
+                        <button id="button-add" class="btn btn-lg bg-black btn-block"><i class="fa fa-plus"></i> {{ trans('livepos.purchasing.addProduct') }}</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">&nbsp;</div>
                 </div>
               @endif
                 <div class="box-footer">

@@ -216,7 +216,7 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
           <!-- Sidebar user panel -->
-          <div class="user-panel">
+          <!-- <div class="user-panel">
             <div class="pull-left image">
               <img src="/themes/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
@@ -224,7 +224,7 @@
               <p>{{ auth()->user()->name }}</p>
               <a href="#"><i class="fa fa-circle text-success"></i> {{ auth()->user()->badge }}</a>
             </div>
-          </div>
+          </div> -->
           <!-- search form -->
           <!-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
@@ -237,7 +237,7 @@
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
+            <!-- <li class="header">MAIN NAVIGATION</li> -->
             @yield('sideMenubar')
           </ul>
         </section>
@@ -300,7 +300,7 @@
         <div class="pull-right hidden-xs">
           <b>v.</b> 0.3.0 <b><a href="https://twitter.com/m_rofi">MR</a></b>
         </div>
-        <strong class="hidden-xs">Hak Cipta &copy; 2015 {!! 2015 < ($year = \Carbon::now()->format('Y')) ? "- $year" : ""  !!}<a href="http://inasaba.com">Inasaba Pekalongan</a>.</strong>
+        <strong class="hidden-xs">&copy; 2015 {!! 2015 < ($year = \Carbon::now()->format('Y')) ? "- $year" : ""  !!} - Supported by <a href="http://inasaba.com">Inasaba Pekalongan</a>.</strong>
       </footer>
 @endsection
 
