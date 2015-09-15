@@ -11,6 +11,7 @@ return [
     'dashboard' => [
         'name' => 'Dashboard',
         'tagline' => 'Dashboard adalah tempat semua instrumen bisa dilihat',
+        'title' => 'Dashboard',
     ],
     
     'productCategory' => [
@@ -19,6 +20,12 @@ return [
     
     'productBrand' => [
         'generic' => 'Tanpa Merk',
+    ],
+
+    'product' => [
+        'title' => 'Produk',
+        'tagline' => 'Berbagai macam produk yang dijual ada di sini',
+        'add' => 'Tambah Produk',
     ],
 
     'supplier' => [

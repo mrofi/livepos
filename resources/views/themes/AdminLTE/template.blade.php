@@ -25,6 +25,18 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="/themes/AdminLTE/dist/css/skins/_all-skins.min.css">
+
+    <style>
+      .livepos-footer {
+        width: 100%;
+        margin-left: 0;
+        position: fixed;
+        bottom: 0;
+      }
+      .btn-round {
+        border-radius: 50%;
+      }
+    </style>
     
     <!--pace-->
     <script src="/themes/AdminLTE/plugins/pace/pace.js"></script>
@@ -214,18 +226,18 @@
             </div>
           </div>
           <!-- search form -->
-          <form action="#" method="get" class="sidebar-form">
+          <!-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
               <input type="text" name="q" class="form-control" placeholder="Search...">
               <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
               </span>
             </div>
-          </form>
+          </form> -->
           <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <!--<li class="header">MAIN NAVIGATION</li>-->
+            <li class="header">MAIN NAVIGATION</li>
             @yield('sideMenubar')
           </ul>
         </section>
@@ -284,11 +296,11 @@
 @endsection
 
 @section('footer')
-      <footer class="main-footer">
+      <footer class="main-footer livepos-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
+          <b>v.</b> 0.3.0 <b><a href="https://twitter.com/m_rofi">MR</a></b>
         </div>
-        <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+        <strong class="hidden-xs">Hak Cipta &copy; 2015 {!! 2015 < ($year = \Carbon::now()->format('Y')) ? "- $year" : ""  !!}<a href="http://inasaba.com">Inasaba Pekalongan</a>.</strong>
       </footer>
 @endsection
 
@@ -463,7 +475,9 @@
   
 @section('bodyEnd')
     </div><!-- ./wrapper -->
+@endsection
 
+@section('script')
     <!-- jQuery 2.1.4 -->
     <script src="/themes/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
@@ -515,10 +529,12 @@
     @yield('contentMain')
   @yield('contentEnd')
   
-  @yield('footer')
   @yield('sidebarRight')
   
 @yield('bodyEnd')
+@yield('footer')
+@yield('script')
 @yield('bottom')
+
 
 

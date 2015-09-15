@@ -9,17 +9,60 @@
             <section class="col-xs-12">
               <div class="box box-solid">
                 <div class="box-header bg-gray-light">
-                  <div class="box-title">
-                    <a href="#add" data-toggle="modal" data-target="#modal-add-edit" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.purchasing.add')) }}</a>
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="box-title">
+                        <a href="#add" data-toggle="modal" data-target="#modal-add-edit" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.purchasing.add')) }}</a>
+                        @if(isset($detail))
+                        <a href="#edit" data-toggle="modal" data-target="#modal-add-edit" data-action="edit" class="btn bg-maroon btn-round"><i class="fa fa-pencil"></i></a>
+                        <a href="#" class="btn btn-round bg-maroon"><i class="fa fa-arrow-left"></i></a>
+                        @endif
+                      </div>
+                    </div>
+                    <div class="col-sm-8 row">
+                      @if(isset($detail))
+                      <div class="col-xs-5">
+                        <div class="box-title">
+                          <i class="fa fa-calendar"></i> {{ $detail->bill_date }}
+                        </div>
+                      </div>
+                      <div class="col-xs-7">
+                        <div class="box-title">
+                          <i class="fa fa-file-o"></i> {{ $detail->transaction_no }}
+                        </div>
+                      </div>
+                      @endif
+                    </div>
+                    <div class="col-md-6 row">
+                      @if(isset($detail))
+                      <div class="col-sm-4 row">
+                        
+                        <h3>
+                          <small>Date </small> {{ $detail->bill_date }}  
+                        </h3>
+                      </div>
+                      <div class="col-sm-8 row">
+                        <h3>
+                          <small>Purchasing No.</small> {{ $detail->transaction_no }}
+                        </h3>
+                      </div>
+                      @endif
+                        
+                        
+                      <h3>
+                      </h3>
+                    </div>
                   </div>
+                      
                   <div class="box-tools .pull-right">
                     <button class="btn bg-maroon btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                   </div>
                 </div> <!--.box-header--> 
-              @if($detail)
+              @if(isset($detail))
                 <div class="box-body bg-gray">
                   <div class="box-title row">
-                    <div class="col-sm-6">
+                    <div class="col-md-6">
+                      
                       {!! $detail->supplier->supplier !!}
                     </div>
                   </div>
