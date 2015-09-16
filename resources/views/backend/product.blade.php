@@ -68,21 +68,95 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="purchase_price" class="col-sm-3 control-label">{{ trans('livepos.product.purchase_price') }}</label>
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="purchase_price" name="purchase_price" autofocus placeholder="{{ trans('livepos.product.purchase_price') }}">
+                <label for="unit" class="col-sm-3 control-label">{{ trans('livepos.product.smallUnit') }}</label>
+                <div class="col-sm-3">
+                  <input type="text" class="form-control" id="unit" name="unit" autofocus placeholder="{{ trans('livepos.product.unit') }}">
                 </div>
-              </div>
-              <div class="form-group">
-                <label for="selling_price" class="col-sm-3 control-label">{{ trans('livepos.product.selling_price') }}</label>
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="selling_price" name="selling_price" autofocus placeholder="{{ trans('livepos.product.selling_price') }}">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="category_id" class="col-sm-3 control-label">{{ trans('livepos.product.choose_ategory') }}</label>
                 <div class="col-sm-6">
-                  <select name="category_id" id="category_id" class="form-control" data-placeholder="{{ trans('livepos.product.choose_ategory') }}">
+                  <label>
+                    <input type="checkbox" id="multi_unit" name="multi_unit" value="1" data-target="#multi-unit" data-toggle="collapse"> {{ trans('livepos.product.useMultiUnit') }}
+                  </label>
+                </div>
+              </div>
+              <div class="collapse" id="multi-unit">
+                <div class="well">
+                  <div class="box-title">{{ trans('livepos.product.addUnitTitle')}}</div>
+                  <hr>
+                  <div class="form-group">
+                    <div class="col-xs-3">
+                      <label for="multi-unit-quantity">{{ trans('livepos.product.addUnit') }}</label>
+                    </div>
+                    <div class="col-xs-3">
+                      <input type="text" class="form-control" id="multi-unit-unit"placeholder="{{ trans('livepos.product.unit') }}">
+                    </div>
+                    <div class="col-xs-3">
+                      <input type="text" class="form-control" id="multi-unit-quantity"placeholder="{{ trans('livepos.product.quantityPerSmallUnit') }}">
+                    </div>
+                    <div class="col-xs-3">
+                      <a href="#" class="btn bg-navy" id="multi-unit-add">{{ trans('livepos.add') }}</a>
+                    </div>
+                  </div>
+                  <table id="multi-unit-table" class="table table-hover">
+                    <thead>
+                        <tr class="bg-navy">
+                            <th>{{ trans('livepos.product.unit') }}</th>
+                            <th>{{ trans('livepos.product.quantity') }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="purchase_price" class="col-sm-3 control-label">{{ trans('livepos.product.purchasePrice') }}</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="purchase_price" name="purchase_price" autofocus placeholder="{{ trans('livepos.product.purchasePrice') }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="selling_price" class="col-sm-3 control-label">{{ trans('livepos.product.sellingPrice') }}</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="selling_price" name="selling_price" value="0" autofocus placeholder="{{ trans('livepos.product.sellingPrice') }}">
+                </div>
+                <div class="col-sm-4">
+                  <label>
+                    <input type="checkbox" id="multi_price" name="multi_price" value="1" data-target="#multi-price" data-toggle="collapse"> {{ trans('livepos.product.useMultiPrice') }}
+                  </label>
+                </div>
+              </div>
+              <div class="collapse" id="multi-price">
+                <div class="well">
+                  <div class="box-title">{{ trans('livepos.product.addPriceTitle')}}</div>
+                  <hr>
+                  <div class="form-group">
+                    <div class="col-xs-3">
+                      <label for="multi-price-quantity">{{ trans('livepos.product.addPrice') }}</label>
+                    </div>
+                    <div class="col-xs-3">
+                      <input type="text" class="form-control" id="multi-price-quantity"placeholder="{{ trans('livepos.quantity') }}">
+                    </div>
+                    <div class="col-xs-3">
+                      <input type="text" class="form-control" id="multi-price-price"placeholder="{{ trans('livepos.product.sellingPricePerSmallUnit') }}">
+                    </div>
+                    <div class="col-xs-3">
+                      <a href="#" class="btn bg-navy" id="multi-price-add">{{ trans('livepos.add') }}</a>
+                    </div>
+                  </div>
+                  <table id="multi-price-table" class="table table-hover">
+                    <thead>
+                        <tr class="bg-navy">
+                            <th>{{ trans('livepos.product.quantity') }}</th>
+                            <th>{{ trans('livepos.product.sellingPrice') }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="category_id" class="col-sm-3 control-label">{{ trans('livepos.product.chooseCategory') }}</label>
+                <div class="col-sm-6">
+                  <select name="category_id" id="category_id" class="form-control" data-placeholder="{{ trans('livepos.product.chooseCategory') }}">
                   @if(isset($categories))
                   @foreach($categories as $category)
                     <option value="{{ $category->id }}" >{{ $category->category }}</option>
@@ -102,12 +176,6 @@
                 </div>
               </div>
               <hr>
-              <div class="form-group">
-                <label for="unit" class="col-sm-3 control-label">{{ trans('livepos.product.unit') }}</label>
-                <div class="col-sm-3">
-                  <input type="text" class="form-control" id="unit" name="unit" autofocus placeholder="{{ trans('livepos.product.unit') }}">
-                </div>
-              </div>
               <div class="form-group input-init-stock">
                 <label for="init_stock" class="col-sm-3 control-label">{{ trans('livepos.product.init_stock') }}</label>
                 <div class="col-sm-3">
@@ -190,6 +258,99 @@ $(function() {
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });
+
+    var multiPriceCollapse = $('#multi-price');
+    multiPriceCollapse.on('show.bs.collapse', function(){
+    }).on('hidden.bs.collapse', function(){
+    }).on('shown.bs.collapse', function(){
+      multiPriceCollapse.find('input')[0].focus();
+    });
+
+    var multiPriceDataTables = $('#multi-price-table').DataTable({
+        paging: false,
+        info: false,
+        searching: false,
+        ajax: '{!! action('Backend\Product@anyMultiPrice') !!}',
+        columns: [
+            { data: 'quantity', name: 'quantity' },
+            { data: 'selling_price', name: 'products.selling_price' },
+            { data: 'action', name: 'action', orderable: false, searchable: false },
+        ]
+    })
+
+    multiPriceCollapse.find('#multi-price-add').click(function(e){
+      e.preventDefault();
+      multiPriceDataTables.row.add({
+        quantity: multiPriceCollapse.find('#multi-price-quantity').val(),
+        selling_price: multiPriceCollapse.find('#multi-price-price').val(),
+        action: '<a href="#" class="multi-price-delete">Delete</a>'
+      }).draw();
+      multiPriceCollapse.find('input').val('');
+      multiPriceCollapse.find('input')[0].focus();
+    });
+
+    $('#multi-price-table tbody').on('click', '.multi-price-delete', function(){
+      var row = multiPriceDataTables.row($(this).parents('tr'));
+      row.remove().draw();
+    })
+
+    $('#selling_price').change(function(){
+      $('#multi_price').attr('disabled', false);
+      if ($(this).val() == '') {
+        multiPriceDataTables.clear().draw();
+        multiPriceCollapse.collapse('hide');
+        $('#multi_price').attr('checked', false).attr('disabled', true);
+      } 
+    });
+
+    // multi unit
+    $('#unit').change(function(){
+      $('#multi_unit').attr('disabled', false);
+      title = '{{ trans('livepos.product.unit') }}' + ' ('+ $('#unit').val() +')';
+      $('#multi-unit-table thead tr th:eq(1)').text(title);
+      if ($(this).val() == '') {
+        multiUnitDataTables.clear().draw();
+        multiUnitCollapse.collapse('hide');
+        $('#multi_unit').attr('checked', false).attr('disabled', true);
+      } 
+    });
+
+    var multiUnitCollapse = $('#multi-unit');
+    multiUnitCollapse.on('show.bs.collapse', function(){
+      title = '{{ trans('livepos.product.unit') }}' + ' ('+ $('#unit').val() +')';
+      $('#multi-unit-table thead tr th:eq(1)').text(title);
+    }).on('hidden.bs.collapse', function(){
+    }).on('shown.bs.collapse', function(){
+      multiUnitCollapse.find('input')[0].focus();
+    });
+
+    var multiUnitDataTables = $('#multi-unit-table').DataTable({
+        paging: false,
+        info: false,
+        searching: false,
+        ajax: '{!! action('Backend\Product@anyMultiUnit') !!}',
+        columns: [
+            { data: 'unit', name: 'products.unit' },
+            { data: 'quantity', name: 'quantity' },
+            { data: 'action', name: 'action', orderable: false, searchable: false },
+        ]
+    })
+
+    multiUnitCollapse.find('#multi-unit-add').click(function(e){
+      e.preventDefault();
+      multiUnitDataTables.row.add({
+        unit: multiUnitCollapse.find('#multi-unit-unit').val(),
+        quantity: multiUnitCollapse.find('#multi-unit-quantity').val(),
+        action: '<a href="#" class="multi-unit-delete">Delete</a>'
+      }).draw();
+      multiUnitCollapse.find('input').val('');
+      multiUnitCollapse.find('input')[0].focus();
+    });
+
+    $('#multi-unit-table tbody').on('click', '.multi-unit-delete', function(){
+      var row = multiUnitDataTables.row($(this).parents('tr'));
+      row.remove().draw();
+    })
     
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {

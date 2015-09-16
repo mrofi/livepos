@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use yajra\Datatables\Datatables;
 
 use livepos\Purchasing as Model;
+use livepos\PurchasingDetail as ModelDetail;
 use livepos\Supplier as SupplierModal;
 use livepos\Product as ProductModal;
 use livepos\Http\Requests;
@@ -33,6 +34,30 @@ class Purchasing extends BackendController
 
     	return Datatables::of($data)
     		->addColumn('action', function ($data) {
+                $button = '<a href="'.action('Backend\Purchasing@detail', ['id' => $data->id]).'" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-supplier="'.$data->supplier.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
+                return $button;        
+            })
+            ->editColumn('bill_date', '{!! livepos_dateToShow($bill_date) !!}')
+            ->removeColumn('id')
+            ->make(true);
+    }
+
+    public function detail($id)
+    {
+        $detail = Model::findOrFail($id);
+        $detail->bill_date = livepos_dateToShow($detail->bill_date);
+        $suppliers = SupplierModal::all();
+
+        return view('backend.purchasing')->with(compact('detail', 'suppliers')); 
+    }
+
+    public function detailData($id)
+    {
+        $data = ModelDetail::select('*')->where('purchasing_id', $id);
+
+        return Datatables::of($data)
+            ->addColumn('action', function ($data) {
                 $button = '<a href="#edit-'.$data->id.'" ';
                 $button .= ' data-id="'.$data->id.'"';
                 $button .= ' data-bill_no="'.$data->bill_no.'"';
@@ -47,13 +72,5 @@ class Purchasing extends BackendController
             ->editColumn('bill_date', '{!! livepos_dateToShow($bill_date) !!}')
             ->removeColumn('id')
             ->make(true);
-    }
-
-    public function detail($id)
-    {
-        $detail = Model::findOrFail($id);
-        $suppliers = SupplierModal::all();
-
-        return view('backend.purchasing')->with(compact('detail', 'suppliers')); 
     }
 }

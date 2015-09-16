@@ -136,6 +136,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
         yajra\Datatables\DatatablesServiceProvider::class,
 
@@ -196,6 +197,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Gate'      => Illuminate\Support\Facades\Gate::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
+        'Form'      => Collective\Html\FormFacade::class,
         'Datatables' => yajra\Datatables\Datatables::class,
         'Carbon'    => Carbon\Carbon::class,
 

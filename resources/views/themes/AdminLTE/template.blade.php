@@ -9,7 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@yield('pageTitle', 'Not Title') | {{ strip_tags(config('livepos.title')) }}</title>
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="width=device-width, initial-scale=2, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- CSRF -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="/themes/AdminLTE/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -502,6 +504,12 @@
         $.fn.datepicker.defaults.format = "{{ config('livepos.dateformat') }}";
         $.fn.datepicker.defaults.language = "id";
         $.fn.datepicker.defaults.todayHighlight = true;
+
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+});
       })
     </script>
     

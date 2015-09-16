@@ -2,6 +2,7 @@
 
 namespace livepos;
 
+use livepos\Purchasing;
 use Illuminate\Database\Eloquent\Model;
 
 class PurchasingDetail extends BaseModel
@@ -29,4 +30,9 @@ class PurchasingDetail extends BaseModel
         'quantity' => 'Quantity',
         'amount' => 'Jumlah'
     ];
+
+    public function purchasing()
+    {
+        $this->belongsTo(Purchasing::class);
+    }
 }

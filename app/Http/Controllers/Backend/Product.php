@@ -9,6 +9,7 @@ use livepos\Product as Model;
 use livepos\ProductBrand;
 use livepos\ProductCategory;
 use livepos\Http\Requests;
+use Illuminate\Support\Collection;
 use livepos\Http\Controllers\BackendController;
 
 class Product extends BackendController
@@ -25,6 +26,18 @@ class Product extends BackendController
         $categories = ProductCategory::all();
         $brands = ProductBrand::all();
         return view('backend.product', compact('product', 'categories', 'brands'));
+    }
+
+    public function anyMultiUnit($id = null)
+    {
+        $data = new Collection();
+        if ($id == null) return Datatables::of($data)->make(true);
+    }
+
+    public function anyMultiPrice($id = null)
+    {
+        $data = new Collection();
+        if ($id == null) return Datatables::of($data)->make(true);
     }
     
     public function anyData()

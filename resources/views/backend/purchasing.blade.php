@@ -13,9 +13,9 @@
                     <div class="col-sm-4 col-md-5">
                         <a href="#add" data-toggle="modal" data-target="#modal-add-edit" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> <span class="hidden-sm">{{ ucwords(trans('livepos.purchasing.add')) }}</span></a>
                         @if(isset($detail))
-                        <a href="#" class="btn btn-round bg-maroon"><i class="fa fa-arrow-left"></i></a>
+                        <a href="{{ livepos_asset('dashboard/purchasing') }}" class="btn btn-round bg-maroon"><i class="fa fa-arrow-left"></i></a>
                         <div class="pull-right">  
-                            <a href="#edit" data-toggle="modal" title="{{ ucwords(trans('livepos.edit')) }}" data-target="#modal-add-edit" data-action="edit" class="btn bg-maroon btn-round"><i class="fa fa-pencil"></i></a>
+                            <a href="#edit" data-toggle="modal" title="{{ ucwords(trans('livepos.edit')) }}" data-target="#modal-add-edit" data-id="{{ $detail->id }}" data-bill_date="{{ $detail->bill_date }}" data-supplier_id="{{ $detail->supplier_id }}" data-bill_no="{{ $detail->bill_no }}" data-action="edit" class="btn bg-maroon btn-round"><i class="fa fa-pencil"></i></a>
                             <div class="visible-xs" style="width: 75px;">&nbsp;</div>
                         </div>
                         @endif
@@ -67,18 +67,18 @@
                   <div class="box-title row">
                     <div class="col-sm-6 col-md-8">
                       <label class="control-label">{{ trans('livepos.purchasing.chooseProduct') }}</label>
-                      <select id="input-product" class="input-lg form-control text-black">
+                      <select id="input-product" class="form-control text-black">
                         <option value>Pilih Produk untuk ditambahkan</option>
                       </select>
                     </div>
                     <div class="col-sm-6 col-md-4 row">  
                       <div class="col-xs-4">
                         <label class="control-label">{{ trans('livepos.quantity') }}</label>
-                        <input type="text" id="input-quantity" class="input-lg form-control text-black" placeholder="Qty">
+                        <input type="text" id="input-quantity" class="form-control text-black" placeholder="Qty">
                       </div>
                       <div class="col-xs-8 text-right">  
                         <label class="control-label">{{ trans('livepos.add') }}</label>
-                        <button id="button-add" class="btn btn-lg bg-black btn-block"><i class="fa fa-plus"></i> {{ trans('livepos.purchasing.addProduct') }}</button>
+                        <button id="button-add" class="btn bg-black btn-block"><i class="fa fa-plus"></i> {{ trans('livepos.purchasing.addProduct') }}</button>
                       </div>
                     </div>
                   </div>
@@ -86,6 +86,21 @@
                 </div>
               @endif
                 <div class="box-footer">
+                  @if(isset($detail))
+                  <table class="table table-hover" id="purchasing-details-table">
+                      <thead>
+                          <tr class="bg-navy">
+                              <th>{{ trans('livepos.product.name') }}</th>
+                              <th>{{ trans('livepos.product.unit') }}</th>
+                              <th>{{ trans('livepos.purchase_price') }}</th>
+                              <th>{{ trans('livepos.quantity') }}</th>
+                              <th>{{ trans('livepos.discount') }}</th>
+                              <th>{{ trans('livepos.amount') }}</th>
+                              <th></th>
+                          </tr>
+                      </thead>
+                  </table>
+                  @else
                   <table class="table table-hover" id="purchasings-table">
                       <thead>
                           <tr class="bg-navy">
@@ -97,6 +112,7 @@
                           </tr>
                       </thead>
                   </table>
+                  @endif
                 </div>
               </div><!--.box--> 
             </section>
@@ -181,6 +197,22 @@
 @push('scriptJs')
 <script>
 $(function() {
+  @if(isset($detail))
+    var dataTables = $('#purchasing-details-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ livepos_asset('dashboard/purchasing/detailData/'.$detail->id) }}',
+        columns: [
+            { data: 'product_name', name: 'purchasing_details.product_name' },
+            { data: 'unit', name: 'purchasing_details.unit' },
+            { data: 'purchase_price', name: 'purchasing_details.purchase_price' },
+            { data: 'quantity', name: 'purchasing_details.quantity' },
+            { data: 'disocunt', name: 'purchasing_details.disocunt' },
+            { data: 'amount', name: 'purchasing_details.amount' },
+            { data: 'action', name: 'action', orderable: false, searchable: false },
+        ]
+    });
+  @else
     var dataTables = $('#purchasings-table').DataTable({
         processing: true,
         serverSide: true,
@@ -193,6 +225,7 @@ $(function() {
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });
+  @endif
     
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {
@@ -268,7 +301,6 @@ $(function() {
           if (data.created) {
              location.href += '/'+data.created.id+'/detail';
           }
-        } else {
           error_handling(_form, data);
         };
       }, 'json').error( function(xhr, textStatus, errorThrown) {

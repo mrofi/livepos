@@ -4,6 +4,7 @@ namespace livepos;
 
 use DB;
 use Carbon\Carbon;
+use livepos\PurchasingDetail;
 use livepos\Supplier;
 use Illuminate\Database\Eloquent\Model;
 
@@ -59,5 +60,10 @@ class Purchasing extends BaseModel
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function purchasing_details()
+    {
+        return $this->hasMany(PurchasingDetail::class);
     }
 }

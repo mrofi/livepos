@@ -29,8 +29,8 @@ return [
 		        'brand_id' => '', 
 		        'min_stock' => '0', 
 		        'init_stock' => '0', 
-		        'purchase_price' => '', 
-		        'selling_price' => '', 
+		        'purchase_price' => '0', 
+		        'selling_price' => '0', 
 		        'active' => '1', 
 		        'unit' => 'pcs'
 		    ], 
