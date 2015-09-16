@@ -13,4 +13,9 @@ class Product extends ApiController
     {
         parent::__construct($model);
     }
+
+    public function store(Request $request)
+    {
+    	return $request->all();
+    }
 }

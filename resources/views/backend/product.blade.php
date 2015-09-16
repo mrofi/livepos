@@ -90,7 +90,7 @@
                       <input type="text" class="form-control" id="multi-unit-unit"placeholder="{{ trans('livepos.product.unit') }}">
                     </div>
                     <div class="col-xs-3">
-                      <input type="text" class="form-control" id="multi-unit-quantity"placeholder="{{ trans('livepos.product.quantityPerSmallUnit') }}">
+                      <input type="number" min="0" step="any" class="form-control" id="multi-unit-quantity"placeholder="{{ trans('livepos.product.quantityPerSmallUnit') }}">
                     </div>
                     <div class="col-xs-3">
                       <a href="#" class="btn bg-navy" id="multi-unit-add">{{ trans('livepos.add') }}</a>
@@ -110,13 +110,13 @@
               <div class="form-group">
                 <label for="purchase_price" class="col-sm-3 control-label">{{ trans('livepos.product.purchasePrice') }}</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="purchase_price" name="purchase_price" autofocus placeholder="{{ trans('livepos.product.purchasePrice') }}">
+                  <input type="number" min="0" step="any" class="form-control" id="purchase_price" name="purchase_price" autofocus placeholder="{{ trans('livepos.product.purchasePrice') }}">
                 </div>
               </div>
               <div class="form-group">
                 <label for="selling_price" class="col-sm-3 control-label">{{ trans('livepos.product.sellingPrice') }}</label>
                 <div class="col-sm-4">
-                  <input type="text" class="form-control" id="selling_price" name="selling_price" value="0" autofocus placeholder="{{ trans('livepos.product.sellingPrice') }}">
+                  <input type="number" min="0" step="any" class="form-control" id="selling_price" name="selling_price" value="0" autofocus placeholder="{{ trans('livepos.product.sellingPrice') }}">
                 </div>
                 <div class="col-sm-4">
                   <label>
@@ -133,10 +133,10 @@
                       <label for="multi-price-quantity">{{ trans('livepos.product.addPrice') }}</label>
                     </div>
                     <div class="col-xs-3">
-                      <input type="text" class="form-control" id="multi-price-quantity"placeholder="{{ trans('livepos.quantity') }}">
+                      <input type="number" min="0" step="any" class="form-control" id="multi-price-quantity"placeholder="{{ trans('livepos.quantity') }}">
                     </div>
                     <div class="col-xs-3">
-                      <input type="text" class="form-control" id="multi-price-price"placeholder="{{ trans('livepos.product.sellingPricePerSmallUnit') }}">
+                      <input type="number" min="0" step="any" class="form-control" id="multi-price-price"placeholder="{{ trans('livepos.product.sellingPricePerSmallUnit') }}">
                     </div>
                     <div class="col-xs-3">
                       <a href="#" class="btn bg-navy" id="multi-price-add">{{ trans('livepos.add') }}</a>
@@ -179,13 +179,13 @@
               <div class="form-group input-init-stock">
                 <label for="init_stock" class="col-sm-3 control-label">{{ trans('livepos.product.init_stock') }}</label>
                 <div class="col-sm-3">
-                  <input type="text" class="form-control" id="init_stock" name="init_stock" autofocus placeholder="{{ trans('livepos.product.init_stock') }}">
+                  <input type="number" min="0" step="any" class="form-control" id="init_stock" name="init_stock" autofocus placeholder="{{ trans('livepos.product.init_stock') }}">
                 </div>
               </div>
               <div class="form-group">
                 <label for="min_stock" class="col-sm-3 control-label">{{ trans('livepos.product.min_stock') }}</label>
                 <div class="col-sm-3">
-                  <input type="text" class="form-control" id="min_stock" name="min_stock" autofocus placeholder="{{ trans('livepos.product.min_stock') }}">
+                  <input type="number" min="0" step="any" class="form-control" id="min_stock" name="min_stock" autofocus placeholder="{{ trans('livepos.product.min_stock') }}">
                 </div>
               </div>
               <hr>
@@ -203,6 +203,8 @@
             </div>
             <div class="modal-footer">
               <input type="hidden" name="_method" id="method" >
+              <input type="hidden" name="_multi_unit_data" id="multi_unit_data" >
+              <input type="hidden" name="_multi_price_data" id="multi_price_data" >
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.close') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.save') }}</button>
             </div>
@@ -280,11 +282,19 @@ $(function() {
 
     multiPriceCollapse.find('#multi-price-add').click(function(e){
       e.preventDefault();
-      multiPriceDataTables.row.add({
+      var _new = {
         quantity: multiPriceCollapse.find('#multi-price-quantity').val(),
         selling_price: multiPriceCollapse.find('#multi-price-price').val(),
         action: '<a href="#" class="multi-price-delete">Delete</a>'
-      }).draw();
+      };
+      var _data = window._multi_price_data;
+      if (!_data) _data = [];
+      for( x in _data) {
+        if (_data[x].quantity == _new.quantity) return;
+      }
+      multiPriceDataTables.row.add(_new).draw();
+      _data.push(_new);
+      window._multi_price_data = _data;
       multiPriceCollapse.find('input').val('');
       multiPriceCollapse.find('input')[0].focus();
     });
@@ -292,12 +302,18 @@ $(function() {
     $('#multi-price-table tbody').on('click', '.multi-price-delete', function(){
       var row = multiPriceDataTables.row($(this).parents('tr'));
       row.remove().draw();
+      var _data = window._multi_price_data;
+      for( x in _data) {
+        if (x == row[0][0]) _data.splice(x, 1);
+      }
+      window._multi_price_data = _data;
     })
 
     $('#selling_price').change(function(){
       $('#multi_price').attr('disabled', false);
       if ($(this).val() == '') {
         multiPriceDataTables.clear().draw();
+        window._multi_price_data = [];
         multiPriceCollapse.collapse('hide');
         $('#multi_price').attr('checked', false).attr('disabled', true);
       } 
@@ -310,6 +326,7 @@ $(function() {
       $('#multi-unit-table thead tr th:eq(1)').text(title);
       if ($(this).val() == '') {
         multiUnitDataTables.clear().draw();
+        window._multi_unit_data = [];
         multiUnitCollapse.collapse('hide');
         $('#multi_unit').attr('checked', false).attr('disabled', true);
       } 
@@ -328,7 +345,7 @@ $(function() {
         paging: false,
         info: false,
         searching: false,
-        ajax: '{!! action('Backend\Product@anyMultiUnit') !!}',
+        data: [],
         columns: [
             { data: 'unit', name: 'products.unit' },
             { data: 'quantity', name: 'quantity' },
@@ -338,11 +355,19 @@ $(function() {
 
     multiUnitCollapse.find('#multi-unit-add').click(function(e){
       e.preventDefault();
-      multiUnitDataTables.row.add({
+      var _new = {
         unit: multiUnitCollapse.find('#multi-unit-unit').val(),
         quantity: multiUnitCollapse.find('#multi-unit-quantity').val(),
         action: '<a href="#" class="multi-unit-delete">Delete</a>'
-      }).draw();
+      };
+      var _data = window._multi_unit_data;
+      if (!_data) _data = [];
+      for( x in _data) {
+        if (_data[x].unit == _new.unit) return;
+      }
+      multiUnitDataTables.row.add(_new).draw();
+      _data.push(_new);
+      window._multi_unit_data = _data;
       multiUnitCollapse.find('input').val('');
       multiUnitCollapse.find('input')[0].focus();
     });
@@ -350,10 +375,24 @@ $(function() {
     $('#multi-unit-table tbody').on('click', '.multi-unit-delete', function(){
       var row = multiUnitDataTables.row($(this).parents('tr'));
       row.remove().draw();
+      var _data = window._multi_unit_data;
+      for( x in _data) {
+        if (x == row[0][0]) _data.splice(x, 1);
+      }
+      window._multi_unit_data = _data;
     })
     
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {
+      window._multi_unit_data = [];
+      window._multi_price_data = [];
+      multiPriceDataTables.clear().draw();
+      multiUnitDataTables.clear().draw();
+      multiPriceCollapse.collapse('hide');
+      multiUnitCollapse.collapse('hide');
+      $('#multi_price').attr('checked', false);
+      $('#multi_unit').attr('checked', false);
+
       var button = $(event.relatedTarget), 
           title = '{{ trans('livepos.product.add') }}',
           content = {!! json_encode($product) !!}, 
@@ -423,6 +462,8 @@ $(function() {
       _form.find('.form-group').removeClass('has-warning');
       _form.find('.form-group .error-label').remove();
       _form.find('.modal-body .alert.cloned').remove();
+      _form.find('#multi_unit_data').val(JSON.stringify(window._multi_unit_data));
+      _form.find('#multi_price_data').val(JSON.stringify(window._multi_price_data));
       $.post(_form.attr('action'), _form.serialize(), function( data ) {
         if (data.message == 'ok') {
           dataTables.draw();
