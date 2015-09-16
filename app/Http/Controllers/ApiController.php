@@ -49,6 +49,7 @@ class ApiController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge(array_map('trim', $request->all()));
         return $this->userAuthorize('store', function() use ($request)
         {
             // validation
@@ -58,6 +59,9 @@ class ApiController extends Controller
             $request->merge(['created_by' => auth()->user()->id, 'updated_by' => auth()->user()->id]);
             // insert data
             $create = $this->model->create($request->all());
+
+            if ($create['error']) return $create;
+
             return ['message' => 'ok', 'created' => $create];
         });
     }
@@ -69,7 +73,7 @@ class ApiController extends Controller
      * @return Response
      */
     public function show(Request $request, $id)
-    {
+    {        
         return $this->userAuthorize('show', function() use ($request, $id)
         {
             $show = $this->model->find($id);
@@ -88,6 +92,8 @@ class ApiController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->merge(array_map('trim', $request->all()));
+     
         return $this->userAuthorize('update', function() use ($request, $id)
         {
             // find record

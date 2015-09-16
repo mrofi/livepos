@@ -246,6 +246,7 @@
 @push('scriptJs')
 <script>
 $(function() {
+    var regex = /[^\W_]/;
     var dataTables = $('#products-table').DataTable({
         processing: true,
         serverSide: true,
@@ -289,6 +290,7 @@ $(function() {
       };
       var _data = window._multi_price_data;
       if (!_data) _data = [];
+      if ( _new.quantity == 1 || ! regex.test(_new.selling_price) || ! regex.test(_new.quantity)) return;
       for( x in _data) {
         if (_data[x].quantity == _new.quantity) return;
       }
@@ -311,7 +313,7 @@ $(function() {
 
     $('#selling_price').change(function(){
       $('#multi_price').attr('disabled', false);
-      if ($(this).val() == '') {
+      if (!regex.test($(this).val())) {
         multiPriceDataTables.clear().draw();
         window._multi_price_data = [];
         multiPriceCollapse.collapse('hide');
@@ -324,7 +326,7 @@ $(function() {
       $('#multi_unit').attr('disabled', false);
       title = '{{ trans('livepos.product.unit') }}' + ' ('+ $('#unit').val() +')';
       $('#multi-unit-table thead tr th:eq(1)').text(title);
-      if ($(this).val() == '') {
+      if (! regex.test($(this).val())) {
         multiUnitDataTables.clear().draw();
         window._multi_unit_data = [];
         multiUnitCollapse.collapse('hide');
@@ -362,6 +364,7 @@ $(function() {
       };
       var _data = window._multi_unit_data;
       if (!_data) _data = [];
+      if (_new.unit == $('#unit').val() || ! regex.test(_new.unit) || ! regex.test(_new.quantity)) return;
       for( x in _data) {
         if (_data[x].unit == _new.unit) return;
       }
@@ -392,6 +395,8 @@ $(function() {
       multiUnitCollapse.collapse('hide');
       $('#multi_price').attr('checked', false);
       $('#multi_unit').attr('checked', false);
+      multiPriceCollapse.find('input').val('');
+      multiUnitCollapse.find('input').val('');
 
       var button = $(event.relatedTarget), 
           title = '{{ trans('livepos.product.add') }}',
