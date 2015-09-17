@@ -24,6 +24,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'B
 
     Route::get('purchasing/detailData/{id}', 'Purchasing@detailData');
 
+    // Route::get('purchasing/products', 'Purchasing@products');
+
     Route::controller('purchasing', 'Purchasing');
 
 

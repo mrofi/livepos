@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use yajra\Datatables\Datatables;
 
 use livepos\Product as Model;
+use livepos\ProductMeta;
 use livepos\ProductBrand;
 use livepos\ProductCategory;
 use livepos\Http\Requests;
@@ -43,15 +44,39 @@ class Product extends BackendController
     public function anyData()
     {
 
+        $metas = ProductMeta::all();
+
+        $product_metas = [];
+        foreach ($metas as $meta) {
+            $product_metas[$meta->product_id][$meta->meta_key] = $meta->meta_value;
+        }
+
         $data = Model::join('product_categories', 'products.category_id', '=', 'product_categories.id')
                         ->join('product_brands', 'products.brand_id', '=', 'product_brands.id')
                         ->select(['products.id', 'products.name', 'product_brands.brand', 
-                                    'product_categories.category', 'products.unit', 'products.purchase_price',
-                                    'products.selling_price', 'products.active', 'products.min_stock']);
+                            'product_categories.category', 'products.unit', 'products.purchase_price',
+                            'products.selling_price', 'products.active', 'products.min_stock']);
+
         return  Datatables::of($data)
             ->editColumn('purchase_price', '{!! livepos_round($purchase_price) !!}')
-            ->editColumn('selling_price', '{!! livepos_round($selling_price) !!}')
-            ->addColumn('action', function ($data) {
+            ->editColumn('unit', function($data) use($product_metas) {
+                if (!isset($product_metas[$data->id]['multi_unit'])) return $data->unit;
+                $units = [$data->unit];
+                foreach (json_decode($product_metas[$data->id]['multi_unit']) as $multi_unit) {
+                    $units[] = $multi_unit->unit;
+                }
+                return implode(', ', $units);
+            })
+            ->editColumn('selling_price', function($data) use($product_metas) {
+                if (!isset($product_metas[$data->id]['multi_price'])) return livepos_round($data->selling_price);
+                $prices = [$data->selling_price];
+                foreach (json_decode($product_metas[$data->id]['multi_price']) as $multi_price) {
+                    $prices[] = $multi_price->selling_price;
+                }
+                asort($prices);
+                return livepos_round(head($prices)).' - '.livepos_round(last($prices));
+            })
+            ->addColumn('action', function ($data) use($product_metas) {
                 $button = '<a href="#edit-'.$data->id.'" ';
                     $button .= ' data-id="'.$data->id.'"';
                     $button .= ' data-name="'.$data->name.'"';
@@ -62,6 +87,8 @@ class Product extends BackendController
                     $button .= ' data-selling_price="'.livepos_round($data->selling_price).'"';
                     $button .= ' data-active="'.$data->active.'"';
                     $button .= ' data-min_stock="'.livepos_round($data->min_stock).'"';
+                    $button .= ' data-multi_unit=\''.(isset($product_metas[$data->id]['multi_unit']) ? $product_metas[$data->id]['multi_unit'] : '0').'\'';
+                    $button .= ' data-multi_price=\''.(isset($product_metas[$data->id]['multi_price']) ? $product_metas[$data->id]['multi_price'] : '0').'\'';
                 $button .= ' data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
                 $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-brand="'.$data->brand.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
                 return $button;        

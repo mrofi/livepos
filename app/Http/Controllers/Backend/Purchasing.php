@@ -48,8 +48,14 @@ class Purchasing extends BackendController
         $detail = Model::findOrFail($id);
         $detail->bill_date = livepos_dateToShow($detail->bill_date);
         $suppliers = SupplierModal::all();
+        $products = ProductModal::with('metas')->get();
 
-        return view('backend.purchasing')->with(compact('detail', 'suppliers')); 
+        return view('backend.purchasing')->with(compact('detail', 'suppliers', 'products')); 
+    }
+
+    public function products()
+    {
+        return ProductModal::with('metas')->get();
     }
 
     public function detailData($id)
@@ -57,19 +63,7 @@ class Purchasing extends BackendController
         $data = ModelDetail::select('*')->where('purchasing_id', $id);
 
         return Datatables::of($data)
-            ->addColumn('action', function ($data) {
-                $button = '<a href="#edit-'.$data->id.'" ';
-                $button .= ' data-id="'.$data->id.'"';
-                $button .= ' data-bill_no="'.$data->bill_no.'"';
-                $button .= ' data-bill_date="'.livepos_dateToShow($data->bill_date).'"';
-                $button .= ' data-supplier_id="'.$data->supplier_id.'"';
-                $button .= ' data-total_amount="'.$data->total_amount.'"';
-                    
-                $button .= ' data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-supplier="'.$data->supplier.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
-                return $button;        
-            })
-            ->editColumn('bill_date', '{!! livepos_dateToShow($bill_date) !!}')
+            ->addColumn('action', '')
             ->removeColumn('id')
             ->make(true);
     }

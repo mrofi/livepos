@@ -32,7 +32,9 @@ return [
 		        'purchase_price' => '0', 
 		        'selling_price' => '0', 
 		        'active' => '1', 
-		        'unit' => 'pcs'
+		        'unit' => 'pcs',
+		        'multi_unit' => '0',
+		        'multi_price' => '0',
 		    ], 
 	    ],
     ],

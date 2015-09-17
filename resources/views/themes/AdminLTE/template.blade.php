@@ -298,7 +298,7 @@
 @endsection
 
 @section('footer')
-      <footer class="main-footer livepos-footer">
+      <footer class="main-footer">
         <div class="pull-right hidden-xs">
           <b>v.</b> 0.3.0 <b><a href="https://twitter.com/m_rofi">MR</a></b>
         </div>

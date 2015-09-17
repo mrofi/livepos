@@ -273,7 +273,7 @@ $(function() {
         paging: false,
         info: false,
         searching: false,
-        ajax: '{!! action('Backend\Product@anyMultiPrice') !!}',
+        data: [],
         columns: [
             { data: 'quantity', name: 'quantity' },
             { data: 'selling_price', name: 'products.selling_price' },
@@ -387,24 +387,17 @@ $(function() {
     
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {
-      window._multi_unit_data = [];
-      window._multi_price_data = [];
       multiPriceDataTables.clear().draw();
       multiUnitDataTables.clear().draw();
-      multiPriceCollapse.collapse('hide');
-      multiUnitCollapse.collapse('hide');
-      $('#multi_price').attr('checked', false);
-      $('#multi_unit').attr('checked', false);
-      multiPriceCollapse.find('input').val('');
-      multiUnitCollapse.find('input').val('');
-
+      window._multi_unit_data = [];
+      window._multi_price_data = [];
       var button = $(event.relatedTarget), 
           title = '{{ trans('livepos.product.add') }}',
           content = {!! json_encode($product) !!}, 
           action = "{{ livepos_asset('api/product') }}";
           method = 'POST';
+
       
-      $('.input-init-stock').removeClass('hide');
       if (button.data('action') == 'edit') {
         title = '{{ trans('livepos.product.edit') }}';
         content.name = button.data('name'),
@@ -415,9 +408,37 @@ $(function() {
         content.selling_price = button.data('selling_price'),
         content.active = button.data('active'),
         content.unit = button.data('unit'),
+        content.multi_unit = button.data('multi_unit');
+        content.multi_price = button.data('multi_price');
         action += '/'+button.data('id');
         method = 'PUT';
         $('.input-init-stock').addClass('hide');
+
+        if (content.multi_unit != '0') {
+          multiUnitCollapse.collapse('show');
+          $('#multi_unit').prop('checked', true);
+          var _multi_unit_datas = content.multi_unit;
+          var _multi_unit_data = [];
+          for(x in _multi_unit_datas) {
+            _multi_unit_data[x] = _multi_unit_datas[x]; 
+            _multi_unit_data[x].action = '<a href="#" class="multi-unit-delete">Delete</a>';
+          }
+          window._multi_unit_data = _multi_unit_data;
+          multiUnitDataTables.rows.add(_multi_unit_data).draw();
+        }
+
+        if (content.multi_price != '0') {
+          multiPriceCollapse.collapse('show');
+          $('#multi_price').prop('checked', true);
+          var _multi_price_datas = content.multi_price;
+          var _multi_unit_data = [];
+          for(x in _multi_price_datas) {
+            _multi_price_data[x] = _multi_price_datas[x]; 
+            _multi_price_data[x].action = '<a href="#" class="multi-price-delete">Delete</a>';
+          }
+          window._multi_price_data = _multi_price_data;
+          multiPriceDataTables.rows.add(_multi_price_data).draw();
+        }
       }
           
       modal.find('.modal-title').text(title);
@@ -434,7 +455,7 @@ $(function() {
           opt = c.find('option');
           if (opt.attr('value') == cx) opt.attr('selected', 'selected');
         } else if(c.is('input[type=checkbox]')) {
-          if (c.attr('value') == cx) c.attr('checked', 'checked');
+          if (c.attr('value') == cx) c.prop('checked', true);
         } else {
           c.val(cx)
         }
@@ -442,6 +463,15 @@ $(function() {
 
     }).on('shown.bs.modal', function() {
       modal.find('.modal-body [autofocus]')[0].focus();
+    }).on('hide.bs.modal', function() {
+      multiPriceCollapse.collapse('hide');
+      multiUnitCollapse.collapse('hide');
+      $('#multi_price').prop('checked', false);
+      $('#multi_unit').prop('checked', false);
+      multiPriceCollapse.find('input').val('');
+      multiUnitCollapse.find('input').val('');
+      $('.input-init-stock').removeClass('hide');
+
     });
     
     modalDelete.on('show.bs.modal', function(event){

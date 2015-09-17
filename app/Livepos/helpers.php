@@ -35,6 +35,7 @@ function livepos_dateTimeToDB($date)
 
 function livepos_isRound($value)
 {
+    if (!is_numeric($value)) return false;
     return floor($value) == $value;
 }
 

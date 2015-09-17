@@ -19,4 +19,9 @@ class ProductMeta extends BaseModel
         'meta_key' => 'Meta Key',
         'meta_value' => 'Meta Value'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

@@ -40,7 +40,7 @@ class Purchasing extends BaseModel
                 'id' => $purchasing->id,
                 'month' => date('M', Carbon::now()->month),
                 'year' => Carbon::now()->year,
-             ]);
+            ]);
 
             $purchasing->transaction_no = $transaction_no;
             $purchasing->save();
