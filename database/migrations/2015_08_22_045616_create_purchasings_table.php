@@ -19,7 +19,7 @@ class CreatePurchasingsTable extends Migration
             $table->date('bill_date');
             $table->integer('supplier_id')->unsigned();
             $table->decimal('amount', 12, 2)->unsigned();
-            $table->decimal('discount', 5, 2)->unsigned();
+            $table->decimal('discount', 12, 2)->unsigned();
             $table->decimal('total_amount', 12, 2)->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();

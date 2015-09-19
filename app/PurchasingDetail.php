@@ -2,7 +2,7 @@
 
 namespace livepos;
 
-use livepos\Purchasing;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class PurchasingDetail extends BaseModel
@@ -35,4 +35,43 @@ class PurchasingDetail extends BaseModel
     {
         $this->belongsTo(Purchasing::class);
     }
+
+    public static function create(Array $attributes = [])
+    {
+        DB::beginTransaction();
+
+            $created = parent::create($attributes);
+
+            Purchasing::calculate($created);
+
+        DB::commit();
+
+        return $created;
+    } 
+
+    public function update(Array $attributes = [])
+    {
+        DB::beginTransaction();
+
+            parent::update($attributes);
+
+            Purchasing::calculate($this);
+
+        DB::commit();
+
+        return $this;
+    } 
+
+    public function delete(Array $attributes = [])
+    {
+        DB::beginTransaction();
+
+            parent::delete($attributes);
+
+            Purchasing::calculate($this);
+
+        DB::commit();
+
+        return $this;
+    } 
 }

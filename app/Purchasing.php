@@ -66,4 +66,28 @@ class Purchasing extends BaseModel
     {
         return $this->hasMany(PurchasingDetail::class);
     }
+
+    public static function calculate(PurchasingDetail $detail)
+    {
+        DB::beginTransaction();
+
+            $details = PurchasingDetail::where('purchasing_id', $detail->purchasing_id)->get();
+
+            $amount = 0;
+
+            foreach ($details as $row) 
+            {
+                $amount += $row->amount;        
+            }
+
+            $purchasing = static::where('id', $detail->purchasing_id)->firstOrFail();
+
+            $purchasing->amount = $amount;
+
+            $purchasing->total_amount = $amount - $purchasing->discount;
+
+            $purchasing->save();
+
+        DB::commit();
+    }
 }

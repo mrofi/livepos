@@ -18,7 +18,7 @@ class CreateSellingDetailsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->string('unit', 10);
             $table->decimal('selling_price', 12, 2)->unsigned();
-            $table->decimal('discount', 5, 2)->unsigned();
+            $table->decimal('discount', 12, 2)->unsigned();
             $table->decimal('quantity', 10, 3)->unsigned();
             $table->decimal('amount', 12, 2)->unsigned();
             $table->timestamps();

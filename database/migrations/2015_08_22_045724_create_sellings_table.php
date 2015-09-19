@@ -17,7 +17,7 @@ class CreateSellingsTable extends Migration
             $table->string('transaction_no', 50)->unique();
             $table->integer('customer_id')->unsigned();
             $table->decimal('amount', 12, 2)->unsigned();
-            $table->decimal('discount', 5, 2)->unsigned();
+            $table->decimal('discount', 12, 2)->unsigned();
             $table->decimal('total_amount', 12, 2)->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();

@@ -60,10 +60,35 @@ class Purchasing extends BackendController
 
     public function detailData($id)
     {
-        $data = ModelDetail::select('*')->where('purchasing_id', $id);
+        $datas = ModelDetail::select('*')->where('purchasing_id', $id);
 
-        return Datatables::of($data)
-            ->addColumn('action', '')
+        $collection = [];
+        $no = 0;
+        foreach($datas->get() as $row)
+        {
+            $collection[$row->id] = ++$no;
+        }
+
+        $no = 0;
+
+        return Datatables::of($datas)
+            ->editColumn('purchase_price', '{!! livepos_round($purchase_price) !!}')
+            ->editColumn('quantity', '{!! livepos_round($quantity) !!}')
+            ->editColumn('discount', '{!! livepos_round($discount) !!}')
+            ->editColumn('amount', '{!! livepos_round($amount) !!}')
+            ->addColumn('action', function ($data) {
+                $d = '';
+                foreach ($data->toArray() as $key => $value) {
+                    $d .= ' data-'.$key.'="'.livepos_round($value).'" ';
+                }
+
+                $button = '<a href="#edit-'.$data->id.'" class="btn-link btn btn-xs" data-action="edit" data-target="#detail-edit" data-toggle="modal" '.$d.'><i class="fa fa-pencil"></i> Edit</a>';
+                $button .= '<a href="#delete-'.$data->id.'" data-action="delete" data-toggle="modal" data-target="#detail-delete" '.$d.' class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
+                return $button;        
+            })
+            ->editColumn('created_at', function($data) use($collection) {
+                return $collection[$data->id];
+            })
             ->removeColumn('id')
             ->make(true);
     }
