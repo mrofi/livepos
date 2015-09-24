@@ -12,7 +12,7 @@ class Purchasing extends BaseModel
 {
     protected static $created;
 
-    protected $fillable = ['transaction_no', 'bill_no', 'bill_date', 'supplier_id', 'amount', 'discount', 'total_amount', 'created_by', 'updated_by'];
+    protected $fillable = ['transaction_no', 'bill_no', 'bill_date', 'supplier_id', 'amount', 'discount', 'total_amount', 'done', 'created_by', 'updated_by'];
     
     protected $rules = [
         'bill_no' => 'required|string|max:50|unique:purchasings,bill_no,__id__',
@@ -54,7 +54,12 @@ class Purchasing extends BaseModel
     public function update(Array $attributes = []) 
     {
         if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $attributes['bill_date'])) $attributes['bill_date'] = livepos_dateToDB($attributes['bill_date']);
-        return parent::update($attributes);
+        
+        $updated = parent::update($attributes);
+
+        $this->calculate();
+
+        return $updated;
     }
 
     public function supplier()
@@ -67,11 +72,11 @@ class Purchasing extends BaseModel
         return $this->hasMany(PurchasingDetail::class);
     }
 
-    public static function calculate(PurchasingDetail $detail)
+    public function calculate()
     {
         DB::beginTransaction();
 
-            $details = PurchasingDetail::where('purchasing_id', $detail->purchasing_id)->get();
+            $details = PurchasingDetail::where('purchasing_id', $this->id)->get();
 
             $amount = 0;
 
@@ -80,13 +85,11 @@ class Purchasing extends BaseModel
                 $amount += $row->amount;        
             }
 
-            $purchasing = static::where('id', $detail->purchasing_id)->firstOrFail();
+            $this->amount = $amount;
 
-            $purchasing->amount = $amount;
+            $this->total_amount = $amount - $this->discount;
 
-            $purchasing->total_amount = $amount - $purchasing->discount;
-
-            $purchasing->save();
+            $this->save();
 
         DB::commit();
     }

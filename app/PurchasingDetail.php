@@ -42,7 +42,7 @@ class PurchasingDetail extends BaseModel
 
             $created = parent::create($attributes);
 
-            Purchasing::calculate($created);
+            Purchasing::find($created->purchasing_id)->calculate();
 
         DB::commit();
 
@@ -55,7 +55,7 @@ class PurchasingDetail extends BaseModel
 
             parent::update($attributes);
 
-            Purchasing::calculate($this);
+            Purchasing::find($this->purchasing_id)->calculate();
 
         DB::commit();
 
@@ -68,7 +68,7 @@ class PurchasingDetail extends BaseModel
 
             parent::delete($attributes);
 
-            Purchasing::calculate($this);
+            Purchasing::find($this->purchasing_id)->calculate();
 
         DB::commit();
 

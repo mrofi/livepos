@@ -19,3 +19,20 @@ $factory->define(livepos\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(livepos\ProductBrand::class, function(Faker\Generator $faker) {
+	return [
+		'brand' => $faker->unique()->lastName,
+		'created_by' => '1',
+		'updated_by' => '1',
+	];
+});
+
+$factory->define(livepos\Supplier::class, function(Faker\Generator $faker) {
+	return [
+		'supplier' => $faker->unique()->company,
+		'created_by' => '1',
+		'updated_by' => '1',
+	];
+});
+

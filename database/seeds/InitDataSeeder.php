@@ -5,6 +5,7 @@ use Illuminate\Database\Seeder;
 use livepos\ProductCategory;
 use livepos\ProductBrand;
 use livepos\Supplier;
+use livepos\Customer;
 
 class InitDataSeeder extends Seeder
 {
@@ -23,8 +24,20 @@ class InitDataSeeder extends Seeder
         
         ProductBrand::create(['brand' => trans('livepos.productBrand.generic')]);
 
+        factory(livepos\ProductBrand::class, 50)->create();
+
         DB::table('suppliers')->delete();
         
         Supplier::create(['supplier' => trans('livepos.supplier.generic')]);
+
+        factory(livepos\Supplier::class, 50)->create();
+
+        DB::table('customers')->delete();
+        
+        Customer::create(['customer' => 'Anonymous']);
+
+
+        DB::table('products')->delete();
+    
     }
 }

@@ -24,10 +24,11 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'B
 
     Route::get('purchasing/detailData/{id}', 'Purchasing@detailData');
 
-    // Route::get('purchasing/products', 'Purchasing@products');
-
     Route::controller('purchasing', 'Purchasing');
 
+    Route::get('selling/{id}', 'Selling@detail');
+
+    Route::controller('selling', 'Selling');
 
     Route::controller('/', 'Dashboard');
   
@@ -41,6 +42,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
     
     Route::resource('productMeta', 'ProductMeta'); 
     
+    Route::get('product/search', 'Product@getSearch');
+
     Route::resource('product', 'Product'); 
         
     Route::resource('purchasing', 'Purchasing'); 

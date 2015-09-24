@@ -139,36 +139,37 @@
                       </thead>
                   </table>
                   <div class="well">
-                    <form action="#" id="form-add-discount" class="form-inline">
-                      <div class="row">
-                        <div class="col-sm-6">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <form action="#" id="form-add-discount" class="form-inline">
+                          <input type="hidden" name="_method" value="put">
                           <div class="input-group input-group-lg">
                             <input type="text" class="form-control" name="discount" placeholder="{{ trans('livepos.purchasing.addDiscount') }}">
                             <div class="input-group-btn">
                               <button type="button" class="btn btn-primary">{{ trans('livepos.saveDiscount') }}</button>
                             </div><!-- /btn-group -->
                           </div> 
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="table-responsive">
-                            <table class="table">
-                              <tr>
-                                <th style="width:50%">{{ trans('livepos.purchasing.subTotal') }}:</th>
-                                <td class="subtotal-amount" id="subtotal-amount-1">{{ $detail->amount }}</td>
-                              </tr>
-                              <tr>
-                                <th>{{ trans('livepos.discount') }} (<a href="#" id="delete-discount-amount" class="btn btn-link"><i class="fa fa-times"></i> {{ trans('livepos.clear') }}</a>):</th>
-                                <td class="discount-amount">{{ $detail->discount }}</td>
-                              </tr>
-                              <tr>
-                                <th>{{ trans('livepos.purchasing.total') }}:</th>
-                                <td class="total-amount" id="total-amount-2">{{ $detail->total_amount }}</td>
-                              </tr>
-                            </table>
-                          </div>
+                        </form>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="table-responsive">
+                          <table class="table">
+                            <tr>
+                              <th style="width:50%">{{ trans('livepos.purchasing.subTotal') }}:</th>
+                              <td class="subtotal-amount" id="subtotal-amount-1">{{ $detail->amount }}</td>
+                            </tr>
+                            <tr>
+                              <th>{{ trans('livepos.discount') }} (<a href="#" id="delete-discount-amount" class="btn btn-link"><i class="fa fa-times"></i> {{ trans('livepos.clear') }}</a>):</th>
+                              <td class="discount-amount">{{ $detail->discount }}</td>
+                            </tr>
+                            <tr>
+                              <th>{{ trans('livepos.purchasing.total') }}:</th>
+                              <td class="total-amount" id="total-amount-2">{{ $detail->total_amount }}</td>
+                            </tr>
+                          </table>
                         </div>
                       </div>
-                    </form>
+                    </div>
                   </div>
                   @else
                   <table class="table table-hover" id="purchasings-table">
@@ -507,9 +508,9 @@ $(function() {
 
     $('#form-add-product').on('submit', function(e) {
       e.preventDefault();
-      form = $(this);
-      post = {};
-      input_product = $('#input-product :selected');
+      var form = $(this);
+      var post = {};
+      var input_product = $('#input-product :selected');
       post.purchasing_id = '{{ $detail->id }}';
       post.product_id = input_product.data('id');
       post.product_name = input_product.data('name');
@@ -530,9 +531,9 @@ $(function() {
     var modalDetail = $('#detail-edit');
 
     modalDetail.on('show.bs.modal', function(e){
-      button = $(e.relatedTarget);
-      modal = $(this);
-      form = modal.find('form');
+      var button = $(e.relatedTarget);
+      var modal = $(this);
+      var form = modal.find('form');
       form.find('select')[0].focus();
       form.attr('action', '{{ livepos_asset('api/purchasingDetail') }}'+'/'+button.data('id'));
       $('#input-product-modal').find('[data-id='+button.data('product_id')+'][data-meta_unit='+button.data('unit')+']').prop('selected', true);
@@ -544,9 +545,9 @@ $(function() {
 
     $('#form-edit-product').on('submit', function(e) {
       e.preventDefault();
-      form = $(this);
-      post = {};
-      input_product = $('#input-product-modal :selected');
+      var form = $(this);
+      var post = {};
+      var input_product = $('#input-product-modal :selected');
       post.purchasing_id = '{{ $detail->id }}';
       post.product_id = input_product.data('id');
       post.product_name = input_product.data('name');
@@ -567,10 +568,10 @@ $(function() {
     });
 
     var countAmountModal = function(){
-      purchase_price = $('#input-price-modal').val();
-      discount = $('#input-discount-modal').val();
-      quantity = $('#input-quantity-modal').val();
-      amount = purchase_price * quantity - discount;
+      var purchase_price = $('#input-price-modal').val();
+      var discount = $('#input-discount-modal').val();
+      var quantity = $('#input-quantity-modal').val();
+      var amount = purchase_price * quantity - discount;
       $('#input-amount-modal').val(amount);
     };
 
@@ -584,15 +585,15 @@ $(function() {
 
     var modalDetailDelete = $('#detail-delete');
     modalDetailDelete.on('show.bs.modal', function(e){
-      button = $(e.relatedTarget);
+      var button = $(e.relatedTarget);
       $('#product-detail-delete').text(button.data('product_name'));
       $(this).find('form').attr('action', '{{ livepos_asset('api/purchasingDetail') }}'+'/'+button.data('id'));
     });
 
     modalDetailDelete.find('form').on('submit', function(e){
       e.preventDefault();
-      form = $(this);
-      post = {};
+      var form = $(this);
+      var post = {};
       post._method = 'delete';
       $.post(form.attr('action'), post, function(data) {
         if (data.message == 'ok') {
@@ -609,6 +610,28 @@ $(function() {
           $('.subtotal-amount').text(data.amount);
           $('.discount-amount').text(data.discount);
           $('.total-amount').text(data.total_amount);
+        }
+      })
+    })
+
+    $('#form-add-discount').on('submit', function(e) {
+      e.preventDefault();
+      var form = $(this);
+      $.post('{{ livepos_asset("api/purchasing/".$detail->id) }}', form.serialize(), function(data) {
+        if (data.message == 'ok') {
+          dataTables.draw();
+          form[0].reset();
+          $('#input-product')[0].focus();
+        }
+      })
+    })
+
+    $('#delete-discount-amount').click(function(e) {
+      e.preventDefault();
+      $.post('{{ livepos_asset("api/purchasing/".$detail->id) }}', {_method: 'put', discount: 0}, function(data) {
+        if (data.message == 'ok') {
+          dataTables.draw();
+          $('#input-product')[0].focus();
         }
       })
     })

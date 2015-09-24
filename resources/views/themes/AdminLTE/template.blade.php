@@ -498,10 +498,13 @@
     <!-- DataTables -->
     <script src="/themes/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/themes/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <!-- Bootstrap Typeahead -->
+    <script src="/themes/AdminLTE/plugins/bootstrap-typeahead/bootstrap3-typeahead.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/themes/AdminLTE/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="/themes/AdminLTE/dist/js/demo.js"></script>
+
 
     <script>
       $(function() {

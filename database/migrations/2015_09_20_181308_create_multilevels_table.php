@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSellingsTable extends Migration
+class CreateMultilevelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,10 @@ class CreateSellingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sellings', function (Blueprint $table) {
+        Schema::create('multilevels', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('transaction_no', 50)->unique();
             $table->integer('customer_id')->unsigned();
-            $table->decimal('amount', 12, 2)->unsigned();
-            $table->decimal('discount', 12, 2)->unsigned();
-            $table->decimal('total_amount', 12, 2)->unsigned();
-            $table->decimal('profit', 12, 2)->unsigned();
-            $table->enum('done', ['0', '1'])->default('0');
+            $table->integer('upline_id')->unsigned();
             $table->timestamps();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();
@@ -34,6 +29,6 @@ class CreateSellingsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sellings');
+        Schema::drop('multilevels');
     }
 }

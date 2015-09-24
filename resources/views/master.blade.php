@@ -33,6 +33,12 @@
                 <small class="label pull-right bg-red"></small>
               </a>
             </li>
+            <li>
+              <a href="{{ livepos_asset('dashboard/selling') }}">
+                <i class="fa fa-shopping-cart"></i> <span>Selling</span>
+                <small class="label pull-right bg-red"></small>
+              </a>
+            </li>
 @endsection
 
 <?php if (!isset($thePage)) $thePage = ''; ?>  

@@ -18,7 +18,7 @@ class Product extends BaseModel
         'selling_price' => 'required|numeric|min:1',
     ];
 
-    protected function addMeta($product_id, Array $attributes = [])
+    protected function addMeta(Array $attributes = [])
     {
     	if ($units = json_decode($attributes['_multi_unit_data']))  
     	{
@@ -41,7 +41,7 @@ class Product extends BaseModel
 				$_units[] = $unit;
     		}
 
-    		ProductMeta::create(['product_id' => $product_id, 'meta_key' => 'multi_unit', 'meta_value' => json_encode($_units), 'created_by' => auth()->user()->id, 'updated_by' => auth()->user()->id]);
+    		ProductMeta::create(['product_id' => $this->id, 'meta_key' => 'multi_unit', 'meta_value' => json_encode($_units), 'created_by' => auth()->user()->id, 'updated_by' => auth()->user()->id]);
     	}
 
     	if ($prices = json_decode($attributes['_multi_price_data']))  
@@ -59,7 +59,7 @@ class Product extends BaseModel
     			$_prices[] = $price;
     		}
 
-    		ProductMeta::create(['product_id' => $product_id, 'meta_key' => 'multi_price', 'meta_value' => json_encode($_prices), 'created_by' => auth()->user()->id, 'updated_by' => auth()->user()->id]);
+    		ProductMeta::create(['product_id' => $this->id, 'meta_key' => 'multi_price', 'meta_value' => json_encode($_prices), 'created_by' => auth()->user()->id, 'updated_by' => auth()->user()->id]);
     	}
 
     }
@@ -70,7 +70,7 @@ class Product extends BaseModel
 
 	    	$created = parent::create($attributes);
 
-	    	$this->addMeta($created->id, $attributes);
+	    	$created->addMeta($attributes);
 	    	
 	    DB::commit();
 	    
@@ -85,7 +85,7 @@ class Product extends BaseModel
 
 	    	ProductMeta::where('product_id', $this->id)->delete();
 
-	    	$this->addMeta($this->id, $attributes);
+	    	$this->addMeta($attributes);
 	    	
 	    DB::commit();
 	    

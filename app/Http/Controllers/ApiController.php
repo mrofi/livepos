@@ -20,7 +20,7 @@ class ApiController extends Controller
         $this->model = $model;
     }
     
-    private function userAuthorize($method, Closure $next)
+    protected function userAuthorize($method, Closure $next)
     {
         $class = new \ReflectionClass($this->model);
         $area = $class->getShortName().'.'.$method;
@@ -97,9 +97,12 @@ class ApiController extends Controller
         return $this->userAuthorize('update', function() use ($request, $id)
         {
             // find record
-            $update = $this->model->find($id);
-            if (! $update) return ['error' => 'no data'];
+            $update = $this->model->findOrFail($id);
             
+            $new_data = array_merge($update->toArray(), $request->all());
+
+            $request->merge($new_data);
+
             // validation
             $this->validate($request, $this->model->get_rules($id), $this->model->get_error_messages(), $this->model->get_attributes());
             
