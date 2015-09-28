@@ -37,7 +37,9 @@ class ApiController extends Controller
     {
         return $this->userAuthorize('index', function() use ($request)
         {
-            return $this->model->all();  
+            $data = $this->model->all()->toArray();  
+            
+            return livepos_arrayMapRecursive('livepos_round', $data);
         });
     }
 
@@ -62,6 +64,8 @@ class ApiController extends Controller
 
             if ($create['error']) return $create;
 
+            $create = livepos_arrayMapRecursive('livepos_round', $create->toArray());
+
             return ['message' => 'ok', 'created' => $create];
         });
     }
@@ -76,9 +80,19 @@ class ApiController extends Controller
     {        
         return $this->userAuthorize('show', function() use ($request, $id)
         {
-            $show = $this->model->find($id);
+            $model = $this->model;
+
+            foreach ($this->model->get_dependencies() as $otherModel) 
+            {
+                $model = $model->with($otherModel);    
+            }
+
+            $show = $model->find($id);
+
             if (! $show) return ['error' => 'no data'];
             
+            $show = livepos_arrayMapRecursive('livepos_round', $show->toArray());
+
             return $show;
         });
     }
@@ -111,6 +125,9 @@ class ApiController extends Controller
             
             // update data
             $update->update($request->all());
+
+            $update = livepos_arrayMapRecursive('livepos_round', $update->toArray());
+
             return ['message' => 'ok', 'updated' => $update];
         });
     }
@@ -130,6 +147,9 @@ class ApiController extends Controller
             if (! $delete) return ['error' => 'no data'];
             
             $delete->delete();
+
+            $delete = $delete->toArray();
+
             return ['message' => 'ok', 'deleted' => $delete];
         });
     }

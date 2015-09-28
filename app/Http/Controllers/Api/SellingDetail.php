@@ -72,4 +72,31 @@ class SellingDetail extends ApiController
 	    return $stored;
 
     }
+
+    public function destroy(Request $request, $id)
+    {
+    	DB::beginTransaction();
+
+		    $deleted = parent::destroy($request, $id);
+
+		    if (isset($deleted['deleted']['error'])) 
+		    {
+		    	DB::rollback();
+		    	return $deleted;
+		    } 
+
+		    $sellingModel = SellingModel::find($deleted['deleted']['selling_id']);
+
+		    $calculation = $sellingModel->calculate();
+
+        	if (!$calculation) 
+        	{
+        		DB::rollback();
+        		return ['error' => 'error occurred when calculating'];
+        	}
+
+		DB::commit();
+
+		return $deleted;
+    }
 }

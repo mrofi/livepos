@@ -64,11 +64,3 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
 // Authentication routes...
 Route::controller('auth', 'Auth\AuthController');
 
-// Route::get('auth/login', 'Auth\AuthController@getLogin');
-// Route::post('auth/login', 'Auth\AuthController@postLoginProcess');
-// Route::get('auth/logout', 'Auth\AuthController@getLogout');
-
-// // Registration routes...
-// Route::get('auth/register', 'Auth\AuthController@getRegister');
-// Route::post('auth/register', 'Auth\AuthController@postRegister');
-

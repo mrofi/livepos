@@ -22,9 +22,15 @@ class Selling extends BackendController
         return view('backend.selling');
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
     	$detail = Model::where('done', '0')->where('id', $id)->firstOrFail();
+
+    	$shopCommision = $request->session()->get('commision_of_shop', 0) / 100 * $detail->profit;
+
+    	$customerCommision = $request->session()->get('commision_of_customer', 0) / 100 * $shopCommision;
+
+    	$detail->point = $customerCommision;
 
     	return view('backend.selling')->with(compact('detail'));
     }

@@ -11,6 +11,9 @@ return [
     'company' => ENV('LIVEPOS_COMPANY', 'PT Hiret Web Indonesia'),
     'title' => ENV('LIVEPOS_TITLE', 'live <b>POS</b> App'),
     'shorttitle' => ENV('LIVEPOS_SHORTTITLE', 'l<b>P</b>A'),
+
+    'percentToShop' => 50,  // from Profit
+    'percentToCustomer' => 50,  // from customer allocation
     
     'model' => [
 	    'product' => [

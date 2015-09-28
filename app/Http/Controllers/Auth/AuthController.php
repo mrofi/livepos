@@ -92,6 +92,9 @@ class AuthController extends Controller
         $request->session()->flash('credential', $credential_type);
         
         $request->merge($credentials = [$credential_type => $credential, 'password' => $password]);
+
+        $request->session()->put('commision_of_shop', config('livepos.percentToShop'));
+        $request->session()->put('commision_of_customer', config('livepos.percentToCustomer'));
         
         return $this->postLogin($request);
     }

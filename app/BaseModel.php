@@ -11,6 +11,8 @@ class BaseModel extends Model
     protected $class_name = null;
 
     protected $fillable = [];
+
+    protected $dependencies = [];
     
     protected $rules = [];
     
@@ -19,6 +21,11 @@ class BaseModel extends Model
     protected $attributes = [];
 
     protected $init_data = [];
+
+    public function get_dependencies()
+    {
+        return $this->dependencies;
+    }
 
     protected function get_model_config()
     {

@@ -14,7 +14,7 @@
                     <a href="#all" data-action="all" class="btn bg-maroon btn-round"><i class="fa fa-list"></i></a>
                   </div>
                   <div class="box-tools .pull-right">
-                    <h1 class="box-title" style="font-size: 2.5em; margin-right: 10px;">@if(isset($detail)) {{ livepos_round($detail->total_amount) }} @else 0 @endif</h1>
+                    <h1 class="box-title total-amount" id="total-amount-1" style="font-size: 2.5em; margin-right: 10px;">@if(isset($detail)) {{ livepos_round($detail->total_amount) }} @else 0 @endif</h1>
                     <button class="btn bg-maroon btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                   </div>
                 </div> <!--.box-header--> 
@@ -78,6 +78,71 @@
                             </tr>
                         </thead>
                       </table>
+                      <div class="well">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <form action="#" id="form-add-discount" class="form-inline">
+                              <input type="hidden" name="_method" value="put">
+                              <div class="input-group input-group-lg">
+                                <input type="text" class="form-control" name="discount" placeholder="{{ trans('livepos.addDiscount') }}">
+                                <div class="input-group-btn">
+                                  <button type="button" class="btn btn-primary">{{ trans('livepos.saveDiscount') }}</button>
+                                </div><!-- /btn-group -->
+                              </div> 
+                            </form>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="table-responsive">
+                              <table class="table">
+                                <tr>
+                                  <th style="width:50%">{{ trans('livepos.subTotal') }}:</th>
+                                  <td class="subtotal-amount" id="subtotal-amount-1">{{ $detail->amount }}</td>
+                                </tr>
+                                <tr>
+                                  <th>{{ trans('livepos.discount') }} (<a href="#" id="delete-discount-amount" class="btn btn-link"><i class="fa fa-times"></i> {{ trans('livepos.clear') }}</a>):</th>
+                                  <td class="discount-amount">{{ $detail->discount }}</td>
+                                </tr>
+                                <tr>
+                                  <th>{{ trans('livepos.total') }}:</th>
+                                  <td class="total-amount" id="total-amount-2">{{ $detail->total_amount }}</td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <form action="#" id="form-add-customer" class="form-inline">
+                              <input type="hidden" name="_method" value="put">
+                              <div class="input-group input-group-lg">
+                                <input type="text" class="form-control" name="customer" placeholder="{{ trans('livepos.customer') }}">
+                                <input type="hidden" name="customer_id">
+                                <div class="input-group-btn">
+                                  <button type="button" class="btn btn-primary">{{ trans('livepos.save') }}</button>
+                                </div><!-- /btn-group -->
+                              </div> 
+                            </form>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="table-responsive">
+                              <table class="table">
+                                <tr>
+                                  <th style="width:50%">{{ trans('livepos.customer.name') }}:</th>
+                                  <td class="customer-name" id="subtotal-amount-1">{{ $detail->customer->customer }}</td>
+                                </tr>
+                                <tr>
+                                  <th>{{ trans('livepos.selling.point') }}:</th>
+                                  <td class="selling-point" id="subtotal-amount-1">{{ $detail->point }}</td>
+                                </tr>
+                                <tr>
+                                  <th>{{ trans('livepos.totalPoint') }}:</th>
+                                  <td class="total-point" id="total-amount-2">{{ $detail->customer->totalPoint }}</td>
+                                </tr>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     @endif
                   </div>
@@ -240,27 +305,11 @@ $(function() {
 
     });
 
-    var formInput = $('#form-input-product');
-
-    formInput.submit(function(e){
-      e.preventDefault();
-      url = formInput.attr('action');
-      $.post(url, formInput.serialize(), function(data) {
-        if (data.message == 'ok') {
-          if ($('#input-selling_id').val() == '') {
-            location.href = '{{ livepos_asset("dashboard/selling/") }}'+data.created.selling_id;
-          }
-          dataTables.draw();
-          formInput[0].reset();
-          $('#display-product').text('');
-          $('#input-product')[0].focus();
-        }
-      })
-
-    })
-
     @if(isset($detail))
     var dataTables = $('#selling-table').DataTable({
+        processing: true,
+        serverSide: true,
+        order: [[0, 'desc']],
         paging: false,
         info: false,
         searching: false,
@@ -274,95 +323,47 @@ $(function() {
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });
-    @endif
-    var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
-    modal.on('show.bs.modal', function( event ) {
-      var button = $(event.relatedTarget), 
-          title = '{{ trans('livepos.supplier.add') }}',
-          content = {supplier: '', address: '', contact1: '', contact2: ''},
-          action = "{{ livepos_asset('api/supplier') }}";
-          method = 'POST';
-      
-      if (button.data('action') == 'edit') {
-        title = '{{ trans('livepos.supplier.edit') }}';
-        content.supplier = button.data('supplier');
-        content.address = button.data('address');
-        content.contact1 = button.data('contact1');
-        content.contact2 = button.data('contact2');
-        action += '/'+button.data('id');
-        method = 'PUT';
-      }
-          
-      modal.find('.modal-title').text(title);
-      modal.find('.modal-body #supplier').val(content);
-      modal.find('.modal-footer #method').val(method);
-      form.attr('action', action)
-        .find('.error-label').remove().end()
-        .find('.form-group').removeClass('has-warning').end()
-        .find('.alert.cloned').remove();
-      for (x in content) {
-        cx = content[x];
-        c = modal.find('.modal-body #'+x);
-        if (c.is('select')) {
-          opt = c.find('option');
-          if (opt.attr('value') == cx) opt.attr('selected', 'selected');
-        } else if(c.is('input[type=checkbox]')) {
-          if (c.attr('value') == cx) c.attr('checked', 'checked');
-        } else {
-          c.val(cx)
-        }
-      }
 
-    }).on('shown.bs.modal', function() {
-      modal.find('.modal-body [autofocus]')[0].focus();
+    dataTables.on('draw.dt', function() {
+      $.get('{{ livepos_asset("api/selling/$detail->id") }}', {}, function(data) {
+        if (data.id) {
+          $('.subtotal-amount').text(data.amount.toString().toRp());
+          $('.discount-amount').text(data.discount);
+          $('.total-amount').text(data.total_amount.toString().toRp());
+        }
+      })
+    })
+    @endif
+
+    var formInput = $('#form-input-product');
+
+    formInput.submit(function(e){
+      e.preventDefault();
+      url = formInput.attr('action');
+      $.post(url, formInput.serialize(), function(data) {
+        if (data.message == 'ok') {
+          if ($('#input-selling_id').val() == '') {
+            location.href = '{{ livepos_asset("dashboard/selling/") }}'+data.created.selling_id;
+            return;
+          }
+          dataTables.draw();
+          formInput[0].reset();
+          $('#display-product').text('');
+          $('#input-product')[0].focus();
+        }
+      }, 'json');
+
     });
-    
-    modalDelete.on('show.bs.modal', function(event){
-      var button = $(event.relatedTarget);
-      formDelete.attr('action', "{{ livepos_asset('api/supplier') }}/"+button.data('id'))
-        .find('.alert.cloned').remove();
-      
-    });
-    
-    var error_handling = function(_form, data) {
-      for (x in data) {
-        err = data[x];
-        _form.find('[name='+x+']').after('<label class="error-label control-label" for="inputError"><i class="fa fa-times-circle-o"></i> '+err[0]+'</label>')
-          .parents('.form-group').addClass('has-warning');
-      } 
-      var $alert = _form.find('.modal-body .alert').clone().prependTo(_form.find('.modal-body')).addClass('cloned');
-      $alert.find('.message').text(data.error ? data.error : '{{ trans('livepos.errorHappening') }}');
-      $alert.removeClass('hide');
-    }
-    
-    var submit_handling = function(_form, event) {
-      event.preventDefault();
-      _form.find('.form-group').removeClass('has-warning');
-      _form.find('.form-group .error-label').remove();
-      _form.find('.modal-body .alert.cloned').remove();
-      $.post(_form.attr('action'), _form.serialize(), function( data ) {
+
+    $('#selling-table').on('click', 'tr a[data-target=#detail-delete]', function(e){
+      e.preventDefault();
+      var button = $(this);
+      $.post('{{ livepos_asset("api/sellingDetail/") }}'+button.data('id'), {_method: 'delete'}, function( data ) {
         if (data.message == 'ok') {
           dataTables.draw();
-          _form.parents('.modal').modal('hide');
-        } else {
-          error_handling(_form, data);
-        };
-      }, 'json').error( function(xhr, textStatus, errorThrown) {
-        error_handling(_form, $.parseJSON(xhr.responseText));
-      });
-      return false;
-    };
-    
-    form.on('submit', function( event ) {
-      _form = $(this);
-      return submit_handling(form, event);
-    });
-    
-    formDelete.on('submit', function(event){
-      event.preventDefault();
-      _form = $(this);
-      return submit_handling(_form, event);
-    }); 
+        }
+      })
+    })
 
 });
 </script>

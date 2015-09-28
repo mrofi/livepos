@@ -144,7 +144,7 @@
                         <form action="#" id="form-add-discount" class="form-inline">
                           <input type="hidden" name="_method" value="put">
                           <div class="input-group input-group-lg">
-                            <input type="text" class="form-control" name="discount" placeholder="{{ trans('livepos.purchasing.addDiscount') }}">
+                            <input type="text" class="form-control" name="discount" placeholder="{{ trans('livepos.addDiscount') }}">
                             <div class="input-group-btn">
                               <button type="button" class="btn btn-primary">{{ trans('livepos.saveDiscount') }}</button>
                             </div><!-- /btn-group -->
@@ -155,7 +155,7 @@
                         <div class="table-responsive">
                           <table class="table">
                             <tr>
-                              <th style="width:50%">{{ trans('livepos.purchasing.subTotal') }}:</th>
+                              <th style="width:50%">{{ trans('livepos.subTotal') }}:</th>
                               <td class="subtotal-amount" id="subtotal-amount-1">{{ $detail->amount }}</td>
                             </tr>
                             <tr>
@@ -163,7 +163,7 @@
                               <td class="discount-amount">{{ $detail->discount }}</td>
                             </tr>
                             <tr>
-                              <th>{{ trans('livepos.purchasing.total') }}:</th>
+                              <th>{{ trans('livepos.total') }}:</th>
                               <td class="total-amount" id="total-amount-2">{{ $detail->total_amount }}</td>
                             </tr>
                           </table>

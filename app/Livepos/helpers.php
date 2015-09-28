@@ -1,5 +1,18 @@
 <?php
 
+function livepos_arrayMapRecursive($callback, $array) 
+{
+    foreach ($array as $key => $value) {
+        if (is_array($array[$key])) {
+            $array[$key] = livepos_arrayMapRecursive($callback, $array[$key]);
+        }
+        else {
+            $array[$key] = call_user_func($callback, $array[$key]);
+        }
+    }
+    return $array;
+}
+
 function livepos_password($password = null)
 {
     $salt = config('livepos.salt');

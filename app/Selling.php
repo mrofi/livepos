@@ -22,6 +22,13 @@ class Selling extends BaseModel
         'total_amount' => 'Total'
     ];
 
+    protected $dependencies = ['customer', 'details'];
+
+    public  function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     public function details()
     {
         return $this->hasMany(SellingDetail::class);

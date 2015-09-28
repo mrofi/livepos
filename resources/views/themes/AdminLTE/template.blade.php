@@ -507,6 +507,9 @@
 
 
     <script>
+      String.prototype.toRp = function(b,c,d,e) {
+        e=function(f){return f.split('').reverse().join('')};b=e(parseInt(this,10).toString());for(c=0,d='';c<b.length;c++){d+=b[c];if((c+1)%3===0&&c!==(b.length-1)){d+='.';}}return'Rp.\t'+e(d)+',00';
+      }
       $(function() {
         $.fn.datepicker.defaults.format = "{{ config('livepos.dateformat') }}";
         $.fn.datepicker.defaults.language = "id";
@@ -517,6 +520,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
 });
+
       })
     </script>
     
