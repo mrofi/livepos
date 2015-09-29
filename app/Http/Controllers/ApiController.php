@@ -80,14 +80,7 @@ class ApiController extends Controller
     {        
         return $this->userAuthorize('show', function() use ($request, $id)
         {
-            $model = $this->model;
-
-            foreach ($this->model->get_dependencies() as $otherModel) 
-            {
-                $model = $model->with($otherModel);    
-            }
-
-            $show = $model->find($id);
+            $show = $this->model->with($this->model->get_dependencies())->find($id);
 
             if (! $show) return ['error' => 'no data'];
             

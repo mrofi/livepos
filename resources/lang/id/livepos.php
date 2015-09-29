@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'unit' => 'Satuan',
+    'save' => 'Simpan',
+    'cancel' => 'Batal',
+    'close' => 'Tutup',
+    'yes' => 'Ya',
+    'confirmDelete' => 'Apakah Anda yakin akan menghapus',
     'login' => [
         'greeting' => 'Silakan login terlebih dahulu',
         'remember' => 'Ingat saya',
@@ -26,6 +32,32 @@ return [
         'title' => 'Produk',
         'tagline' => 'Berbagai macam produk yang dijual ada di sini',
         'add' => 'Tambah Produk',
+        'name' => 'Nama Produk',
+        'purchase_price' => 'Harga Beli',
+        'purchasePrice' => 'Harga Beli',
+        'selling_price' => 'Harga Jual',
+        'sellingPrice' => 'Harga Jual',
+        'smallUnit' => 'Satuan Terkecil',
+        'useMultiUnit' => 'Punya Banyak Satuan',
+        'useMultiPrice' => 'Punya Banyak Harga',
+        'chooseCategory' => 'Pilih Kategori',
+        'chooseBrand' => 'Pilih Merk',
+        'init_stock' => 'Stock Awal',
+        'min_stock' => 'Stock Minimal',
+        'active' => 'Apakah aktif?',
+    ],
+
+    'brand' => [
+        'name' => 'Merk',
+
+    ],
+
+    'category' => [
+        'name' => 'Kategori',
+        'title' => 'Kategori Produk',
+        'tagline' => 'Daftar semua kategori produk',
+        'add' => 'Tambah Kategori',
+        
     ],
 
     'supplier' => [
@@ -36,4 +68,6 @@ return [
     'purchasing' => [
         'codeName' => 'INVOICE',
     ],
+
+
 ];  

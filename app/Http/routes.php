@@ -26,9 +26,13 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'B
 
     Route::controller('purchasing', 'Purchasing');
 
+    Route::get('selling/{id}/print', 'Selling@toPrint');
+
     Route::get('selling/{id}', 'Selling@detail');
 
     Route::controller('selling', 'Selling');
+
+    Route::controller('multilevel', 'Multilevel');
 
     Route::controller('/', 'Dashboard');
   
@@ -56,7 +60,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
         
     Route::resource('supplier', 'Supplier');
     
+    Route::get('customer/search', 'Customer@getSearch');
+
     Route::resource('customer', 'Customer');
+
+    Route::resource('multilevel', 'Multilevel');
         
     Route::resource('user', 'User'); 
 });

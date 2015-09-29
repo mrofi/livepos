@@ -31,7 +31,7 @@ function livepos_dateToShow($date = null)
 function livepos_dateTimeToShow($date)
 {
     $date = \Carbon::createFromFormat('Y-m-d H:i:s', $date);
-    return $date->format(config('livepos.phpdateformat'));
+    return $date->format(config('livepos.phpdatetimeformat'));
 }
 
 function livepos_dateToDB($date)
@@ -85,4 +85,18 @@ function livepos_themeAsset($location = '')
     // return (Request::secure()) ? secure_asset($location) : asset($location);
 
     return $location;
+}
+
+function livepos_alphaToNumber($dest)
+{
+    if ($dest)
+        return ord(strtolower($dest)) - 96;
+    else
+        return 0;
+}
+
+function livepos_toCurrency($num, $str = 'Rp. ')
+{
+    $num = intval(preg_replace('/,.*|[^0-9]/', '', ceil($num)));
+    return $str.strrev(implode('.',str_split(strrev(strval($num)),3)));
 }

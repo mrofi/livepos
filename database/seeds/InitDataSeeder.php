@@ -34,7 +34,7 @@ class InitDataSeeder extends Seeder
 
         DB::table('customers')->delete();
         
-        Customer::create(['customer' => 'Anonymous']);
+        Customer::create(['customer' => 'No Customer']);
 
 
         DB::table('products')->delete();

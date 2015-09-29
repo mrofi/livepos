@@ -16,7 +16,7 @@
                     <button class="btn bg-maroon btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                   </div>
                 </div> <!--.box-header--> 
-                <div class="box-body bg-gray">
+                <!-- <div class="box-body bg-gray">
                   <div class="box-title row">
                     <div class="col-sm-6">
                      <h3>TEs</h3> 
@@ -24,7 +24,7 @@
                     
                     <hr>
                   </div>
-                </div>
+                </div> -->
                 <div class="box-footer">
                   <table class="table table-hover" id="products-table">
                       <thead>

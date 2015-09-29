@@ -17,6 +17,7 @@ class CreateMultilevelCommisionsTable extends Migration
             $table->integer('selling_id')->unsigned();
             $table->integer('multilevel_id')->unsigned();
             $table->decimal('commision', 12, 2)->unsigned();
+            $table->enum('redeem', ['0', '1'])->default('0');
             $table->timestamps();
         });
     }

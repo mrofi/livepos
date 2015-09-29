@@ -136,7 +136,7 @@
                                 </tr>
                                 <tr>
                                   <th>{{ trans('livepos.totalPoint') }}:</th>
-                                  <td class="total-point" id="total-amount-2">{{ $detail->customer->totalPoint }}</td>
+                                  <td class="total-point" id="total-amount-2">{{ $detail->customer->totalPoint or $detail->point}}</td>
                                 </tr>
                               </table>
                             </div>

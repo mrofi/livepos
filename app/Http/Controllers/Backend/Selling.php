@@ -28,11 +28,24 @@ class Selling extends BackendController
 
     	$shopCommision = $request->session()->get('commision_of_shop', 0) / 100 * $detail->profit;
 
-    	$customerCommision = $request->session()->get('commision_of_customer', 0) / 100 * $shopCommision;
+    	$customerCommision = $request->session()->get('commision_of_customer', 0) / 100 * ($detail->profit - $shopCommision);
 
     	$detail->point = $customerCommision;
 
     	return view('backend.selling')->with(compact('detail'));
+    }
+
+    public function toPrint(Request $request, $id)
+    {
+    	$detail = Model::with(['customer', 'details'])->where('done', '0')->where('id', $id)->firstOrFail();
+
+    	$shopCommision = $request->session()->get('commision_of_shop', 0) / 100 * $detail->profit;
+
+    	$customerCommision = $request->session()->get('commision_of_customer', 0) / 100 * $shopCommision;
+
+    	$detail->point = $customerCommision;
+
+    	return view('reports.bill')->with(compact('detail'));
     }
 
     public function anyDataDetail($id)

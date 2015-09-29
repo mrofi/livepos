@@ -3,16 +3,18 @@
 return [
 	'dateformat' => ENV('LIVEPOS_DATEFORMAT', 'dd-mm-yyyy'),
 	'phpdateformat' => ENV('LIVEPOS_PHPDATEFORMAT', 'd-m-Y'),
+	'phpdatetimeformat' => ENV('LIVEPOS_PHPDATETIMEFORMAT', 'd-m-Y H:i:s'),
     'subfolder' => ENV('LIVEPOS_SUBFOLDER', ''),
     'useremail' => ENV('LIVEPOS_USEREMAIL', true),
     'frontend' => ENV('LIVEPOS_FRONTEND', false),
     'salt' => ENV('LIVEPOS_SALT', '##SALT##__password__##SALT##'), //this_just_example_salt__password__to_make_strong    
     'theme' => ENV('LIVEPOS_THEME', 'AdminLTE'),
     'company' => ENV('LIVEPOS_COMPANY', 'PT Hiret Web Indonesia'),
+    'companyaddress' => ENV('LIVEPOS_COMPANY_ADDRESS', 'Jl. Jendral Sudirman 146 Batang, <br>Jawa Tengah - Indonesia, 51211 '),
     'title' => ENV('LIVEPOS_TITLE', 'live <b>POS</b> App'),
     'shorttitle' => ENV('LIVEPOS_SHORTTITLE', 'l<b>P</b>A'),
 
-    'percentToShop' => 50,  // from Profit
+    'percentToShop' => 20,  // from Profit
     'percentToCustomer' => 50,  // from customer allocation
     
     'model' => [

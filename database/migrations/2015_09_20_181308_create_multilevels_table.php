@@ -16,6 +16,7 @@ class CreateMultilevelsTable extends Migration
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
             $table->integer('upline_id')->unsigned();
+            $table->string('level', 2);
             $table->timestamps();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();

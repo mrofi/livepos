@@ -13,8 +13,8 @@ class Customer extends BaseModel
         'id_no' => 'required|string|max:25',
         'id_type' => 'required|string|max:10',
         'address' => 'string',
-        'contact1' => 'number',
-        'contact2' => 'number',
+        'contact1' => 'numeric',
+        'contact2' => 'numeric',
     ];
 
     protected $attributes = [
@@ -25,4 +25,10 @@ class Customer extends BaseModel
         'contact1' => 'Telp / Hp #1',
         'contact2' => 'Telp / Hp #2',
     ];
+
+    public function getTotalPointAttribute()
+    {
+        if ( ! Multilevel::find($this->id) ) return;
+        return $this->id;
+    }
 }
