@@ -34,8 +34,8 @@ class Purchasing extends BackendController
 
     	return Datatables::of($data)
     		->addColumn('action', function ($data) {
-                $button = '<a href="'.action('Backend\Purchasing@detail', ['id' => $data->id]).'" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-supplier="'.$data->supplier.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
+                $button = '<a href="'.action('Backend\Purchasing@detail', ['id' => $data->id]).'" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> '.trans('livepos.edit').'</a>';
+                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-supplier="'.$data->supplier.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
             ->editColumn('bill_date', '{!! livepos_dateToShow($bill_date) !!}')
@@ -82,8 +82,8 @@ class Purchasing extends BackendController
                     $d .= ' data-'.$key.'="'.livepos_round($value).'" ';
                 }
 
-                $button = '<a href="#edit-'.$data->id.'" class="btn-link btn btn-xs" data-action="edit" data-target="#detail-edit" data-toggle="modal" '.$d.'><i class="fa fa-pencil"></i> Edit</a>';
-                $button .= '<a href="#delete-'.$data->id.'" data-action="delete" data-toggle="modal" data-target="#detail-delete" '.$d.' class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
+                $button = '<a href="#edit-'.$data->id.'" class="btn-link btn btn-xs" data-action="edit" data-target="#detail-edit" data-toggle="modal" '.$d.'><i class="fa fa-pencil"></i> '.trans('livepos.edit').'</a>';
+                $button .= '<a href="#delete-'.$data->id.'" data-action="delete" data-toggle="modal" data-target="#detail-delete" '.$d.' class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
             ->editColumn('created_at', function($data) use($collection) {

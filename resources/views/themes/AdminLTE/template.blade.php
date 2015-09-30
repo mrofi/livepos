@@ -58,7 +58,7 @@
 
 @section('mid')
   </head>
-  <body class="sidebar-collapse @yield('bodyClass', 'hold-transition skin-yellow sidebar-mini')">
+  <body class="sidebar-collapse fixed @yield('bodyClass', 'hold-transition skin-yellow sidebar-mini')">
 @endsection
 
 @section('bodyInit')
@@ -131,9 +131,9 @@
                 </ul>
               </li>
               <!-- Control Sidebar Toggle Button -->
-              <li>
+              <!-- <li>
                 <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </nav>
@@ -148,7 +148,7 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
           <!-- Sidebar user panel -->
-          <!-- <div class="user-panel">
+          <div class="user-panel">
             <div class="pull-left image">
               <img src="/themes/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
@@ -156,7 +156,7 @@
               <p>{{ auth()->user()->name }}</p>
               <a href="#"><i class="fa fa-circle text-success"></i> {{ auth()->user()->badge }}</a>
             </div>
-          </div> -->
+          </div>
           <!-- search form -->
           <!-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
@@ -442,10 +442,53 @@
         $.fn.datepicker.defaults.todayHighlight = true;
 
         $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-});
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        $.fn.modal.Constructor.DEFAULTS.backdrop = 'static';
+
+          var slideToTop = $("<div />");
+          slideToTop.html('<i class="fa fa-chevron-up"></i>');
+          slideToTop.css({
+            position: 'fixed',
+            bottom: '40px',
+            right: '25px',
+            width: '40px',
+            height: '40px',
+            color: '#eee',
+            'font-size': '',
+            'line-height': '40px',
+            'text-align': 'center',
+            'background-color': '#222d32',
+            cursor: 'pointer',
+            'border-radius': '5px',
+            'z-index': '99999',
+            opacity: '.7',
+            'display': 'none'
+          });
+          slideToTop.on('mouseenter', function () {
+            $(this).css('opacity', '1');
+          });
+          slideToTop.on('mouseout', function () {
+            $(this).css('opacity', '.7');
+          });
+          $('.wrapper').append(slideToTop);
+          $(window).scroll(function () {
+            if ($(window).scrollTop() >= 50) {
+              if (!$(slideToTop).is(':visible')) {
+                $(slideToTop).fadeIn(500);
+              }
+            } else {
+              $(slideToTop).fadeOut(500);
+            }
+          });
+          $(slideToTop).click(function () {
+            $("body").animate({
+              scrollTop: 0
+            }, 500);
+          });
 
       })
     </script>
@@ -474,7 +517,7 @@
     @yield('contentMain')
   @yield('contentEnd')
   
-  @yield('sidebarRight')
+  {{-- @yield('sidebarRight') --}}
   
 @yield('bodyEnd')
 @yield('footer')

@@ -346,7 +346,7 @@ $(function() {
             location.href = '{{ livepos_asset("dashboard/selling/") }}'+data.created.selling_id;
             return;
           }
-          dataTables.draw();
+          dataTables.draw(false);
           formInput[0].reset();
           $('#display-product').text('');
           $('#input-product')[0].focus();
@@ -360,7 +360,7 @@ $(function() {
       var button = $(this);
       $.post('{{ livepos_asset("api/sellingDetail/") }}'+button.data('id'), {_method: 'delete'}, function( data ) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
         }
       })
     })

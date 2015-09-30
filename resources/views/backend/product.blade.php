@@ -294,7 +294,7 @@ $(function() {
       for( x in _data) {
         if (_data[x].quantity == _new.quantity) return;
       }
-      multiPriceDataTables.row.add(_new).draw();
+      multiPriceDataTables.row.add(_new).draw(false);
       _data.push(_new);
       window._multi_price_data = _data;
       multiPriceCollapse.find('input').val('');
@@ -303,7 +303,7 @@ $(function() {
 
     $('#multi-price-table tbody').on('click', '.multi-price-delete', function(){
       var row = multiPriceDataTables.row($(this).parents('tr'));
-      row.remove().draw();
+      row.remove().draw(false);
       var _data = window._multi_price_data;
       for( x in _data) {
         if (x == row[0][0]) _data.splice(x, 1);
@@ -314,7 +314,7 @@ $(function() {
     $('#selling_price').change(function(){
       $('#multi_price').attr('disabled', false);
       if (!regex.test($(this).val())) {
-        multiPriceDataTables.clear().draw();
+        multiPriceDataTables.clear().draw(false);
         window._multi_price_data = [];
         multiPriceCollapse.collapse('hide');
         $('#multi_price').attr('checked', false).attr('disabled', true);
@@ -324,10 +324,10 @@ $(function() {
     // multi unit
     $('#unit').change(function(){
       $('#multi_unit').attr('disabled', false);
-      title = '{{ trans('livepos.product.unit') }}' + ' ('+ $('#unit').val() +')';
+      title = '{{ trans('livepos.product.quantity') }}' + ' ('+ $('#unit').val() +')';
       $('#multi-unit-table thead tr th:eq(1)').text(title);
       if (! regex.test($(this).val())) {
-        multiUnitDataTables.clear().draw();
+        multiUnitDataTables.clear().draw(false);
         window._multi_unit_data = [];
         multiUnitCollapse.collapse('hide');
         $('#multi_unit').attr('checked', false).attr('disabled', true);
@@ -336,7 +336,7 @@ $(function() {
 
     var multiUnitCollapse = $('#multi-unit');
     multiUnitCollapse.on('show.bs.collapse', function(){
-      title = '{{ trans('livepos.product.unit') }}' + ' ('+ $('#unit').val() +')';
+      title = '{{ trans('livepos.product.quantity') }}' + ' ('+ $('#unit').val() +')';
       $('#multi-unit-table thead tr th:eq(1)').text(title);
     }).on('hidden.bs.collapse', function(){
     }).on('shown.bs.collapse', function(){
@@ -368,7 +368,7 @@ $(function() {
       for( x in _data) {
         if (_data[x].unit == _new.unit) return;
       }
-      multiUnitDataTables.row.add(_new).draw();
+      multiUnitDataTables.row.add(_new).draw(false);
       _data.push(_new);
       window._multi_unit_data = _data;
       multiUnitCollapse.find('input').val('');
@@ -377,7 +377,7 @@ $(function() {
 
     $('#multi-unit-table tbody').on('click', '.multi-unit-delete', function(){
       var row = multiUnitDataTables.row($(this).parents('tr'));
-      row.remove().draw();
+      row.remove().draw(false);
       var _data = window._multi_unit_data;
       for( x in _data) {
         if (x == row[0][0]) _data.splice(x, 1);
@@ -387,8 +387,8 @@ $(function() {
     
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {
-      multiPriceDataTables.clear().draw();
-      multiUnitDataTables.clear().draw();
+      multiPriceDataTables.clear().draw(false);
+      multiUnitDataTables.clear().draw(false);
       window._multi_unit_data = [];
       window._multi_price_data = [];
       var button = $(event.relatedTarget), 
@@ -424,7 +424,7 @@ $(function() {
             _multi_unit_data[x].action = '<a href="#" class="multi-unit-delete">Delete</a>';
           }
           window._multi_unit_data = _multi_unit_data;
-          multiUnitDataTables.rows.add(_multi_unit_data).draw();
+          multiUnitDataTables.rows.add(_multi_unit_data).draw(false);
         }
 
         if (content.multi_price != '0') {
@@ -437,7 +437,7 @@ $(function() {
             _multi_price_data[x].action = '<a href="#" class="multi-price-delete">Delete</a>';
           }
           window._multi_price_data = _multi_price_data;
-          multiPriceDataTables.rows.add(_multi_price_data).draw();
+          multiPriceDataTables.rows.add(_multi_price_data).draw(false);
         }
       }
           
@@ -501,7 +501,7 @@ $(function() {
       _form.find('#multi_price_data').val(JSON.stringify(window._multi_price_data));
       $.post(_form.attr('action'), _form.serialize(), function( data ) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           _form.parents('.modal').modal('hide');
         } else {
           error_handling(_form, data);

@@ -202,7 +202,7 @@ $(function() {
       _form.find('.modal-body .alert.cloned').remove();
       $.post(_form.attr('action'), _form.serialize(), function( data ) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           _form.parents('.modal').modal('hide');
         } else {
           error_handling(_form, data);

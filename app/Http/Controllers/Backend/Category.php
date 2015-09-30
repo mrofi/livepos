@@ -21,9 +21,9 @@ class Category extends BackendController
         $data = Model::select(['id', 'category']);
         return Datatables::of($data)
             ->addColumn('action', function ($data) {
-                $button = '<a href="#edit-'.$data->id.'" data-id="'.$data->id.'" data-category="'.$data->category.'" data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
+                $button = '<a href="#edit-'.$data->id.'" data-id="'.$data->id.'" data-category="'.$data->category.'" data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> '.trans('livepos.edit').'</a>';
                 $button .= ' | <a href="#view-product-by-category-'.$data->id.'" class="btn-link btn btn-xs"><i class="fa fa-list"></i> View Products</a>';
-                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-category="'.$data->category.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
+                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-category="'.$data->category.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
             ->removeColumn('id')

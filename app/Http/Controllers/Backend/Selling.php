@@ -71,7 +71,7 @@ class Selling extends BackendController
                 foreach ($data->toArray() as $key => $value) {
                     $d .= ' data-'.$key.'="'.livepos_round($value).'" ';
                 }
-                $button = '<a href="#delete-'.$data->id.'" data-action="delete" data-toggle="modal" data-target="#detail-delete" '.$d.' class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
+                $button = '<a href="#delete-'.$data->id.'" data-action="delete" data-toggle="modal" data-target="#detail-delete" '.$d.' class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
             ->editColumn('created_at', function($data) use($collection) {

@@ -467,7 +467,7 @@ $(function() {
       _form.find('.modal-body .alert.cloned').remove();
       $.post(_form.attr('action'), _form.serialize(), function( data ) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           _form.parents('.modal').modal('hide');
           if (data.created) {
              location.replace('{{ livepos_asset("dashboard/purchasing") }}' + '/'+data.created.id+'/detail');
@@ -521,7 +521,7 @@ $(function() {
       post.amount = post.purchase_price * post.quantity - post.discount;
       $.post(form.attr('action'), post, function(data) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           form[0].reset();
           $('#input-product')[0].focus();
         }
@@ -560,7 +560,7 @@ $(function() {
       if (post.amount < 0) return;
       $.post(form.attr('action'), post, function(data) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           form[0].reset();
           modalDetail.modal('hide');
         }
@@ -597,7 +597,7 @@ $(function() {
       post._method = 'delete';
       $.post(form.attr('action'), post, function(data) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           form[0].reset();
           modalDetailDelete.modal('hide');
         }
@@ -619,7 +619,7 @@ $(function() {
       var form = $(this);
       $.post('{{ livepos_asset("api/purchasing/".$detail->id) }}', form.serialize(), function(data) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           form[0].reset();
           $('#input-product')[0].focus();
         }
@@ -630,7 +630,7 @@ $(function() {
       e.preventDefault();
       $.post('{{ livepos_asset("api/purchasing/".$detail->id) }}', {_method: 'put', discount: 0}, function(data) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           $('#input-product')[0].focus();
         }
       })

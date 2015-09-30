@@ -10,11 +10,11 @@
             <li><a href="{{ livepos_asset('dashboard/product') }}"><i class="fa fa-dropbox"></i> <span>Products</span></a></li>
             <li><a href="{{ livepos_asset('dashboard/product/category') }}"><i class="fa fa-list"></i> <span>Categories</span></a></li>
             <li><a href="{{ livepos_asset('dashboard/product/brand') }}"><i class="fa fa-tags"></i> <span>Brands</span></a></li>
-            <li><a href="{{ livepos_asset('dashboard/product/stock') }}"><i class="fa fa-flask"></i> <span>Stock</span></a></li>
-            <li><a href="{{ livepos_asset('dashboard/product/supplier') }}"><i class="fa fa-truck"></i> <span>Supplier</span></a></li>
+            <li><a href="{{ livepos_asset('dashboard/product/stock') }}"><i class="fa fa-flask"></i> <span>Stocks</span></a></li>
+            <li><a href="{{ livepos_asset('dashboard/product/supplier') }}"><i class="fa fa-truck"></i> <span>Suppliers</span></a></li>
             <li>
               <a href="{{ livepos_asset('dashboard/customer') }}">
-                <i class="fa fa-users"></i> <span>Customer</span>
+                <i class="fa fa-users"></i> <span>Customers</span>
                 <small class="label pull-right bg-red"></small>
               </a>
             </li>
@@ -33,6 +33,12 @@
             <li>
               <a href="{{ livepos_asset('dashboard/multilevel') }}">
                 <i class="fa fa-star"></i> <span>Multilevel</span>
+                <small class="label pull-right bg-red"></small>
+              </a>
+            </li>
+            <li>
+              <a href="{{ livepos_asset('auth/logout') }}">
+                <i class="fa fa-power-off text-red"></i> <span>Logout</span>
                 <small class="label pull-right bg-red"></small>
               </a>
             </li>

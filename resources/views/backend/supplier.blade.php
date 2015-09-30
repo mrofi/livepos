@@ -66,7 +66,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="address" name="address" class=col-sm-3 "control-label">{{ trans('livepos.supplier.address') }}</label>
+                <label for="address" name="address" class="col-sm-3 control-label">{{ trans('livepos.supplier.address') }}</label>
                 <div class="col-sm-9">
                   <textarea name="address" id="address" class="form-control" placeholder="{{ trans('livepos.supplier.address') }}"></textarea>
                 </div>
@@ -207,7 +207,7 @@ $(function() {
       _form.find('.modal-body .alert.cloned').remove();
       $.post(_form.attr('action'), _form.serialize(), function( data ) {
         if (data.message == 'ok') {
-          dataTables.draw();
+          dataTables.draw(false);
           _form.parents('.modal').modal('hide');
         } else {
           error_handling(_form, data);

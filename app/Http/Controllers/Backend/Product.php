@@ -89,8 +89,8 @@ class Product extends BackendController
                     $button .= ' data-min_stock="'.livepos_round($data->min_stock).'"';
                     $button .= ' data-multi_unit=\''.(isset($product_metas[$data->id]['multi_unit']) ? $product_metas[$data->id]['multi_unit'] : '0').'\'';
                     $button .= ' data-multi_price=\''.(isset($product_metas[$data->id]['multi_price']) ? $product_metas[$data->id]['multi_price'] : '0').'\'';
-                $button .= ' data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> Edit</a>';
-                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-brand="'.$data->brand.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> Delete</a>';
+                $button .= ' data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> '.trans('livepos.edit').'</a>';
+                $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-brand="'.$data->brand.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
             ->removeColumn('id')
