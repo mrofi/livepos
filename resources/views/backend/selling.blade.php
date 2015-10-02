@@ -10,7 +10,7 @@
               <div class="box box-solid">
                 <div class="box-header bg-gray-light">
                   <div class="box-title">
-                    <a href="#add" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.supplier.add')) }}</a>
+                    <a href="#add" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.selling.add')) }}</a>
                     <a href="#all" data-action="all" class="btn bg-maroon btn-round"><i class="fa fa-list"></i></a>
                   </div>
                   <div class="box-tools .pull-right">
@@ -23,11 +23,11 @@
                   <table class="table table-hover" id="selling-table">
                       <thead>
                           <tr class="bg-navy">
-                              <th>{{ trans('livepos.supplier.name') }}</th>
-                              <th>{{ trans('livepos.supplier.address') }}</th>
-                              <th>{{ trans('livepos.supplier.contact1') }}</th>
-                              <th>{{ trans('livepos.supplier.contact2') }}</th>
-                              <th></th>
+                              <th>{{ trans('livepos.selling.name') }}</th>
+                              <th>{{ trans('livepos.selling.address') }}</th>
+                              <th>{{ trans('livepos.selling.contact1') }}</th>
+                              <th>{{ trans('livepos.selling.contact2') }}</th>
+                              <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
                   </table>
@@ -74,7 +74,7 @@
                                 <th>{{ trans('livepos.quantity') }}</th>
                                 <th>{{ trans('livepos.discount') }}</th>
                                 <th>{{ trans('livepos.amount') }}</th>
-                                <th></th>
+                                <th style="min-width: 100px;"></th>
                             </tr>
                         </thead>
                       </table>

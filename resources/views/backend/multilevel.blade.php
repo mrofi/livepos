@@ -34,7 +34,7 @@
                               <th>{{ trans('livepos.multilevel.id') }}</th>
                               <th>{{ trans('livepos.multilevel.level') }}</th>
                               <th>{{ trans('livepos.multilevel.upline') }}</th>
-                              <th></th>
+                              <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
                   </table>

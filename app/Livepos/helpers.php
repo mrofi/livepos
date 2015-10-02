@@ -100,3 +100,8 @@ function livepos_toCurrency($num, $str = 'Rp. ')
     $num = intval(preg_replace('/,.*|[^0-9]/', '', ceil($num)));
     return $str.strrev(implode('.',str_split(strrev(strval($num)),3)));
 }
+
+function livepos_activeMenu($page, $thePage)
+{
+    if ($page == $thePage) return 'active';
+}

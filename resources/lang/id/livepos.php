@@ -9,8 +9,19 @@ return [
     'add' => 'Tambah',
     'edit' => 'Edit',
     'delete' => 'Hapus',
+    'clear' => 'Kosongkan',
     'quantity' => 'Qty',
+    'price' => 'Harga',
+    'amount' => 'Jumlah',
+    'subTotal' => 'Sub Total',
+    'total' => 'Total',
+    'discount' => 'Diskon',
+    'addDiscount' => 'Tambah Diskon',
+    'date' => 'Tanggal',
+    'totalAmount' => 'Total Nilai',
+    'saveDiscount' => 'Simpan Diskon',
     'confirmDelete' => 'Apakah Anda yakin akan menghapus',
+
     'login' => [
         'greeting' => 'Silakan login terlebih dahulu',
         'remember' => 'Ingat saya',
@@ -83,7 +94,7 @@ return [
 
     'supplier' => [
         'generic' => 'Tanpa Supplier',
-        'name' => 'Supplier',
+        'name' => 'Nama Supplier',
         'title' => 'Supplier Produk',
         'tagline' => 'Daftar semua supplier produk',
         'add' => 'Tambah Supplier',
@@ -94,10 +105,49 @@ return [
         'contact2' => 'Kontak #2',
     ],
 
-    'transactionNumberFormat' => ':id/:type/:month/:year',
+    'customer' => [
+        'name' => 'Nama Pelanggan',
+        'title' => 'Pelanggan',
+        'tagline' => 'Daftar semua pelanggan',
+        'add' => 'Tambah Pelanggan',
+        'edit' => 'Edit Pelanggan',
+        'delete' => 'Hapus Pelanggan',
+        'address' => 'Alamat Pelanggan',
+        'identity' => 'Identitas',
+        'identityType' => 'Jenis Identitas',
+        'identityNumber' => 'No. Identitas',
+        'contact1' => 'Kontak #1',
+        'contact2' => 'Kontak #2',
+    ],
+
     'purchasing' => [
         'codeName' => 'INVOICE',
+        'name' => 'Pembelian',
+        'title' => 'Pembelian',
+        'tagline' => 'Daftar semua pembelian',
+        'add' => 'Tambah Pembelian',
+        'edit' => 'Edit Pembelian',
+        'delete' => 'Hapus Pembelian',
+        'address' => 'Alamat Pembelian',
+        'transactionNumber' => 'No. Transaksi',
+        'chooseProduct' => 'Pilih Produk',
+        'addProduct' => 'Tambah Produk',
     ],
+
+    'selling' => [
+        'name' => 'Penjualan',
+        'title' => 'Penjualan',
+        'tagline' => 'Daftar semua penjualan',
+        'add' => 'Penjualan Baru',
+        'edit' => 'Edit Penjualan',
+        'delete' => 'Hapus Penjualan',
+        'address' => 'Alamat Penjualan',
+        'transactionNumber' => 'No. Transaksi',
+        'chooseProduct' => 'Pilih Produk',
+        'addProduct' => 'Tambah Produk',
+    ],
+
+    'transactionNumberFormat' => ':id/:type/:month/:year',
 
 
 ];  

@@ -63,7 +63,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="box-body bg-navy">
+                <div class="space">&nbsp;</div>
+                <div class="box-body bg-gray">
                   <form id="form-add-product" action="{{ livepos_asset('api/purchasingDetail') }}" method="post">
                     <div class="row">
                       <div class="col-md-4">
@@ -113,7 +114,7 @@
                         </div>
                         <div class="col-xs-5 text-right">  
                           <label class="control-label">{{ trans('livepos.add') }}</label>
-                          <button id="button-add" type="submit" class="input-lg btn bg-black btn-block"><i class="fa fa-plus"></i> {{ trans('livepos.purchasing.addProduct') }}</button>
+                          <button id="button-add" type="submit" class="input-lg btn bg-navy btn-block"><i class="fa fa-plus"></i> {{ trans('livepos.purchasing.addProduct') }}</button>
                         </div>
                       </div>
                     </div>
@@ -134,7 +135,7 @@
                               <th>{{ trans('livepos.quantity') }}</th>
                               <th>{{ trans('livepos.discount') }}</th>
                               <th>{{ trans('livepos.amount') }}</th>
-                              <th></th>
+                              <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
                   </table>
@@ -179,7 +180,7 @@
                               <th>{{ trans('livepos.purchasing.billNumber') }}</th>
                               <th>{{ trans('livepos.supplier.name') }}</th>
                               <th>{{ trans('livepos.totalAmount') }}</th>
-                              <th></th>
+                              <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
                   </table>

@@ -30,7 +30,7 @@
                       <thead>
                           <tr class="bg-navy">
                               <th>{{ trans('livepos.category.name') }}</th>
-                              <th></th>
+                              <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
                   </table>

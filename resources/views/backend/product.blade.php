@@ -35,7 +35,7 @@
                               <th>{{ trans('livepos.unit') }}</th>
                               <th>{{ trans('livepos.product.purchase_price') }}</th>
                               <th>{{ trans('livepos.product.selling_price') }}</th>
-                              <th></th>
+                              <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
                   </table>

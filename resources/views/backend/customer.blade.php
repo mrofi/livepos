@@ -35,7 +35,7 @@
                               <th>{{ trans('livepos.customer.address') }}</th>
                               <th>{{ trans('livepos.customer.contact1') }}</th>
                               <th>{{ trans('livepos.customer.contact2') }}</th>
-                              <th></th>
+                              <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
                   </table>
