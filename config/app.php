@@ -139,6 +139,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
         yajra\Datatables\DatatablesServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -201,6 +202,7 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Datatables' => yajra\Datatables\Datatables::class,
         'Carbon'    => Carbon\Carbon::class,
+        'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 
