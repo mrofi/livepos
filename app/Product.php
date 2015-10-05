@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends BaseModel
 {
-    protected $fillable = ['name', 'category_id', 'brand_id', 'unit', 'min_stock', 'purchase_price', 'selling_price', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'barcode', 'category_id', 'brand_id', 'unit', 'min_stock', 'purchase_price', 'selling_price', 'created_by', 'updated_by'];
     
     protected $rules = [
         'name' => 'required|string|max:50|unique:products,name,__id__',
+        'barcode' => 'string|max:20|unique:products,barcode,__id__',
         'category_id' => 'required|numeric',
         'brand_id' => 'required|numeric',
         'unit' => 'required|string|max:10',
@@ -36,6 +37,12 @@ class Product extends BaseModel
 					DB::rollback();
 					return ['error' => trans('livepos.product.errorNotAllowedEmptyUnit')];	
 				}
+
+                if ( $unit->barcode == '' || $unit->barcode == $attributes['barcode'] || $this->where('barcode', $unit->barcode)->first() || ProductMeta::where('meta_value', 'like', '%"barcode":"'.$unit->barcode.'"%')->first())
+                {
+                    $number = ProductMeta::where('product_id', $this->id)->where('meta_key', 'multi_unit')->count('id');  
+                    $unit->barcode = $this->createInternalBarcode($number + 1);
+                }
 
 				unset($unit->action);
 				$_units[] = $unit;
@@ -64,13 +71,34 @@ class Product extends BaseModel
 
     }
 
+    protected function createInternalBarcode($number = 0)
+    {
+        return trans('livepos.barcodeFormat', [
+            'id' => $this->id,
+            'number' => $number
+        ]);
+    }
+
     public static function create(Array $attributes = [])
     {
         DB::beginTransaction();
 
-	    	$created = parent::create($attributes);
 
-	    	$created->addMeta($attributes);
+            $created = parent::create($attributes);
+
+            if ($created->barcode == '') 
+            {
+                $created->barcode = $created->createInternalBarcode();
+                $created->save();
+            }
+
+	    	$metas = $created->addMeta($attributes);
+
+            if (isset($metas['error'])) 
+            {
+                DB::rollback();
+                return $metas;
+            }
 	    	
 	    DB::commit();
 	    
@@ -83,9 +111,21 @@ class Product extends BaseModel
 
 	    	$updated = parent::update($attributes);
 
+            if ($this->barcode == '') 
+            {
+                $this->barcode = $this->createInternalBarcode();
+                $this->save();
+            }
+
 	    	ProductMeta::where('product_id', $this->id)->delete();
 
-	    	$this->addMeta($attributes);
+	    	$metas = $this->addMeta($attributes);
+
+            if (isset($metas['error'])) 
+            {
+                DB::rollback();
+                return $metas;
+            }
 	    	
 	    DB::commit();
 	    

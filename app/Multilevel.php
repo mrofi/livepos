@@ -17,7 +17,7 @@ class Multilevel extends BaseModel
 
     public function customer()
     {
-    	return $this->belongsTo('customer');
+    	return $this->belongsTo(Customer::class);
     }
 
     public static function create(array $attributes = [])
@@ -25,5 +25,10 @@ class Multilevel extends BaseModel
     	if ($attributes['upline_id'] == '') $attributes['upline_id'] = '0';
 
     	return parent::create($attributes);
+    }
+
+    public function getTotalCommisionAttribute()
+    {
+        return Commisions::where('Multilevel_id', $this->id)->where('redeem', '0')->sum('commisions');
     }
 }

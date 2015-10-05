@@ -28,7 +28,8 @@ class Customer extends BaseModel
 
     public function getTotalPointAttribute()
     {
-        if ( ! Multilevel::find($this->id) ) return;
-        return $this->id;
+        if ( ! $multilevel = Multilevel::where('customer_id', $this->id)->first() ) return 0;
+
+        return $multilevel->totalCommision;
     }
 }

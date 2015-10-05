@@ -83,6 +83,10 @@ class ApiController extends Controller
             $show = $this->model->with($this->model->get_dependencies())->find($id);
 
             if (! $show) return ['error' => 'no data'];
+
+            foreach ($this->model->additionalAttributes as $att) {
+                $show->$att = $show->$att;
+            }
             
             $show = livepos_arrayMapRecursive('livepos_round', $show->toArray());
 

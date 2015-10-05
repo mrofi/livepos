@@ -2,10 +2,15 @@
 
 namespace livepos;
 
+use DB;
+use Session;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Selling extends BaseModel
 {
+    protected static $created;
+
     protected $fillable = ['transaction_no', 'customer_id', 'amount', 'discount', 'total_amount', 'profit', 'done', 'created_by', 'updated_by'];
     
      protected $rules = [
@@ -22,9 +27,11 @@ class Selling extends BaseModel
         'total_amount' => 'Total'
     ];
 
+    public $additionalAttributes = ['point', 'customerPoint'];
+
     protected $dependencies = ['customer', 'details'];
 
-    public  function customer()
+    public function customer()
     {
         return $this->belongsTo(Customer::class);
     }
@@ -32,6 +39,64 @@ class Selling extends BaseModel
     public function details()
     {
         return $this->hasMany(SellingDetail::class);
+    }
+
+    public function getPointAttribute()
+    {
+        $shopCommision = Session::get('commision_of_shop', 0) / 100 * $this->profit;
+
+        $customerCommision = Session::get('commision_of_customer', 0) / 100 * ($this->profit - $shopCommision);
+
+        return $customerCommision;
+    }
+
+    public function getCustomerPointAttribute()
+    {
+        $customer = Customer::find($this->customer_id);
+
+        if (!$customer) return 0;
+
+        return $customer->totalPoint;
+    }
+
+    public static function create(Array $attributes = [])
+    {
+        DB::transaction(function () use ($attributes) {
+            $selling = parent::create($attributes);
+            $transaction_no = trans('livepos.transactionNumberFormat', [
+                'type' => trans('livepos.selling.codeName'), 
+                'id' => $selling->id,
+                'month' => Carbon::now()->month,
+                'year' => Carbon::now()->year,
+            ]);
+
+            $selling->transaction_no = $transaction_no;
+            $selling->save();
+            
+            static::$created = $selling;
+        });
+
+        return static::$created;
+    }
+
+    public function update(Array $attributes = []) 
+    {        
+        DB::transaction(function () use ($attributes) {
+
+            $updated = parent::update($attributes);
+
+            $this->calculate();
+
+            if ($attributes['pay'] && is_numeric($attributes['pay']))
+            {
+                $this->cash = $attributes['pay'];
+                $this->change = $attributes['pay'] - $this->total_amount;
+                $this->save();
+
+            }
+
+            return $updated;
+        });
     }
 
     public function calculate()

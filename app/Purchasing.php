@@ -38,7 +38,7 @@ class Purchasing extends BaseModel
             $transaction_no = trans('livepos.transactionNumberFormat', [
                 'type' => trans('livepos.purchasing.codeName'), 
                 'id' => $purchasing->id,
-                'month' => date('M', Carbon::now()->month),
+                'month' => Carbon::now()->month,
                 'year' => Carbon::now()->year,
             ]);
 

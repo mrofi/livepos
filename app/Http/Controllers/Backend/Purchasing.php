@@ -72,10 +72,12 @@ class Purchasing extends BackendController
         $no = 0;
 
         return Datatables::of($datas)
-            ->editColumn('purchase_price', '{!! livepos_round($purchase_price) !!}')
+            ->addColumn('price', function ($data) {
+                return livepos_toCurrency($data->purchase_price * $data->converter);
+            })
             ->editColumn('quantity', '{!! livepos_round($quantity) !!}')
             ->editColumn('discount', '{!! livepos_round($discount) !!}')
-            ->editColumn('amount', '{!! livepos_round($amount) !!}')
+            ->editColumn('amount', '{!! livepos_toCurrency($amount) !!}')
             ->addColumn('action', function ($data) {
                 $d = '';
                 foreach ($data->toArray() as $key => $value) {

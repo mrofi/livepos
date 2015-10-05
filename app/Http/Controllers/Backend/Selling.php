@@ -26,24 +26,12 @@ class Selling extends BackendController
     {
     	$detail = Model::where('done', '0')->where('id', $id)->firstOrFail();
 
-    	$shopCommision = $request->session()->get('commision_of_shop', 0) / 100 * $detail->profit;
-
-    	$customerCommision = $request->session()->get('commision_of_customer', 0) / 100 * ($detail->profit - $shopCommision);
-
-    	$detail->point = $customerCommision;
-
     	return view('backend.selling')->with(compact('detail'));
     }
 
     public function toPrint(Request $request, $id)
     {
-    	$detail = Model::with(['customer', 'details'])->where('done', '0')->where('id', $id)->firstOrFail();
-
-    	$shopCommision = $request->session()->get('commision_of_shop', 0) / 100 * $detail->profit;
-
-    	$customerCommision = $request->session()->get('commision_of_customer', 0) / 100 * $shopCommision;
-
-    	$detail->point = $customerCommision;
+        $detail = Model::where('done', '0')->where('id', $id)->firstOrFail();
 
     	return view('reports.bill')->with(compact('detail'));
     }
@@ -62,10 +50,10 @@ class Selling extends BackendController
         $no = 0;
 
         return Datatables::of($datas)
-            ->editColumn('product_name', '{!! $product_name." - ".strtoupper($unit)." (".livepos_round($selling_price * $converter).")" !!}')
+            ->editColumn('product_name', '{!! $product_name." - ".strtoupper($unit)." (".livepos_toCurrency($selling_price * $converter).")" !!}')
             ->editColumn('quantity', '{!! livepos_round($quantity) !!}')
             ->editColumn('discount', '{!! livepos_round($discount) !!}')
-            ->editColumn('amount', '{!! livepos_round($amount) !!}')
+            ->editColumn('amount', '{!! livepos_toCurrency($amount) !!}')
             ->addColumn('action', function ($data) {
                 $d = '';
                 foreach ($data->toArray() as $key => $value) {

@@ -12,7 +12,7 @@ class CreateMultilevelCommisionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('multivel_commisions', function (Blueprint $table) {
+        Schema::create('multilevel_commisions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('selling_id')->unsigned();
             $table->integer('multilevel_id')->unsigned();
@@ -29,6 +29,6 @@ class CreateMultilevelCommisionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('multivel_commisions');
+        Schema::drop('multilevel_commisions');
     }
 }

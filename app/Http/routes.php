@@ -54,6 +54,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
         
     Route::resource('purchasingDetail', 'PurchasingDetail'); 
         
+    Route::post('selling/{id}/pay', 'Selling@pay');
+
     Route::resource('selling', 'Selling'); 
         
     Route::resource('sellingDetail', 'SellingDetail'); 

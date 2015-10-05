@@ -84,9 +84,9 @@
                             <form action="#" id="form-add-discount" class="form-inline">
                               <input type="hidden" name="_method" value="put">
                               <div class="input-group input-group-lg">
-                                <input type="text" class="form-control" name="discount" placeholder="{{ trans('livepos.addDiscount') }}">
+                                <input autocomplete="off" type="text" class="form-control" name="discount" placeholder="{{ trans('livepos.addDiscount') }}">
                                 <div class="input-group-btn">
-                                  <button type="button" class="btn btn-primary">{{ trans('livepos.saveDiscount') }}</button>
+                                  <button type="button" class="btn bg-navy">{{ trans('livepos.saveDiscount') }}</button>
                                 </div><!-- /btn-group -->
                               </div> 
                             </form>
@@ -96,15 +96,15 @@
                               <table class="table">
                                 <tr>
                                   <th style="width:50%">{{ trans('livepos.subTotal') }}:</th>
-                                  <td class="subtotal-amount" id="subtotal-amount-1">{{ $detail->amount }}</td>
+                                  <td class="subtotal-amount text-right" id="subtotal-amount-1">{{ livepos_toCurrency($detail->amount) }}</td>
                                 </tr>
                                 <tr>
-                                  <th>{{ trans('livepos.discount') }} (<a href="#" id="delete-discount-amount" class="btn btn-link"><i class="fa fa-times"></i> {{ trans('livepos.clear') }}</a>):</th>
-                                  <td class="discount-amount">{{ $detail->discount }}</td>
+                                  <th>{{ trans('livepos.discount') }} (<a href="#" id="delete-discount-amount" class="btn btn-link"><i class="fa fa-times"></i> {{ trans('livepos.delete') }}</a>):</th>
+                                  <td class="discount-amount text-right">({{ livepos_toCurrency($detail->discount) }})</td>
                                 </tr>
                                 <tr>
                                   <th>{{ trans('livepos.total') }}:</th>
-                                  <td class="total-amount" id="total-amount-2">{{ $detail->total_amount }}</td>
+                                  <td class="text-right"><h3 class="total-amount" id="total-amount-2">{{ livepos_toCurrency($detail->total_amount) }}</h3></td>
                                 </tr>
                               </table>
                             </div>
@@ -115,28 +115,39 @@
                             <form action="#" id="form-add-customer" class="form-inline">
                               <input type="hidden" name="_method" value="put">
                               <div class="input-group input-group-lg">
-                                <input type="text" class="form-control" name="customer" placeholder="{{ trans('livepos.customer') }}">
-                                <input type="hidden" name="customer_id">
+                                <input autocomplete="off" type="text" class="form-control"  id="input-customer" name="customer" placeholder="{{ trans('livepos.customer.name') }}">
+                                <input type="hidden" name="customer_id" id="input-customer_id" >
                                 <div class="input-group-btn">
-                                  <button type="button" class="btn btn-primary">{{ trans('livepos.save') }}</button>
+                                  <button type="button" class="btn bg-navy">{{ trans('livepos.save') }}</button>
                                 </div><!-- /btn-group -->
                               </div> 
+                              <div class="form-group">
+                                <a href="{{ livepos_asset('dashboard/customer') }}" target="_blank" class="btn-link">{{ trans('livepos.customer.add') }}</a>
+                              </div>
                             </form>
                           </div>
                           <div class="col-sm-6">
                             <div class="table-responsive">
                               <table class="table">
                                 <tr>
-                                  <th style="width:50%">{{ trans('livepos.customer.name') }}:</th>
-                                  <td class="customer-name" id="subtotal-amount-1">{{ $detail->customer->customer }}</td>
+                                  <th style="width:60%">{{ trans('livepos.customer.name') }} (<a href="#" id="delete-customer" class="btn btn-link"><i class="fa fa-times"></i> {{ trans('livepos.delete') }}</a>):</th>
+                                  <td class="customer-name text-right" id="customer-name">{{ $detail->customer->customer }}</td>
                                 </tr>
                                 <tr>
                                   <th>{{ trans('livepos.selling.point') }}:</th>
-                                  <td class="selling-point" id="subtotal-amount-1">{{ $detail->point }}</td>
+                                  <td class="selling-point text-right" id="selling-point">{{ livepos_toCurrency($detail->point, '') }}</td>
                                 </tr>
                                 <tr>
-                                  <th>{{ trans('livepos.totalPoint') }}:</th>
-                                  <td class="total-point" id="total-amount-2">{{ $detail->customer->totalPoint or $detail->point}}</td>
+                                  <th>{{ trans('livepos.customer.point') }}:</th>
+                                  <td class="total-point text-right" id="customer-point">{{ livepos_toCurrency($detail->customer->totalPoint, '') }}</td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <a href="#" class="btn btn-lg btn-block bg-navy"><i class="fa fa-trash-o"></i> Discard</a>
+                                  </td>
+                                  <td>
+                                    <a href="#" data-target="#modal-pay" data-toggle="modal" class="btn btn-lg btn-block bg-yellow-v2"><i class="fa fa-check"></i> Pay</a>
+                                  </td>
                                 </tr>
                               </table>
                             </div>
@@ -144,6 +155,58 @@
                         </div>
                       </div>
                     </div>
+    <!-- modal delete -->
+    <div class="modal fade" id="modal-pay">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-yellow-v2">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-center">{{ trans('livepos.pay') }}</h4>
+          </div>
+          <form class="form-horizontal" method="POST" id="form-pay">
+            <input type="hidden" name="_method" value="put">
+            <div class="modal-body" id="form-input-pay">
+              <div class="alert alert-warning alert-dismissable hide">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                <span class="message"></span>
+              </div>
+              <div class="form-group">
+                <label for="total" name="total" class="col-sm-3 control-label">{{ trans('livepos.total') }}</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control total-amount" id="total" name="total" value="{{ $detail->total_amount}}" readonly="true">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="total" name="pay" class="col-sm-3 control-label">{{ trans('livepos.pay') }}</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="pay" name="pay" autofocus placeholder="{{ trans('livepos.pay') }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="total" name="payChange" class="col-sm-3 control-label">{{ trans('livepos.payChange') }}</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="payChange" name="payChange" value="0" readonly="true">
+                </div>
+              </div>
+            </div>
+            <div id="succes-pay" class="modal-body hide">
+              <div class="form-group">
+                <div class="col-sm-12 text-center"><p>Pembayaran Berhasil</p></div>
+                <div class="col-sm-12">
+                  <a href="{{ livepos_asset('dashboard/selling/'.$detail->id.'/print') }}" target="__print" class="new-selling btn btn-block btn-lg bg-maroon">{{ trans('livepos.print') }}</a>
+                  <a class="new-selling btn btn-block btn-lg btn-default">{{ trans('livepos.noPrint') }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer bg-navy">
+              <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
+              <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
                     @endif
                   </div>
                   <div class="col-md-3 row">
@@ -163,7 +226,7 @@
     <div class="modal fade" id="modal-add-edit">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">supplier</h4>
           </div>
@@ -199,7 +262,7 @@
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" >
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.close') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.save') }}</button>
@@ -213,7 +276,7 @@
     <div class="modal fade" id="modal-delete">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">{{ trans('livepos.supplier.delete') }}</h4>
           </div>
@@ -226,7 +289,7 @@
               </div>
               <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.supplier.name') }} <span id="supplier"></span> ?</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" value="delete">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
@@ -235,6 +298,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
 
     
 @endsection
@@ -297,7 +361,7 @@ $(function() {
         $('#input-purchase_price').val( products[ item ].purchase_price );
         $('#input-selling_price').val( products[ item ].selling_price );
         $('#input-converter').val( products[ item ].converter );
-        label = products[ item ].selling_price * products[ item ].converter + ' @ ' + products[ item ].unit;
+        label = (products[ item ].selling_price * products[ item ].converter).toString().toRp() + ' @ ' + products[ item ].unit;
         $('#display-product').text(label);
         $('#input-quantity')[0].focus();
         return item;
@@ -306,6 +370,67 @@ $(function() {
     });
 
     @if(isset($detail))
+
+    $('#pay').on('keyup', function() {
+      $('#payChange').val( $(this).val() - $('#total').val() );
+    })
+
+    var modalPay = $('#modal-pay');
+    modalPay.on('show.bs.modal',  function(e) {
+      $(this).find('form')[0].reset();
+      $(this).find('#total').val( $(window).data('total_amount') );
+    })
+
+    $('#form-pay').on('submit', function(e) {
+      e.preventDefault();
+      if ($('#pay').val() == '') return;
+      form = $(this);
+      $.post('{{ livepos_asset("api/selling/{$detail->id}") }}', form.serialize(), function( data ) {
+        if (data.message == 'ok') {
+          form.find('#form-input-pay, .modal-footer').addClass('hide');
+          $('#succes-pay').removeClass('hide');
+        }
+      }, 'json')
+    })
+
+    $('.new-selling').click(function() {
+      location.href='{{ livepos_asset("dashboard/selling") }}';
+    })
+
+    var inputProduct  = $('#input-customer');
+    inputProduct.typeahead({
+      source: function(query, process) {
+        $.get('{{ livepos_asset("api/customer/search") }}', {q: query}, function(data) {
+          customers = {};
+          customerLabels = [];
+
+          $.each( data, function(i, e) {
+            e.converter = 1;
+            label = e.customer + ' - ' + e.id + ' - ' + e.id_no + ' - ' + e.address + ' - ' + e.contact1 + ' - ' + e.contact2;
+            customerLabels.push(label);
+            customers[ label ] = e;
+            
+          })
+          process(customerLabels);
+        });
+      }
+      , updater: function( item ) {
+        $('#input-customer_id').val( customers[ item ].id );
+        $('#form-add-customer').submit();
+        return '';
+      }
+
+    });
+
+    $('#form-add-customer').on('submit', function(e) {
+      e.preventDefault();
+      $.post('{{ livepos_asset("api/selling/$detail->id") }}', {_method: 'PUT', customer_id: $('#input-customer_id').val()}, function(data) {
+        if (data.message == 'ok') {
+          dataTables.draw(false);
+        }
+      }, 'json');
+    })
+    
     var dataTables = $('#selling-table').DataTable({
         processing: true,
         serverSide: true,
@@ -317,9 +442,9 @@ $(function() {
         columns: [
             { data: 'created_at', name: 'created_at' },
             { data: 'product_name', name: 'product_name' },
-            { data: 'quantity', name: 'quantity' },
-            { data: 'discount', name: 'discount' },
-            { data: 'amount', name: 'amount' },
+            { data: 'quantity', name: 'quantity', class: 'text-right' },
+            { data: 'discount', name: 'discount', class: 'text-right' },
+            { data: 'amount', name: 'amount' , class: 'text-right' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });
@@ -328,18 +453,61 @@ $(function() {
       $.get('{{ livepos_asset("api/selling/$detail->id") }}', {}, function(data) {
         if (data.id) {
           $('.subtotal-amount').text(data.amount.toString().toRp());
-          $('.discount-amount').text(data.discount);
+          $('.discount-amount').text('('+data.discount.toString().toRp()+')');
           $('.total-amount').text(data.total_amount.toString().toRp());
+          $('#customer-name').text(data.customer.customer);
+          $('#selling-point').text(data.point.toString().toRp(' '));
+          $('#customer-point').text(data.customerPoint.toString().toRp(' '));
+          $(window).data('total_amount', data.total_amount);
         }
       })
     })
+
+    $('#form-add-discount').on('submit', function(e) {
+      e.preventDefault();
+      form = $(this);
+      $.post('{{ livepos_asset("api/selling/$detail->id") }}', {discount: form.find('[name=discount]').val(), _method: 'PUT'}, function(data) {
+        if (data.message == 'ok') {
+          dataTables.draw(false);
+          form.find('[name=discount]').val('');
+        }
+      }, 'json');
+    })
+
+    $('#delete-discount-amount').click(function(e) {
+      e.preventDefault();
+      $.post('{{ livepos_asset("api/selling/$detail->id") }}', {_method: 'put', discount: 0}, function(data) {
+        if (data.message == 'ok') {
+          dataTables.draw(false);
+        }
+      })
+    })
+
+    $('#delete-customer').click(function(e) {
+      e.preventDefault();
+      $.post('{{ livepos_asset("api/selling/$detail->id") }}', {_method: 'put', customer_id: 1}, function(data) {
+        if (data.message == 'ok') {
+          dataTables.draw(false);
+        }
+      })
+    })
+
     @endif
 
     var formInput = $('#form-input-product');
 
+    $('#input-product').change(function() {
+      if ($(this).val() == '') {
+        $('#input-product_id').val('');
+        $('#input-quantity').val('');
+        $('#display-product').text('');
+      }
+    })
+
     formInput.submit(function(e){
       e.preventDefault();
       url = formInput.attr('action');
+      if ($('#input-product').val() == '' || $('#input-quantity').val() == '') return;
       $.post(url, formInput.serialize(), function(data) {
         if (data.message == 'ok') {
           if ($('#input-selling_id').val() == '') {
@@ -362,7 +530,7 @@ $(function() {
         if (data.message == 'ok') {
           dataTables.draw(false);
         }
-      })
+      }, 'json')
     })
 
 });

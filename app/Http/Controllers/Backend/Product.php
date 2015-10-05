@@ -53,7 +53,7 @@ class Product extends BackendController
 
         $data = Model::join('product_categories', 'products.category_id', '=', 'product_categories.id')
                         ->join('product_brands', 'products.brand_id', '=', 'product_brands.id')
-                        ->select(['products.id', 'products.name', 'product_brands.brand', 
+                        ->select(['products.id', 'products.name', 'products.barcode', 'product_brands.brand', 
                             'product_categories.category', 'products.unit', 'products.purchase_price',
                             'products.selling_price', 'products.active', 'products.min_stock']);
 
@@ -80,6 +80,7 @@ class Product extends BackendController
                 $button = '<a href="#edit-'.$data->id.'" ';
                     $button .= ' data-id="'.$data->id.'"';
                     $button .= ' data-name="'.$data->name.'"';
+                    $button .= ' data-barcode="'.$data->barcode.'"';
                     $button .= ' data-brand="'.$data->brand.'"';
                     $button .= ' data-category="'.$data->category.'"';
                     $button .= ' data-unit="'.$data->unit.'"';

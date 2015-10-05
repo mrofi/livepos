@@ -23,7 +23,7 @@ class Customer extends BackendController
 
     public function anyData()
     {
-        $data  = Model::select('*');
+        $data  = Model::where('id', '<>', '1')->select('*');
 
         return Datatables::of($data)
             ->addColumn('action', function ($data) {

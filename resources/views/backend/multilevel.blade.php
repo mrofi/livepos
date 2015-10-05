@@ -29,11 +29,11 @@
                   <table class="table table-hover" id="multilevel-table">
                       <thead>
                           <tr class="bg-navy">
-                              <th>#</th>
                               <th>{{ trans('livepos.customer.name') }}</th>
-                              <th>{{ trans('livepos.multilevel.id') }}</th>
+                              <th>{{ trans('livepos.customer.code') }}</th>
                               <th>{{ trans('livepos.multilevel.level') }}</th>
                               <th>{{ trans('livepos.multilevel.upline') }}</th>
+                              <th>{{ trans('livepos.customer.point') }}</th>
                               <th style="min-width: 100px;"></th>
                           </tr>
                       </thead>
@@ -49,7 +49,7 @@
     <div class="modal fade" id="modal-add-edit">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">multilevel</h4>
           </div>
@@ -75,7 +75,7 @@
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" >
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.close') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.save') }}</button>
@@ -89,7 +89,7 @@
     <div class="modal fade" id="modal-delete">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">{{ trans('livepos.multilevel.delete') }}</h4>
           </div>
@@ -102,7 +102,7 @@
               </div>
               <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.multilevel.name') }} <span id="multilevel"></span> ?</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" value="delete">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
@@ -124,11 +124,11 @@ $(function() {
         serverSide: true,
         ajax: '{!! action('Backend\Multilevel@anyData') !!}',
         columns: [
-            { data: 'created_at', name: 'created_at' },
             { data: 'customer', name: 'customer' },
-            { data: 'id_multilevel', name: 'id_multilevel' },
+            { data: 'code', name: 'code' },
             { data: 'level', name: 'level' },
             { data: 'upline', name: 'upline' },
+            { data: 'commision', name: 'commision' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });

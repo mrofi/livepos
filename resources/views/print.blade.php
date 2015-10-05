@@ -2,7 +2,7 @@
 
 @section('mid')
 </head>
-<body onload="window.prints();">
+<body onload="window.print();">
 @endsection
 
 @section('header')

@@ -13,11 +13,20 @@ return [
     'quantity' => 'Qty',
     'price' => 'Harga',
     'amount' => 'Jumlah',
+    'point' => 'Poin',
     'subTotal' => 'Sub Total',
     'total' => 'Total',
+    'totalPoint' => 'Total Poin',
+    'nowPoint' => 'Poin Sementara',
     'discount' => 'Diskon',
     'addDiscount' => 'Tambah Diskon',
+    'pay' => 'Bayar',
+    'payChange' => 'Kembali',
     'date' => 'Tanggal',
+
+    'print' => 'Cetak',
+    'noPrint' => 'Tanpa Cetak',
+
     'totalAmount' => 'Total Nilai',
     'saveDiscount' => 'Simpan Diskon',
     'confirmDelete' => 'Apakah Anda yakin akan menghapus',
@@ -50,6 +59,7 @@ return [
         'edit' => 'Edit Produk',
         'delete' => 'Hapus Produk',
         'name' => 'Nama Produk',
+        'barcode' => 'Barcode',
         'purchase_price' => 'Harga Beli',
         'purchasePrice' => 'Harga Beli',
         'selling_price' => 'Harga Jual',
@@ -112,12 +122,14 @@ return [
         'add' => 'Tambah Pelanggan',
         'edit' => 'Edit Pelanggan',
         'delete' => 'Hapus Pelanggan',
+        'code' => 'Kode Pelanggan',
         'address' => 'Alamat Pelanggan',
         'identity' => 'Identitas',
         'identityType' => 'Jenis Identitas',
         'identityNumber' => 'No. Identitas',
         'contact1' => 'Kontak #1',
         'contact2' => 'Kontak #2',
+        'point' => 'Poin Pelanggan',
     ],
 
     'purchasing' => [
@@ -132,9 +144,11 @@ return [
         'transactionNumber' => 'No. Transaksi',
         'chooseProduct' => 'Pilih Produk',
         'addProduct' => 'Tambah Produk',
+        'billNumber' => 'No. Nota',
     ],
 
     'selling' => [
+        'codeName' => 'SELL',
         'name' => 'Penjualan',
         'title' => 'Penjualan',
         'tagline' => 'Daftar semua penjualan',
@@ -143,11 +157,29 @@ return [
         'delete' => 'Hapus Penjualan',
         'address' => 'Alamat Penjualan',
         'transactionNumber' => 'No. Transaksi',
+        'transactionDate' => 'Tgl. Transaksi',
         'chooseProduct' => 'Pilih Produk',
         'addProduct' => 'Tambah Produk',
+        'point' => 'Poin Penjualan',
+
+    ],
+
+    'multilevel' => [
+        'name' => 'Multi Level',
+        'title' => 'Multi Level',
+        'tagline' => 'Daftar semua member multilevel',
+        'add' => 'Member Baru',
+        'edit' => 'Edit Member',
+        'delete' => 'Hapus Member',
+        'id' => 'ID Multilevel',
+        'level' => 'Level',
+        'upline' => 'Upline',
+
+    
     ],
 
     'transactionNumberFormat' => ':id/:type/:month/:year',
+    'barcodeFormat' => '000:id-:number',
 
 
 ];  

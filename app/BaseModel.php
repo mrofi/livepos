@@ -19,6 +19,8 @@ class BaseModel extends Model
     protected $error_messages = [];
     
     protected $attributes = [];
+    
+    public $additionalAttributes = [];
 
     protected $init_data = [];
 

@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-md-4 text-right">  
                       <h1 id="total-amount-1" class="total-amount">
-                      {{ $detail->total_amount }}
+                      {{ livepos_toCurrency($detail->total_amount) }}
                       </h1>
                     </div>
                   </div>
@@ -66,45 +66,25 @@
                 <div class="space">&nbsp;</div>
                 <div class="box-body bg-gray">
                   <form id="form-add-product" action="{{ livepos_asset('api/purchasingDetail') }}" method="post">
+                    <input type="hidden" name="purchasing_id" value="{{ $detail->id }}">
                     <div class="row">
-                      <div class="col-md-4">
+                      <div class="col-md-4">  
                         <label class="control-label">{{ trans('livepos.purchasing.chooseProduct') }}</label>
-                        <select id="input-product" class="input-lg form-control text-black" autofocus data-placeholder="{{ trans('livepos.purchasing.chooseProductOptionText') }}">
-                          <option value=""></option>
-                        @foreach($products->toArray() as $product)
-                                    <option value="{{ $product['id'] }},0" 
-                                    data-meta_id="0" data-meta_convert="1" data-meta_unit="{{ $product['unit'] }}"  
-                                    @foreach($product as $key => $value)
-                                      @if(!is_array($value)) data-{{$key}}="{{ livepos_round($value)}}" @endif 
-                                    @endforeach
-                                  > {{ ucwords($product['name']) }} --- {{ strtoupper($product['unit']) }}</option>
-                          @if(isset($product['metas']))
-                            @foreach($product['metas'] as $meta)
-                              @if($meta['meta_key'] == 'multi_unit')
-                                @foreach(json_decode($meta['meta_value'], true) as $meta_value)
-                                  <option value="{{ $product['id'] }},{{ $meta['id'] }}"
-                                    data-meta_id="{{ $meta['id'] }}"  
-                                    data-meta_convert="{{ $meta_value['quantity']}}" 
-                                    data-meta_unit="{{ $meta_value['unit'] }}" 
-                                    @foreach($product as $key => $value)
-                                      @if(!is_array($value)) data-{{$key}}="{{ livepos_round($value)}}" @endif 
-                                    @endforeach
-                                  >{{ ucwords($product['name']) }} --- {{ strtoupper($meta_value['unit']) }} ({{ $meta_value['quantity'] }} {{ $product['unit'] }})</option>
-                                @endforeach
-                              @endif
-                            @endforeach
-                          @endif
-                        @endforeach
-                        </select>
+                        <input autocomplete="off" type="text" id="input-product" class="input-product input-lg form-control text-black" placeholder="{{ trans('livepos.purchasing.chooseProduct') }}">
+                        <input type="hidden" id="input-product_id" class="input-product_id" name="product_id" value="">
+                        <input type="hidden" id="input-product_name" class="input-product_name" name="product_name" value="">
+                        <input type="hidden" id="input-converter" class="input-converter" name="converter" value="">
+                        <input type="hidden" id="input-unit" class="input-unit" name="unit" value="">
+                        <input type="hidden" id="input-purchase_price" class="input-purchase_price" name="purchase_price" value="">
                       </div>
                       <div class="col-md-4 row">  
                         <div class="col-xs-7">  
                           <label class="control-label">{{ trans('livepos.product.purchase_price') }}</label>
-                          <input type="number" min="0" step="any" id="input-price" class="input-price input-lg form-control text-black" placeholder="{{ trans('livepos.price') }}">
+                          <input type="number" min="0" step="any" id="input-price" name="price" class="input-price input-lg form-control text-black" placeholder="{{ trans('livepos.price') }}">
                         </div>
                         <div class="col-xs-5">
                           <label class="control-label">{{ trans('livepos.quantity') }}</label>
-                          <input type="number" min="0" step="any" id="input-quantity" class="input-lg form-control text-black" placeholder="Qty">
+                          <input type="number" min="0" step="any" id="input-quantity" name="quantity" class="input-lg form-control text-black" placeholder="Qty">
                         </div>
                       </div>
                       <div class="col-md-4 row">  
@@ -157,15 +137,15 @@
                           <table class="table">
                             <tr>
                               <th style="width:50%">{{ trans('livepos.subTotal') }}:</th>
-                              <td class="subtotal-amount" id="subtotal-amount-1">{{ $detail->amount }}</td>
+                              <td class="subtotal-amount" id="subtotal-amount-1">{{ livepos_toCurrency($detail->amount) }}</td>
                             </tr>
                             <tr>
                               <th>{{ trans('livepos.discount') }} (<a href="#" id="delete-discount-amount" class="btn btn-link"><i class="fa fa-times"></i> {{ trans('livepos.clear') }}</a>):</th>
-                              <td class="discount-amount">{{ $detail->discount }}</td>
+                              <td class="discount-amount">{{ livepos_toCurrency($detail->discount) }}</td>
                             </tr>
                             <tr>
                               <th>{{ trans('livepos.total') }}:</th>
-                              <td class="total-amount" id="total-amount-2">{{ $detail->total_amount }}</td>
+                              <td><h3 class="total-amount" id="total-amount-2">{{ livepos_toCurrency($detail->total_amount) }}</h3></td>
                             </tr>
                           </table>
                         </div>
@@ -196,7 +176,7 @@
     <div class="modal fade" id="modal-add-edit">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">Purchasing</h4>
           </div>
@@ -226,7 +206,7 @@
                 <div class="col-sm-8"><input type="text" class="form-control" id="bill_no" name="bill_no" autofocus placeholder="{{ trans('livepos.purchasing.billNumber') }}"></div>
               </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" >
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.close') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.save') }}</button>
@@ -240,7 +220,7 @@
     <div class="modal fade" id="modal-delete">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">{{ trans('livepos.purchasing.delete') }}</h4>
           </div>
@@ -253,7 +233,7 @@
               </div>
               <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.purchasing.name') }} <span id="purchasing"></span> ?</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" value="delete">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
@@ -267,57 +247,38 @@
     <div class="modal fade" id="detail-edit">
       <div class="modal-dialog livepos-full">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">{{ trans('livepos.purchasing.detail') }}</h4>
           </div>
           <form id="form-edit-product" class="inline-form" action="{{ livepos_asset('api/purchasingDetail') }}" method="post">
+            <input type="hidden" name="purchasing_id" value="{{ $detail->id }}">
+            <input type="hidden" name="_method" value="PUT">
             <div class="modal-body">
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4">  
                   <label class="control-label">{{ trans('livepos.purchasing.chooseProduct') }}</label>
-                  <select id="input-product-modal" class="input-lg form-control text-black" autofocus data-placeholder="{{ trans('livepos.purchasing.chooseProductOptionText') }}">
-                    <option value=""></option>
-                  @foreach($products->toArray() as $product)
-                              <option value="{{ $product['id'] }},0" 
-                              data-meta_id="0" data-meta_convert="1" data-meta_unit="{{ $product['unit'] }}"  
-                              @foreach($product as $key => $value)
-                                @if(!is_array($value)) data-{{$key}}="{{ livepos_round($value)}}" @endif 
-                              @endforeach
-                            > {{ ucwords($product['name']) }} --- {{ strtoupper($product['unit']) }}</option>
-                    @if(isset($product['metas']))
-                      @foreach($product['metas'] as $meta)
-                        @if($meta['meta_key'] == 'multi_unit')
-                          @foreach(json_decode($meta['meta_value'], true) as $meta_value)
-                            <option value="{{ $product['id'] }},{{ $meta['id'] }}"
-                              data-meta_id="{{ $meta['id'] }}"  
-                              data-meta_convert="{{ $meta_value['quantity']}}" 
-                              data-meta_unit="{{ $meta_value['unit'] }}" 
-                              @foreach($product as $key => $value)
-                                @if(!is_array($value)) data-{{$key}}="{{ livepos_round($value)}}" @endif 
-                              @endforeach
-                            >{{ ucwords($product['name']) }} --- {{ strtoupper($meta_value['unit']) }} ({{ $meta_value['quantity'] }} {{ $product['unit'] }})</option>
-                          @endforeach
-                        @endif
-                      @endforeach
-                    @endif
-                  @endforeach
-                  </select>
+                  <input autocomplete="off" type="text" id="input-product-modal" class="input-product input-lg form-control text-black" placeholder="{{ trans('livepos.purchasing.chooseProduct') }}">
+                  <input type="hidden" id="input-product_id-modal" class="input-product_id" name="product_id" value="">
+                  <input type="hidden" id="input-product_name-modal" class="input-product_name" name="product_name" value="">
+                  <input type="hidden" id="input-converter-modal" class="input-converter" name="converter" value="">
+                  <input type="hidden" id="input-unit-modal" class="input-unit" name="unit" value="">
+                  <input type="hidden" id="input-purchase_price-modal" class="input-purchase_price" name="purchase_price" value="">
                 </div>
                 <div class="col-md-4 row">  
                   <div class="col-xs-7">  
                     <label class="control-label">{{ trans('livepos.product.purchase_price') }}</label>
-                    <input type="number" min="0" step="any" id="input-price-modal" class="input-price input-lg form-control text-black" placeholder="{{ trans('livepos.price') }}">
+                    <input type="number" min="0" step="any" id="input-price-modal" name="price" class="input-price input-lg form-control text-black" placeholder="{{ trans('livepos.price') }}">
                   </div>
                   <div class="col-xs-5">
                     <label class="control-label">{{ trans('livepos.quantity') }}</label>
-                    <input type="number" min="0" step="any" id="input-quantity-modal" class="input-lg form-control text-black" placeholder="Qty">
+                    <input type="number" min="0" step="any" id="input-quantity-modal" name="quantity" class="input-lg form-control text-black" placeholder="Qty">
                   </div>
                 </div>
                 <div class="col-md-4 row">  
                   <div class="col-xs-7">
                     <label class="control-label">{{ trans('livepos.discount') }}</label>
-                    <input type="number" min="0" step="any" id="input-discount-modal" class="input-lg form-control text-black" placeholder="{{ trans('livepos.discount') }}">
+                    <input type="number" min="0" step="any" id="input-discount-modal" name="discount" class="input-lg form-control text-black" placeholder="{{ trans('livepos.discount') }}">
                   </div>
                   <div class="col-xs-5 text-right">  
                     <label class="control-label">{{ trans('livepos.amount') }}</label>
@@ -328,7 +289,7 @@
               
               <div class="row">&nbsp;</div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.save') }}</button>
             </div>
@@ -341,7 +302,7 @@
     <div class="modal fade" id="detail-delete">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">{{ trans('livepos.purchasing.delete') }}</h4>
           </div>
@@ -354,7 +315,7 @@
               </div>
               <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.product.name') }} <span id="product-detail-delete"></span> ?</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
             </div>
@@ -377,12 +338,75 @@ $(function() {
             { data: 'created_at', name: 'created_at' },
             { data: 'product_name', name: 'purchasing_details.product_name' },
             { data: 'unit', name: 'purchasing_details.unit' },
-            { data: 'purchase_price', name: 'purchasing_details.purchase_price' },
+            { data: 'price', name: 'price' },
             { data: 'quantity', name: 'purchasing_details.quantity' },
             { data: 'discount', name: 'purchasing_details.discount' },
             { data: 'amount', name: 'purchasing_details.amount' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
+    });
+
+    var products = {};
+    var productLabels = [];
+    var inputProduct = $('.input-product');
+    inputProduct.typeahead({
+      source: function(query, process) {
+        $.get('{{ livepos_asset("api/product/search") }}', {q: query}, function(data) {
+          products = {};
+          productLabels = [];
+
+          $.each( data, function(i, e) {
+            e.converter = 1;
+            label = e.name + ' - ' + e.unit.toUpperCase();
+            productLabels.push(label);
+            products[ label ] = e;
+            
+            var q = u = [];
+            var ne = {};
+            
+            for (x in e.metas) {
+              if (e.metas[ x ].meta_key == 'multi_price') {
+                q = $.parseJSON(e.metas[ x ].meta_value);
+              } else if (e.metas[ x ].meta_key == 'multi_unit') {
+                u = $.parseJSON(e.metas[ x ].meta_value);
+              }
+            }
+
+            for (var i = 0; i < u.length; i++) {
+              m = u[i];
+              ne = $.extend(true, {}, e);
+              ne.unit = m.unit;
+              ne.converter = m.quantity;
+
+              s = 1;
+              for (var j = 0; j < q.length; j++) {
+                n = q[j];
+                if (n.quantity <= ne.converter && n.quantity > s) {
+                  ne.selling_price = n.selling_price;
+                  s = n.quantity;
+                }
+              }
+
+              label = ne.name + ' - ' + ne.unit.toUpperCase();
+              productLabels.push(label);
+              products[ label ] = ne;
+            }
+          })
+          process(productLabels);
+        });
+      }
+      , updater: function( item ) {
+        form = $(this)[0].$element.parents('form');
+        form.find('.input-product_id').val( products[ item ].id );
+        form.find('.input-converter').val( products[ item ].converter );
+        form.find('.input-unit').val( products[ item ].unit );
+        form.find('.input-purchase_price').val( products[ item ].purchase_price );
+        form.find('.input-product_name').val( item );
+        price = products[ item ].purchase_price * products[ item ].converter;
+        form.find('.input-price').val( price )[0].focus();
+        return item;
+      }
+
     });
   @else
     var dataTables = $('#purchasings-table').DataTable({
@@ -499,28 +523,10 @@ $(function() {
 
     // DETAIL
   @if(isset($detail))
-    $('#input-product, #input-product-modal').on('change', function(){
-      var product = $(this).find(':selected'),
-          converter = product.data('meta_convert'),
-          price = product.data('purchase_price') * converter;
-      countAmountModal();
-      $(this).parents('form').find('.input-price').val(price)[0].focus();
-    });
-
     $('#form-add-product').on('submit', function(e) {
       e.preventDefault();
       var form = $(this);
-      var post = {};
-      var input_product = $('#input-product :selected');
-      post.purchasing_id = '{{ $detail->id }}';
-      post.product_id = input_product.data('id');
-      post.product_name = input_product.data('name');
-      post.unit = input_product.data('meta_unit');
-      post.purchase_price = $('#input-price').val();
-      post.discount = $('#input-discount').val();
-      post.quantity = $('#input-quantity').val();
-      post.amount = post.purchase_price * post.quantity - post.discount;
-      $.post(form.attr('action'), post, function(data) {
+      $.post(form.attr('action'), form.serialize(), function(data) {
         if (data.message == 'ok') {
           dataTables.draw(false);
           form[0].reset();
@@ -535,10 +541,15 @@ $(function() {
       var button = $(e.relatedTarget);
       var modal = $(this);
       var form = modal.find('form');
-      form.find('select')[0].focus();
+      form.find('#input-product-modal')[0].focus();
       form.attr('action', '{{ livepos_asset('api/purchasingDetail') }}'+'/'+button.data('id'));
-      $('#input-product-modal').find('[data-id='+button.data('product_id')+'][data-meta_unit='+button.data('unit')+']').prop('selected', true);
-      $('#input-price-modal').val(button.data('purchase_price'));
+      $('#input-product_id-modal').val( button.data('product_id') );
+      $('#input-converter-modal').val( button.data('converter') );
+      $('#input-unit-modal').val( button.data('unit') );
+      $('#input-purchase_price-modal').val( button.data('purchase_price') );
+      $('#input-product_name-modal').val( button.data('product_name') );
+      $('#input-product-modal').val( button.data('product_name') );
+      $('#input-price-modal').val(button.data('purchase_price') * button.data('converter'));
       $('#input-quantity-modal').val(button.data('quantity'));
       $('#input-discount-modal').val(button.data('discount'));
       $('#input-amount-modal').val(button.data('amount'));
@@ -547,19 +558,7 @@ $(function() {
     $('#form-edit-product').on('submit', function(e) {
       e.preventDefault();
       var form = $(this);
-      var post = {};
-      var input_product = $('#input-product-modal :selected');
-      post.purchasing_id = '{{ $detail->id }}';
-      post.product_id = input_product.data('id');
-      post.product_name = input_product.data('name');
-      post.unit = input_product.data('meta_unit') == '0' ? input_product.data('unit') : input_product.data('meta_unit');
-      post.purchase_price = $('#input-price-modal').val();
-      post.discount = $('#input-discount-modal').val();
-      post.quantity = $('#input-quantity-modal').val();
-      post.amount = $('#input-amount-modal').val();
-      post._method = 'put';
-      if (post.amount < 0) return;
-      $.post(form.attr('action'), post, function(data) {
+      $.post(form.attr('action'), form.serialize(), function(data) {
         if (data.message == 'ok') {
           dataTables.draw(false);
           form[0].reset();
@@ -608,9 +607,9 @@ $(function() {
     dataTables.on('draw.dt', function() {
       $.get('{{ livepos_asset("api/purchasing/$detail->id") }}', {}, function(data) {
         if (data.id) {
-          $('.subtotal-amount').text(data.amount);
-          $('.discount-amount').text(data.discount);
-          $('.total-amount').text(data.total_amount);
+          $('.subtotal-amount').text(data.amount.toString().toRp());
+          $('.discount-amount').text(data.discount.toString().toRp());
+          $('.total-amount').text(data.total_amount.toString().toRp());
         }
       })
     })

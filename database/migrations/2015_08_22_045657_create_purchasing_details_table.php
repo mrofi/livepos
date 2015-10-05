@@ -18,6 +18,7 @@ class CreatePurchasingDetailsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->string('product_name', 50);
             $table->string('unit', 10);
+            $table->decimal('converter', 12, 2);
             $table->decimal('purchase_price', 12, 2)->unsigned();
             $table->decimal('discount', 12, 2)->unsigned();
             $table->decimal('quantity', 10, 3)->unsigned();

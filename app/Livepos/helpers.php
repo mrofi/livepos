@@ -52,9 +52,10 @@ function livepos_isRound($value)
     return floor($value) == $value;
 }
 
-function livepos_round($value)
+function livepos_round($value, $decimal = ',')
 {
-    return livepos_isRound($value) ? floor($value) : $value;    
+    $value = livepos_isRound($value) ? floor($value) : (!is_numeric($value) ? $value : floatval($value));   
+    return preg_replace('/\./', $decimal, $value); 
 }
 
 function livepos_theme($theme = null)

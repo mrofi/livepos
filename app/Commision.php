@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commision extends Model
 {
+	protected $table = 'multilevel_commisions';
+	
     protected $fillable = ['selling_id', 'multilevel_id', 'commision'];
 
     protected $rules = [

@@ -230,7 +230,7 @@
 @section('footer')
       <footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>v.</b> 0.3.0 <b><a href="https://twitter.com/m_rofi">MR</a></b>
+          <b>v.</b> 0.3.0 alpha <b><a href="https://twitter.com/m_rofi">MR</a></b>
         </div>
         <strong class="hidden-xs">&copy; 2015 {!! 2015 < ($year = \Carbon::now()->format('Y')) ? "- $year" : ""  !!} - Supported by <a href="http://inasaba.com">Inasaba Pekalongan</a>.</strong>
       </footer>
@@ -433,8 +433,8 @@
 
 
     <script>
-      String.prototype.toRp = function(b,c,d,e) {
-        e=function(f){return f.split('').reverse().join('')};b=e(parseInt(this,10).toString());for(c=0,d='';c<b.length;c++){d+=b[c];if((c+1)%3===0&&c!==(b.length-1)){d+='.';}}return'Rp.\t'+e(d);
+      String.prototype.toRp = function(a,b,c,d,e) {
+        e=function(f){return f.split('').reverse().join('')};b=e(parseInt(this,10).toString());for(c=0,d='';c<b.length;c++){d+=b[c];if((c+1)%3===0&&c!==(b.length-1)){d+='.';}}return(a?a:'Rp.\t')+e(d);
       }
       $(function() {
         $.fn.datepicker.defaults.format = "{{ config('livepos.dateformat') }}";

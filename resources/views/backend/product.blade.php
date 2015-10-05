@@ -30,6 +30,7 @@
                       <thead>
                           <tr class="bg-navy">
                               <th>{{ trans('livepos.product.name') }}</th>
+                              <th>{{ trans('livepos.product.barcode') }}</th>
                               <th>{{ trans('livepos.brand.name') }}</th>
                               <th>{{ trans('livepos.category.name') }}</th>
                               <th>{{ trans('livepos.unit') }}</th>
@@ -50,7 +51,7 @@
     <div class="modal fade" id="modal-add-edit">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">Product</h4>
           </div>
@@ -65,6 +66,12 @@
                 <label for="name" class="col-sm-3 control-label">{{ trans('livepos.product.name') }}</label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" id="name" name="name" autofocus placeholder="{{ trans('livepos.product.name') }}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="barcode" class="col-sm-3 control-label">{{ trans('livepos.product.barcode') }}</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="barcode" name="barcode" autofocus placeholder="{{ trans('livepos.product.barcode') }}">
                 </div>
               </div>
               <div class="form-group">
@@ -84,13 +91,13 @@
                   <hr>
                   <div class="form-group">
                     <div class="col-xs-3">
-                      <label for="multi-unit-quantity">{{ trans('livepos.product.addUnit') }}</label>
+                      <input type="text" class="form-control" id="multi-unit-unit" placeholder="{{ trans('livepos.product.unit') }}">
                     </div>
                     <div class="col-xs-3">
-                      <input type="text" class="form-control" id="multi-unit-unit"placeholder="{{ trans('livepos.product.unit') }}">
+                      <input type="number" min="0" step="any" class="form-control" id="multi-unit-quantity" placeholder="{{ trans('livepos.product.quantityPerSmallUnit') }}">
                     </div>
                     <div class="col-xs-3">
-                      <input type="number" min="0" step="any" class="form-control" id="multi-unit-quantity"placeholder="{{ trans('livepos.product.quantityPerSmallUnit') }}">
+                      <input type="text" class="form-control" id="multi-unit-barcode" placeholder="{{ trans('livepos.product.barcode') }}">
                     </div>
                     <div class="col-xs-3">
                       <a href="#" class="btn bg-navy" id="multi-unit-add">{{ trans('livepos.add') }}</a>
@@ -101,6 +108,7 @@
                         <tr class="bg-navy">
                             <th>{{ trans('livepos.product.unit') }}</th>
                             <th>{{ trans('livepos.product.quantity') }}</th>
+                            <th>{{ trans('livepos.product.barcode') }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -201,7 +209,7 @@
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" >
               <input type="hidden" name="_multi_unit_data" id="multi_unit_data" >
               <input type="hidden" name="_multi_price_data" id="multi_price_data" >
@@ -217,7 +225,7 @@
     <div class="modal fade" id="modal-delete">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-maroon">
+          <div class="modal-header bg-yellow-v2">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title text-center">{{ trans('livepos.product.delete') }}</h4>
           </div>
@@ -230,7 +238,7 @@
               </div>
               <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.product.name') }} <span id="product"></span> ?</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer bg-navy">
               <input type="hidden" name="_method" id="method" value="delete">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
@@ -253,6 +261,7 @@ $(function() {
         ajax: '{!! action('Backend\Product@anyData') !!}',
         columns: [
             { data: 'name', name: 'products.name' },
+            { data: 'barcode', name: 'products.barcode' },
             { data: 'brand', name: 'product_brands.brand' },
             { data: 'category', name: 'product_categories.category' },
             { data: 'unit', name: 'products.unit' },
@@ -351,6 +360,7 @@ $(function() {
         columns: [
             { data: 'unit', name: 'products.unit' },
             { data: 'quantity', name: 'quantity' },
+            { data: 'barcode', name: 'barcode' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     })
@@ -360,6 +370,7 @@ $(function() {
       var _new = {
         unit: multiUnitCollapse.find('#multi-unit-unit').val(),
         quantity: multiUnitCollapse.find('#multi-unit-quantity').val(),
+        barcode: multiUnitCollapse.find('#multi-unit-barcode').val(),
         action: '<a href="#" class="multi-unit-delete">Delete</a>'
       };
       var _data = window._multi_unit_data;
@@ -389,6 +400,7 @@ $(function() {
     modal.on('show.bs.modal', function( event ) {
       multiPriceDataTables.clear().draw(false);
       multiUnitDataTables.clear().draw(false);
+      form[0].reset();
       window._multi_unit_data = [];
       window._multi_price_data = [];
       var button = $(event.relatedTarget), 
@@ -401,6 +413,7 @@ $(function() {
       if (button.data('action') == 'edit') {
         title = '{{ trans('livepos.product.edit') }}';
         content.name = button.data('name'),
+        content.barcode = button.data('barcode'),
         content.category_id = button.data('category'),
         content.brand_id = button.data('brand'),
         content.min_stock = button.data('min_stock'),
