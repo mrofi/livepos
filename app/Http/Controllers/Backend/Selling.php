@@ -52,7 +52,7 @@ class Selling extends BackendController
         return Datatables::of($datas)
             ->editColumn('product_name', '{!! $product_name." - ".strtoupper($unit)." (".livepos_toCurrency($selling_price * $converter).")" !!}')
             ->editColumn('quantity', '{!! livepos_round($quantity) !!}')
-            ->editColumn('discount', '{!! livepos_round($discount) !!}')
+            ->editColumn('discount', '{!! livepos_toCurrency($discount) !!}')
             ->editColumn('amount', '{!! livepos_toCurrency($amount) !!}')
             ->addColumn('action', function ($data) {
                 $d = '';

@@ -39,7 +39,7 @@
 			</tr>	
 			<tr>
 				<td>{{ livepos_round($det->quantity) }} {{ $det->unit }}</td>
-				<td>{{ ($det->discount > 0) ? livepos_toCurrency($det->discount) : '-' }}</td>
+				<td>{{ ($det->discount > 0) ? '('.livepos_toCurrency($det->discount).')' : '-' }}</td>
 				<td class="text-right">{{ livepos_toCurrency($det->amount) }}</td>
 			</tr>
 	      @endforeach

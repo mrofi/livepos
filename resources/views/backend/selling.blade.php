@@ -55,7 +55,7 @@
                               <input autocomplete="off" type="number" min="0" name="quantity" step="any" id="input-quantity" class="form-control input-lg input-product bg-navy" placeholder="{{ trans('livepos.quantity') }}">
                             </div>
                             <div class="col-xs-5">
-                              <input autocomplete="off" type="number" min="0" name="discount" step="any" id="input-discount" class="form-control input-lg input-product bg-navy" placeholder="{{ trans('livepos.discount') }}">
+                              <input autocomplete="off" type="text" name="discount" id="input-discount" class="input-mask-currency form-control input-lg input-product bg-navy" placeholder="{{ trans('livepos.discount') }}">
                             </div>
                             <div class="col-xs-3">
                               <button class="btn bg-navy btn-block btn-lg"><i class="fa fa-plus"></i></button>
@@ -84,7 +84,7 @@
                             <form action="#" id="form-add-discount" class="form-inline">
                               <input type="hidden" name="_method" value="put">
                               <div class="input-group input-group-lg">
-                                <input autocomplete="off" type="text" class="form-control" name="discount" placeholder="{{ trans('livepos.addDiscount') }}">
+                                <input autocomplete="off" type="text" class="input-mask-currency form-control" name="discount" placeholder="{{ trans('livepos.addDiscount') }}">
                                 <div class="input-group-btn">
                                   <button type="button" class="btn bg-navy">{{ trans('livepos.saveDiscount') }}</button>
                                 </div><!-- /btn-group -->
@@ -155,7 +155,7 @@
                         </div>
                       </div>
                     </div>
-    <!-- modal delete -->
+    <!-- modal pay -->
     <div class="modal fade" id="modal-pay">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -174,19 +174,19 @@
               <div class="form-group">
                 <label for="total" name="total" class="col-sm-3 control-label">{{ trans('livepos.total') }}</label>
                 <div class="col-sm-5">
-                  <input type="text" class="form-control total-amount" id="total" name="total" value="{{ $detail->total_amount}}" readonly="true">
+                  <input type="text" class="input-mask-currency form-control total-amount" id="total-to-pay" value="{{ $detail->total_amount}}" readonly="true">
                 </div>
               </div>
               <div class="form-group">
                 <label for="total" name="pay" class="col-sm-3 control-label">{{ trans('livepos.pay') }}</label>
                 <div class="col-sm-5">
-                  <input type="text" class="form-control" id="pay" name="pay" autofocus placeholder="{{ trans('livepos.pay') }}">
+                  <input type="text" class="input-mask-currency form-control" id="pay" name="pay" autofocus placeholder="{{ trans('livepos.pay') }}">
                 </div>
               </div>
               <div class="form-group">
                 <label for="total" name="payChange" class="col-sm-3 control-label">{{ trans('livepos.payChange') }}</label>
                 <div class="col-sm-5">
-                  <input type="text" class="form-control" id="payChange" name="payChange" value="0" readonly="true">
+                  <input type="text" class="input-mask-currency form-control" id="payChange" name="payChange" value="0" readonly="true">
                 </div>
               </div>
             </div>
@@ -371,8 +371,12 @@ $(function() {
 
     @if(isset($detail))
 
+    $('#modal-pay').on('shown.bs.modal', function() {
+      $('#total-to-pay').autoNumeric('set', $(window).data('total_amount'));
+    })
+
     $('#pay').on('keyup', function() {
-      $('#payChange').val( $(this).val() - $('#total').val() );
+      $('#payChange').autoNumeric('set', $(this).autoNumeric('get') - $('#total-to-pay').autoNumeric('get') );
     })
 
     var modalPay = $('#modal-pay');
@@ -385,7 +389,7 @@ $(function() {
       e.preventDefault();
       if ($('#pay').val() == '') return;
       form = $(this);
-      $.post('{{ livepos_asset("api/selling/{$detail->id}") }}', form.serialize(), function( data ) {
+      $.post('{{ livepos_asset("api/selling/{$detail->id}") }}', form.autoNumeric('getString'), function( data ) {
         if (data.message == 'ok') {
           form.find('#form-input-pay, .modal-footer').addClass('hide');
           $('#succes-pay').removeClass('hide');
@@ -466,7 +470,7 @@ $(function() {
     $('#form-add-discount').on('submit', function(e) {
       e.preventDefault();
       form = $(this);
-      $.post('{{ livepos_asset("api/selling/$detail->id") }}', {discount: form.find('[name=discount]').val(), _method: 'PUT'}, function(data) {
+      $.post('{{ livepos_asset("api/selling/$detail->id") }}', {discount: form.find('[name=discount]').autoNumeric('get'), _method: 'PUT'}, function(data) {
         if (data.message == 'ok') {
           dataTables.draw(false);
           form.find('[name=discount]').val('');
@@ -508,7 +512,7 @@ $(function() {
       e.preventDefault();
       url = formInput.attr('action');
       if ($('#input-product').val() == '' || $('#input-quantity').val() == '') return;
-      $.post(url, formInput.serialize(), function(data) {
+      $.post(url, formInput.autoNumeric('getString'), function(data) {
         if (data.message == 'ok') {
           if ($('#input-selling_id').val() == '') {
             location.href = '{{ livepos_asset("dashboard/selling/") }}'+data.created.selling_id;

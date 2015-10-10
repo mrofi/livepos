@@ -44,6 +44,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
 
     Route::resource('productBrand', 'ProductBrand'); 
     
+    Route::get('productMeta/tes',  'ProductMeta@getTes');
+
     Route::resource('productMeta', 'ProductMeta'); 
     
     Route::get('product/search', 'Product@getSearch');

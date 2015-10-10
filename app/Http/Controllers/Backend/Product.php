@@ -53,12 +53,13 @@ class Product extends BackendController
 
         $data = Model::join('product_categories', 'products.category_id', '=', 'product_categories.id')
                         ->join('product_brands', 'products.brand_id', '=', 'product_brands.id')
-                        ->select(['products.id', 'products.name', 'products.barcode', 'product_brands.brand', 
+                        ->select(['products.id', 'products.category_id', 'products.brand_id',
+                            'products.name', 'products.barcode', 'product_brands.brand', 
                             'product_categories.category', 'products.unit', 'products.purchase_price',
                             'products.selling_price', 'products.active', 'products.min_stock']);
 
         return  Datatables::of($data)
-            ->editColumn('purchase_price', '{!! livepos_round($purchase_price) !!}')
+            ->editColumn('purchase_price', '{!! livepos_toCurrency($purchase_price) !!}')
             ->editColumn('unit', function($data) use($product_metas) {
                 if (!isset($product_metas[$data->id]['multi_unit'])) return $data->unit;
                 $units = [$data->unit];
@@ -68,19 +69,21 @@ class Product extends BackendController
                 return implode(', ', $units);
             })
             ->editColumn('selling_price', function($data) use($product_metas) {
-                if (!isset($product_metas[$data->id]['multi_price'])) return livepos_round($data->selling_price);
+                if (!isset($product_metas[$data->id]['multi_price'])) return livepos_toCurrency($data->selling_price);
                 $prices = [$data->selling_price];
                 foreach (json_decode($product_metas[$data->id]['multi_price']) as $multi_price) {
                     $prices[] = $multi_price->selling_price;
                 }
                 asort($prices);
-                return livepos_round(head($prices)).' - '.livepos_round(last($prices));
+                return livepos_toCurrency(head($prices)).' - '.livepos_toCurrency(last($prices));
             })
             ->addColumn('action', function ($data) use($product_metas) {
                 $button = '<a href="#edit-'.$data->id.'" ';
                     $button .= ' data-id="'.$data->id.'"';
                     $button .= ' data-name="'.$data->name.'"';
                     $button .= ' data-barcode="'.$data->barcode.'"';
+                    $button .= ' data-brand_id="'.$data->brand_id.'"';
+                    $button .= ' data-category_id="'.$data->category_id.'"';
                     $button .= ' data-brand="'.$data->brand.'"';
                     $button .= ' data-category="'.$data->category.'"';
                     $button .= ' data-unit="'.$data->unit.'"';

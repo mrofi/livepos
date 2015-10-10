@@ -24,6 +24,8 @@ class Product extends BaseModel
     	if ($units = json_decode($attributes['_multi_unit_data']))  
     	{
     		$_units = [];
+            $number = 0;
+            $barcodes = [$this->barcode];
     		foreach ($units as $unit) 
     		{
     			if ($unit->unit == $attributes['unit']) 
@@ -38,11 +40,16 @@ class Product extends BaseModel
 					return ['error' => trans('livepos.product.errorNotAllowedEmptyUnit')];	
 				}
 
-                if ( $unit->barcode == '' || $unit->barcode == $attributes['barcode'] || $this->where('barcode', $unit->barcode)->first() || ProductMeta::where('meta_value', 'like', '%"barcode":"'.$unit->barcode.'"%')->first())
+                if ($unit->barcode == '' || in_array($unit->barcode, $barcodes))
                 {
-                    $number = ProductMeta::where('product_id', $this->id)->where('meta_key', 'multi_unit')->count('id');  
-                    $unit->barcode = $this->createInternalBarcode($number + 1);
+                    do 
+                    {
+                        $unit->barcode = $this->createInternalBarcode(++$number);
+                    } while(in_array($unit->barcode, $barcodes));
+
                 }
+
+                $barcodes[] = $unit->barcode;                    
 
 				unset($unit->action);
 				$_units[] = $unit;

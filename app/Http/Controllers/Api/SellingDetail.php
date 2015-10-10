@@ -41,12 +41,17 @@ class SellingDetail extends ApiController
 	        	$request->merge(['selling_id' => $selling['created']['id']]);
 	        }
 
+
 	        $product = Product::find($request->product_id);
-	        $amount = $request->get('selling_price') * $request->get('quantity') * $request->get('converter') - $request->get('discount');
+	        $amount = $request->get('selling_price') * $request->get('quantity') * $request->get('converter');
+	        $discount = $request->get('discount', 0);
+	        if ($discount > $amount) $discount = $amount;
+	        $amount -= $discount;
 
 	        $request->merge([
 	        	'product_name' => $product->name,
 	        	'amount' => $amount,
+	        	'discount' => $discount,
 	        ]);
 
 	        $stored = parent::store($request);

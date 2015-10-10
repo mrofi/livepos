@@ -53,6 +53,7 @@ return [
     ],
 
     'product' => [
+        'new' => 'Produk Baru',
         'title' => 'Produk',
         'tagline' => 'Berbagai macam produk yang dijual ada di sini',
         'add' => 'Tambah Produk',
@@ -83,6 +84,7 @@ return [
     ],
 
     'brand' => [
+        'new' => 'Merk Baru',
         'name' => 'Merk',
         'title' => 'Merk Produk',
         'tagline' => 'Daftar semua merk produk',
@@ -93,6 +95,7 @@ return [
     ],
 
     'category' => [
+        'new' => 'Kategori Baru',
         'name' => 'Kategori',
         'title' => 'Kategori Produk',
         'tagline' => 'Daftar semua kategori produk',
@@ -145,6 +148,7 @@ return [
         'chooseProduct' => 'Pilih Produk',
         'addProduct' => 'Tambah Produk',
         'billNumber' => 'No. Nota',
+        'detail' => 'Detail Pembelian',
     ],
 
     'selling' => [

@@ -87,7 +87,7 @@ class Selling extends BaseModel
 
             $this->calculate();
 
-            if ($attributes['pay'] && is_numeric($attributes['pay']))
+            if (isset($attributes['pay']) && is_numeric($attributes['pay']))
             {
                 $this->cash = $attributes['pay'];
                 $this->change = $attributes['pay'] - $this->total_amount;
@@ -115,6 +115,8 @@ class Selling extends BaseModel
         }
 
         $this->amount = $amount;
+
+        if ($this->discount > $this->amount) $this->discount = $this->amount;
 
         $this->total_amount = $this->amount - $this->discount;
 

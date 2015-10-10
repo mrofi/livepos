@@ -13,4 +13,10 @@ class ProductMeta extends ApiController
     {
         parent::__construct($model);
     }
+
+    public function getTes()
+    {
+    	var_dump(\livepos\ProductMeta::where('product_id', '5')->where('meta_key', 'multi_unit')->count('*'));
+    	var_dump(\livepos\ProductMeta::where('meta_value', 'like', '%"barcode":"000-1"%')->first());
+    }
 }

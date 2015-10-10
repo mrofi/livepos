@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="/themes/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- datatables -->
     <link rel="stylesheet" href="/themes/AdminLTE/plugins/datatables/datatables.bootstrap.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/themes/AdminLTE/plugins/select2/select2.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/themes/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -426,6 +428,10 @@
     <script src="/themes/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <!-- Bootstrap Typeahead -->
     <script src="/themes/AdminLTE/plugins/bootstrap-typeahead/bootstrap3-typeahead.min.js"></script>
+    <!-- Select2 -->
+    <script src="/themes/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- autonumeric -->
+    <script src="/themes/AdminLTE/plugins/autoNumeric/autoNumeric-min.js"></script>
     <!-- AdminLTE App -->
     <script src="/themes/AdminLTE/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
@@ -448,6 +454,15 @@
         });
 
         $.fn.modal.Constructor.DEFAULTS.backdrop = 'static';
+
+        $.fn.liveposCurrency = {aSep: '.', aDec: ',', aSign: 'Rp. ', lZero: 'deny'};
+        $.fn.liveposNumeric = {aSep: '.', aDec: ',', aSign: '', lZero: 'deny'};
+
+        $('select').select2({width: '100%'});              
+        
+        $('.input-mask-currency').autoNumeric('init', $.fn.liveposCurrency);
+        $('.input-mask-numeric').autoNumeric('init', $.fn.liveposNumeric);
+
 
           var slideToTop = $("<div />");
           slideToTop.html('<i class="fa fa-chevron-up"></i>');

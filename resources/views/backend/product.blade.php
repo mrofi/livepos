@@ -118,13 +118,13 @@
               <div class="form-group">
                 <label for="purchase_price" class="col-sm-3 control-label">{{ trans('livepos.product.purchasePrice') }}</label>
                 <div class="col-sm-4">
-                  <input type="number" min="0" step="any" class="form-control" id="purchase_price" name="purchase_price" autofocus placeholder="{{ trans('livepos.product.purchasePrice') }}">
+                  <input type="text" class="form-control input-mask-currency" id="purchase_price" name="purchase_price" autofocus placeholder="{{ trans('livepos.product.purchasePrice') }}">
                 </div>
               </div>
               <div class="form-group">
                 <label for="selling_price" class="col-sm-3 control-label">{{ trans('livepos.product.sellingPrice') }}</label>
                 <div class="col-sm-4">
-                  <input type="number" min="0" step="any" class="form-control" id="selling_price" name="selling_price" value="0" autofocus placeholder="{{ trans('livepos.product.sellingPrice') }}">
+                  <input type="text" class="form-control input-mask-currency" id="selling_price" name="selling_price" value="0" autofocus placeholder="{{ trans('livepos.product.sellingPrice') }}">
                 </div>
                 <div class="col-sm-4">
                   <label>
@@ -144,7 +144,7 @@
                       <input type="number" min="0" step="any" class="form-control" id="multi-price-quantity"placeholder="{{ trans('livepos.quantity') }}">
                     </div>
                     <div class="col-xs-3">
-                      <input type="number" min="0" step="any" class="form-control" id="multi-price-price"placeholder="{{ trans('livepos.product.sellingPricePerSmallUnit') }}">
+                      <input type="text" class="input-mask-currency form-control" id="multi-price-price"placeholder="{{ trans('livepos.product.sellingPricePerSmallUnit') }}">
                     </div>
                     <div class="col-xs-3">
                       <a href="#" class="btn bg-navy" id="multi-price-add">{{ trans('livepos.add') }}</a>
@@ -163,7 +163,7 @@
               </div>
               <div class="form-group">
                 <label for="category_id" class="col-sm-3 control-label">{{ trans('livepos.product.chooseCategory') }}</label>
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                   <select name="category_id" id="category_id" class="form-control" data-placeholder="{{ trans('livepos.product.chooseCategory') }}">
                   @if(isset($categories))
                   @foreach($categories as $category)
@@ -172,28 +172,60 @@
                   @endif  
                   </select>
                 </div>
+                <div class="col-sm-4">
+                  <a href="#add-category" class="btn btn-link" data-toggle="collapse">{{ trans('livepos.category.add') }}</a>
+                </div>
+              </div>
+              <div class="collapse" id="add-category">
+                <div class="well">
+                  <div class="form-group">
+                    <label for="add-category-input" class="control-label col-xs-3">{{ trans('livepos.category.new') }}</label>
+                    <div class="col-xs-6">
+                      <input type="text" id="add-category-input" class="form-control">
+                    </div>
+                    <div class="col-xs-3">
+                      <a class="btn btn-block bg-navy" id="add-category-submit">{{ trans('livepos.add') }}</a>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="form-group">
                 <label for="brand_id" class="col-sm-3 control-label">{{ trans('livepos.product.chooseBrand') }}</label>
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                   <select name="brand_id" id="brand_id" class="form-control" data-placeholder="{{ trans('livepos.product.chooseBrand') }}">
                   @foreach($brands as $brand)
                     <option value="{{ $brand->id }}" >{{ $brand->brand }}</option>
                   @endforeach
                   </select>
                 </div>
+                <div class="col-sm-4">
+                  <a href="#add-brand" class="btn btn-link" data-toggle="collapse">{{ trans('livepos.brand.add') }}</a>
+                </div>
+              </div>
+              <div class="collapse" id="add-brand">
+                <div class="well">
+                  <div class="form-group">
+                    <label for="add-brand-input" class="control-label col-xs-3">{{ trans('livepos.brand.new') }}</label>
+                    <div class="col-xs-6">
+                      <input type="text" id="add-brand-input" class="form-control">
+                    </div>
+                    <div class="col-xs-3">
+                      <a class="btn btn-block bg-navy" id="add-brand-submit">{{ trans('livepos.add') }}</a>
+                    </div>
+                  </div>
+                </div>
               </div>
               <hr>
               <div class="form-group input-init-stock">
                 <label for="init_stock" class="col-sm-3 control-label">{{ trans('livepos.product.init_stock') }}</label>
                 <div class="col-sm-3">
-                  <input type="number" min="0" step="any" class="form-control" id="init_stock" name="init_stock" autofocus placeholder="{{ trans('livepos.product.init_stock') }}">
+                  <input type="text" class="form-control input-mask-numeric" id="init_stock" name="init_stock" autofocus placeholder="{{ trans('livepos.product.init_stock') }}">
                 </div>
               </div>
               <div class="form-group">
                 <label for="min_stock" class="col-sm-3 control-label">{{ trans('livepos.product.min_stock') }}</label>
                 <div class="col-sm-3">
-                  <input type="number" min="0" step="any" class="form-control" id="min_stock" name="min_stock" autofocus placeholder="{{ trans('livepos.product.min_stock') }}">
+                  <input type="text" class="form-control input-mask-numeric" id="min_stock" name="min_stock" autofocus placeholder="{{ trans('livepos.product.min_stock') }}">
                 </div>
               </div>
               <hr>
@@ -239,6 +271,7 @@
               <p>{{ trans('livepos.confirmDelete') }} {{ trans('livepos.product.name') }} <span id="product"></span> ?</p>
             </div>
             <div class="modal-footer bg-navy">
+              <input type="hidden" class="input-mask-numeric" name="input-mask" value="0">
               <input type="hidden" name="_method" id="method" value="delete">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
@@ -290,6 +323,14 @@ $(function() {
         ]
     })
 
+    multiPriceCollapse.find(':input').on('keydown, keypress', function(e) {
+      if (e.which == '13') {
+        e.preventDefault();
+        multiPriceCollapse.find('#multi-price-add').click();
+        return false;
+      }
+      return true;
+    })
     multiPriceCollapse.find('#multi-price-add').click(function(e){
       e.preventDefault();
       var _new = {
@@ -304,6 +345,8 @@ $(function() {
         if (_data[x].quantity == _new.quantity) return;
       }
       multiPriceDataTables.row.add(_new).draw(false);
+      _new.selling_price = multiPriceCollapse.find('#multi-price-price').autoNumeric('get');
+
       _data.push(_new);
       window._multi_price_data = _data;
       multiPriceCollapse.find('input').val('');
@@ -322,7 +365,7 @@ $(function() {
 
     $('#selling_price').change(function(){
       $('#multi_price').attr('disabled', false);
-      if (!regex.test($(this).val())) {
+      if (!regex.test($(this).autoNumeric('get'))) {
         multiPriceDataTables.clear().draw(false);
         window._multi_price_data = [];
         multiPriceCollapse.collapse('hide');
@@ -365,6 +408,14 @@ $(function() {
         ]
     })
 
+    multiUnitCollapse.find(':input').on('keydown, keypress', function(e) {
+      if (e.which == '13') {
+        e.preventDefault();
+        multiUnitCollapse.find('#multi-unit-add').click();
+        return false;
+      }
+      return true;
+    })
     multiUnitCollapse.find('#multi-unit-add').click(function(e){
       e.preventDefault();
       var _new = {
@@ -396,6 +447,62 @@ $(function() {
       window._multi_unit_data = _data;
     })
     
+    var addCategoryCollapse = $('#add-category');
+    addCategoryCollapse.on('shown.bs.collapse', function() {
+      $('#category_id').prop('disabled', true);
+      $('#add-category-input')[0].focus();
+    }).on('hide.bs.collapse', function() {
+      $('#category_id').prop('disabled', false).click();
+    });
+    $('#add-category-submit').click(function(e) {
+      e.preventDefault();
+      $.post('{{ livepos_asset("api/productCategory") }}', {category: $('#add-category-input').val() }, function( data ) {
+        if (data.message == 'ok') {
+          $('#category_id').append('<option value="'+ data.created.id+'">'+data.created.category+'</option>')
+            .find('[value='+data.created.id+']').prop('selected', true)
+            .end().select2();
+        }
+      }, 'json');
+      $('#add-category-input').val('');
+      addCategoryCollapse.collapse('hide');
+    })
+    $('#add-category-input').on('keydown, keypress', function(e) {
+      if (e.which == '13') {
+        e.preventDefault();
+        $('#add-category-submit').click();
+        return false;
+      }
+      return true;
+    })
+
+    var addBrandCollapse = $('#add-brand');
+    addBrandCollapse.on('shown.bs.collapse', function() {
+      $('#brand_id').prop('disabled', true);
+      $('#add-brand-input')[0].focus();
+    }).on('hide.bs.collapse', function() {
+      $('#brand_id').prop('disabled', false).click();
+    });
+    $('#add-brand-submit').click(function(e) {
+      e.preventDefault();
+      $.post('{{ livepos_asset("api/productBrand") }}', {brand: $('#add-brand-input').val() }, function( data ) {
+        if (data.message == 'ok') {
+          $('#brand_id').append('<option value="'+ data.created.id+'">'+data.created.brand+'</option>')
+            .find('[value='+data.created.id+']').prop('selected', true)
+            .end().select2();
+        }
+      }, 'json');
+      $('#add-brand-input').val('');
+      addBrandCollapse.collapse('hide');
+    })
+    $('#add-brand-input').on('keydown, keypress', function(e) {
+      if (e.which == '13') {
+        e.preventDefault();
+        $('#add-brand-submit').click();
+        return false;
+      }
+      return true;
+    })
+
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {
       multiPriceDataTables.clear().draw(false);
@@ -414,8 +521,8 @@ $(function() {
         title = '{{ trans('livepos.product.edit') }}';
         content.name = button.data('name'),
         content.barcode = button.data('barcode'),
-        content.category_id = button.data('category'),
-        content.brand_id = button.data('brand'),
+        content.category_id = button.data('category_id'),
+        content.brand_id = button.data('brand_id'),
         content.min_stock = button.data('min_stock'),
         content.purchase_price = button.data('purchase_price'),
         content.selling_price = button.data('selling_price'),
@@ -426,6 +533,28 @@ $(function() {
         action += '/'+button.data('id');
         method = 'PUT';
         $('.input-init-stock').addClass('hide');
+      }
+          
+      modal.find('.modal-title').text(title);
+      modal.find('.modal-body #product').val(content);
+      modal.find('.modal-footer #method').val(method);
+      form.attr('action', action)
+        .find('.error-label').remove().end()
+        .find('.form-group').removeClass('has-warning').end()
+        .find('.alert.cloned').remove();
+      for (x in content) {
+        cx = content[x];
+        c = modal.find('.modal-body #'+x);
+        if (c.is('select') && cx) {
+          c.find('[value='+cx+']').prop('selected', true).end().select2();
+        } else if(c.is('input[type=checkbox]')) {
+          if (c.attr('value') == cx) c.prop('checked', true);
+        } else if(c.is('.input-mask-numeric') || c.is('.input-mask-currency')) {
+          c.autoNumeric('set', cx);
+        } else {
+          c.val(cx)
+        }
+      }
 
         if (content.multi_unit != '0') {
           multiUnitCollapse.collapse('show');
@@ -443,47 +572,33 @@ $(function() {
         if (content.multi_price != '0') {
           multiPriceCollapse.collapse('show');
           $('#multi_price').prop('checked', true);
-          var _multi_price_datas = content.multi_price;
-          var _multi_unit_data = [];
+          var _multi_price_datas = $.extend(true, {}, content.multi_price);
+          var _multi_price_data = [];
           for(x in _multi_price_datas) {
             _multi_price_data[x] = _multi_price_datas[x]; 
             _multi_price_data[x].action = '<a href="#" class="multi-price-delete">Delete</a>';
+            _multi_price_data[x].selling_price = _multi_price_data[x].selling_price.toString().toRp();
           }
-          window._multi_price_data = _multi_price_data;
+          window._multi_price_data = content.multi_price;
+          console.log(window._multi_price_data);
           multiPriceDataTables.rows.add(_multi_price_data).draw(false);
         }
-      }
-          
-      modal.find('.modal-title').text(title);
-      modal.find('.modal-body #product').val(content);
-      modal.find('.modal-footer #method').val(method);
-      form.attr('action', action)
-        .find('.error-label').remove().end()
-        .find('.form-group').removeClass('has-warning').end()
-        .find('.alert.cloned').remove();
-      for (x in content) {
-        cx = content[x];
-        c = modal.find('.modal-body #'+x);
-        if (c.is('select')) {
-          opt = c.find('option');
-          if (opt.attr('value') == cx) opt.attr('selected', 'selected');
-        } else if(c.is('input[type=checkbox]')) {
-          if (c.attr('value') == cx) c.prop('checked', true);
-        } else {
-          c.val(cx)
-        }
-      }
 
     }).on('shown.bs.modal', function() {
       modal.find('.modal-body [autofocus]')[0].focus();
+      modal.find('select').select2();
     }).on('hide.bs.modal', function() {
       multiPriceCollapse.collapse('hide');
       multiUnitCollapse.collapse('hide');
+      addCategoryCollapse.collapse('hide');
+      addBrandCollapse.collapse('hide');
       $('#multi_price').prop('checked', false);
       $('#multi_unit').prop('checked', false);
       multiPriceCollapse.find('input').val('');
       multiUnitCollapse.find('input').val('');
       $('.input-init-stock').removeClass('hide');
+      $('#category_id').find('[value=1]').prop('selected', true).end().select2();
+      $('#brand_id').find('[value=1]').prop('selected', true).end().select2();
 
     });
     
@@ -512,7 +627,7 @@ $(function() {
       _form.find('.modal-body .alert.cloned').remove();
       _form.find('#multi_unit_data').val(JSON.stringify(window._multi_unit_data));
       _form.find('#multi_price_data').val(JSON.stringify(window._multi_price_data));
-      $.post(_form.attr('action'), _form.serialize(), function( data ) {
+      $.post(_form.attr('action'), _form.autoNumeric('getString'), function( data ) {
         if (data.message == 'ok') {
           dataTables.draw(false);
           _form.parents('.modal').modal('hide');

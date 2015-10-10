@@ -7,8 +7,10 @@ use yajra\Datatables\Datatables;
 
 use livepos\Purchasing as Model;
 use livepos\PurchasingDetail as ModelDetail;
-use livepos\Supplier as SupplierModal;
-use livepos\Product as ProductModal;
+use livepos\Supplier as SupplierModel;
+use livepos\Product as ProductModel;
+use livepos\ProductBrand as BrandModel;
+use livepos\ProductCategory as CategoryModel;
 use livepos\Http\Requests;
 use livepos\Http\Controllers\BackendController;
 
@@ -21,7 +23,7 @@ class Purchasing extends BackendController
 
     public function getIndex()
     {
-    	$suppliers = SupplierModal::all();
+    	$suppliers = SupplierModel::all();
 
     	return view('backend.purchasing')->with(compact('suppliers'));
     }
@@ -38,6 +40,7 @@ class Purchasing extends BackendController
                 $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-supplier="'.$data->supplier.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
+            ->editColumn('total_amount', '{!! livepos_toCurrency($total_amount) !!}')
             ->editColumn('bill_date', '{!! livepos_dateToShow($bill_date) !!}')
             ->removeColumn('id')
             ->make(true);
@@ -47,15 +50,18 @@ class Purchasing extends BackendController
     {
         $detail = Model::findOrFail($id);
         $detail->bill_date = livepos_dateToShow($detail->bill_date);
-        $suppliers = SupplierModal::all();
-        $products = ProductModal::with('metas')->get();
+        $suppliers = SupplierModel::all();
+        $products = ProductModel::with('metas')->get();
+        $brands = BrandModel::all();
+        $categories = CategoryModel::all();
+        $product = (new ProductModel)->get_init_data();
 
-        return view('backend.purchasing')->with(compact('detail', 'suppliers', 'products')); 
+        return view('backend.purchasing')->with(compact('detail', 'suppliers', 'products', 'brands', 'categories', 'product')); 
     }
 
     public function products()
     {
-        return ProductModal::with('metas')->get();
+        return ProductModel::with('metas')->get();
     }
 
     public function detailData($id)

@@ -14,8 +14,10 @@
     <link rel="stylesheet" href="/themes/AdminLTE/plugins/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ livepos_themeAsset('dist/css/AdminLTE.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ livepos_themeAsset('dist/css/skins/skin-yellow-v2.min.css') }}">
     <!-- iCheck -->
-    <link rel="stylesheet" href="{{ livepos_themeAsset('plugins/iCheck/square/blue.css') }}">
+    <link rel="stylesheet" href="{{ livepos_themeAsset('plugins/iCheck/square/GREY.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,7 +32,7 @@
         <a href="{{ livepos_themeAsset('index2.html') }}">{!! config('livepos.title') !!}</a>
         <h4>{{ config('livepos.company') }}</h4>
       </div><!-- /.login-logo -->
-      <div class="login-box-body">
+      <div class="login-box-body text-gray">
         <p class="login-box-msg">{{ trans('livepos.login.greeting') }}</p>
         @if ($errors->any())
             {!! implode('', $errors->all('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong><i class="fa fa-exclamation-circle"></i></strong> :message </div>')) !!}
@@ -54,15 +56,16 @@
               </div>
             </div><!-- /.col -->
             <div class="col-xs-4">
-              <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('livepos.login.button') }}</button>
+              <button type="submit" class="btn btn-primary btn-block btn-flat bg-yellow-v2 text-black">{{ trans('livepos.login.button') }}</button>
             </div><!-- /.col -->
           </div>
         </form>
-
-        <a href="">{{ trans('livepos.login.forgot') }}</a><br>
-        @if (config('livepos.allowregister'))
-        <a href="register.html" class="text-center">{{ trans('livepos.login.register') }}</a>
-        @endif
+        <p class="text-center">
+          <a href="#" class="text-center text-gray">{{ trans('livepos.login.forgot') }}</a><br>
+          @if (config('livepos.allowregister'))
+          <a href="register.html" class="text-center">{{ trans('livepos.login.register') }}</a>
+          @endif
+        </p>
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
 
@@ -75,8 +78,8 @@
     <script>
       $(function () {
         $('input').iCheck({
-          checkboxClass: 'icheckbox_square-blue',
-          radioClass: 'iradio_square-blue',
+          checkboxClass: 'icheckbox_square-grey',
+          radioClass: 'iradio_square-grey',
           increaseArea: '20%' // optional
         });
       });

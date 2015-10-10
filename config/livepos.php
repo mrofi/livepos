@@ -30,8 +30,8 @@ return [
 
 		    'init_data' => [
 		        'name' => '', 
-		        'category_id' => '', 
-		        'brand_id' => '', 
+		        'category_id' => '1', 
+		        'brand_id' => '1', 
 		        'min_stock' => '0', 
 		        'init_stock' => '0', 
 		        'purchase_price' => '0', 
