@@ -143,10 +143,10 @@
                                 </tr>
                                 <tr>
                                   <td>
-                                    <a href="#" class="btn btn-lg btn-block bg-navy"><i class="fa fa-trash-o"></i> Discard</a>
+                                    <a href="#" class="btn btn-lg btn-block bg-navy"><i class="fa fa-trash-o"></i>  {{ trans('livepos.discard') }}</a>
                                   </td>
                                   <td>
-                                    <a href="#" data-target="#modal-pay" data-toggle="modal" class="btn btn-lg btn-block bg-yellow-v2"><i class="fa fa-check"></i> Pay</a>
+                                    <a href="#" data-target="#modal-pay" data-toggle="modal" class="btn btn-lg btn-block bg-yellow-v2"><i class="fa fa-check"></i>  {{ trans('livepos.pay') }}</a>
                                   </td>
                                 </tr>
                               </table>

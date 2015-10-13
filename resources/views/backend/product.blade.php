@@ -80,9 +80,11 @@
                   <input type="text" class="form-control" id="unit" name="unit" autofocus placeholder="{{ trans('livepos.product.unit') }}">
                 </div>
                 <div class="col-sm-6">
-                  <label>
-                    <input type="checkbox" id="multi_unit" name="multi_unit" value="1" data-target="#multi-unit" data-toggle="collapse"> {{ trans('livepos.product.useMultiUnit') }}
-                  </label>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="multi_unit" name="multi_unit" value="1" data-target="#multi-unit" data-toggle="collapse"> {{ trans('livepos.product.useMultiUnit') }}
+                    </label>
+                  </div>
                 </div>
               </div>
               <div class="collapse" id="multi-unit">
@@ -127,9 +129,11 @@
                   <input type="text" class="form-control input-mask-currency" id="selling_price" name="selling_price" value="0" autofocus placeholder="{{ trans('livepos.product.sellingPrice') }}">
                 </div>
                 <div class="col-sm-4">
-                  <label>
-                    <input type="checkbox" id="multi_price" name="multi_price" value="1" data-target="#multi-price" data-toggle="collapse"> {{ trans('livepos.product.useMultiPrice') }}
-                  </label>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="multi_price" name="multi_price" value="1" data-target="#multi-price" data-toggle="collapse"> {{ trans('livepos.product.useMultiPrice') }}
+                    </label>
+                  </div>
                 </div>
               </div>
               <div class="collapse" id="multi-price">

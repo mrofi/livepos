@@ -10,6 +10,8 @@ return [
     'edit' => 'Edit',
     'delete' => 'Hapus',
     'clear' => 'Kosongkan',
+    'discard' => 'Hapus',
+    'process' => 'Proses',
     'quantity' => 'Qty',
     'price' => 'Harga',
     'amount' => 'Jumlah',
@@ -23,6 +25,9 @@ return [
     'pay' => 'Bayar',
     'payChange' => 'Kembali',
     'date' => 'Tanggal',
+    'required' => 'Harus diisi',
+
+    'errorHappening' => 'Terjadi Kesalahan',
 
     'print' => 'Cetak',
     'noPrint' => 'Tanpa Cetak',
@@ -149,6 +154,7 @@ return [
         'addProduct' => 'Tambah Produk',
         'billNumber' => 'No. Nota',
         'detail' => 'Detail Pembelian',
+        'billDate' => 'Tanggal Transaksi',
     ],
 
     'selling' => [
@@ -180,6 +186,16 @@ return [
         'upline' => 'Upline',
 
     
+    ],
+
+    'stock' => [
+        'min' => 'Minimal Stok',
+        'change' => 'Ubah Stok',
+        'confirmChange' => 'Apakah yakin akan mengubah stock untuk ',
+        'changeDescription' => 'Alasan Pengubahan',
+        'description' => [
+            'product' => 'Stok Awal Produk dengan ID Produk :id',
+        ],
     ],
 
     'transactionNumberFormat' => ':id/:type/:month/:year',

@@ -16,6 +16,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'B
     
     Route::controller('product/supplier', 'Supplier');
 
+    Route::controller('product/stock', 'Stock');
+
     Route::controller('product', 'Product');
     
     Route::controller('customer', 'Customer');
@@ -43,6 +45,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
     Route::resource('productCategory', 'ProductCategory'); 
 
     Route::resource('productBrand', 'ProductBrand'); 
+
+    Route::put('productStock/{id}', 'Stock@update'); 
     
     Route::get('productMeta/tes',  'ProductMeta@getTes');
 
@@ -75,4 +79,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
 
 // Authentication routes...
 Route::controller('auth', 'Auth\AuthController');
+
+$router->get('tes', function() {
+    $date = \Carbon::createFromFormat('Y-m-d H:i:s', '2015-10-10 00:00:00');
+    return $date->diffInDays();
+});
 

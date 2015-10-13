@@ -13,7 +13,7 @@ class Selling extends BaseModel
 
     protected $fillable = ['transaction_no', 'customer_id', 'amount', 'discount', 'total_amount', 'profit', 'done', 'created_by', 'updated_by'];
     
-     protected $rules = [
+    protected $rules = [
         'customer_id' => 'required|numeric',
         'amount' => 'required|numeric',
         'discount' => 'numeric',

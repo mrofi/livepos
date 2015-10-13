@@ -16,9 +16,10 @@ class CreateStocksTable extends Migration
             $table->increments('id');
             $table->integer('product_id')->unsigned();
             $table->string('mutation_type', 30); // init, manual, etc.
+            $table->integer('reff')->unsigned();
             $table->string('unit', 10);
             $table->decimal('quantity', 10, 3);
-            $table->string('description');
+            $table->text('description');
             $table->timestamps();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();

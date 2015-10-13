@@ -152,6 +152,14 @@
                               <th>{{ trans('livepos.total') }}:</th>
                               <td><h3 class="total-amount" id="total-amount-2">{{ livepos_toCurrency($detail->total_amount) }}</h3></td>
                             </tr>
+                            <tr>
+                              <td>
+                                <a href="#" data-target="#modal-delete" data-toggle="modal" data-id="{{ $detail->id }}" data-reload="true" class="btn btn-lg btn-block bg-navy"><i class="fa fa-trash-o"></i> {{ trans('livepos.discard') }}</a>
+                              </td>
+                              <td>
+                                <a href="#" data-target="#modal-purchasing-process" data-toggle="modal" class="btn btn-lg btn-block bg-yellow-v2"><i class="fa fa-check"></i>  {{ trans('livepos.process') }}</a>
+                              </td>
+                            </tr>
                           </table>
                         </div>
                       </div>
@@ -324,6 +332,34 @@
             </div>
             <div class="modal-footer bg-navy">
               <input type="hidden" class="input-mask-numeric" name="input-mask" value="0">
+              <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
+              <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- modal process -->
+    <div class="modal fade" id="modal-purchasing-process">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-yellow-v2">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-center">{{ trans('livepos.purchasing.process') }}</h4>
+          </div>
+          <form class="form-horizontal" method="POST">
+            <div class="modal-body">
+              <div class="alert alert-warning alert-dismissable hide">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                <span class="message"></span>
+              </div>
+              <p>{{ trans('livepos.purchasing.confirmProcess') }} {{ trans('livepos.purchasing.name') }} <span id="purchasing"></span> ?</p>
+            </div>
+            <div class="modal-footer bg-navy">
+              <input type="hidden" class="input-mask-numeric" name="input-mask" value="0">
+              <input type="hidden" name="_method" id="purchasing-method" value="post">
               <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
               <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
             </div>
@@ -717,6 +753,9 @@ $(function() {
           @if(isset($detail))
           if (data.updated) {
              location.reload();
+          }
+          if (data.deleted) {
+            location.href='{{ livepos_asset("dashboard/purchasing") }}';
           }
           @endif
           error_handling(_form, data);

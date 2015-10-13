@@ -106,6 +106,34 @@ class Product extends BaseModel
                 DB::rollback();
                 return $metas;
             }
+
+            if (isset($attributes['init_stock']) && $attributes['init_stock'] > 0)
+            {
+                $daily = StockDaily::create([
+                    'product_id' => $created->id,
+                    'unit' => $created->unit,
+                    'quantity' => 0,
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,                    
+                ]);
+
+                $stock = Stock::create([
+                    'product_id' => $created->id,
+                    'mutation_type' => 'product',
+                    'reff' => $created->id,
+                    'unit' => $created->unit,
+                    'quantity' => $attributes['init_stock'],
+                    'description' => trans('livepos.stock.description.product', ['id' => $created->id]),
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                ]);
+
+                if (! $stock->id ) 
+                {
+                    DB::rollback();
+                    return $stock['error'];
+                }
+            }
 	    	
 	    DB::commit();
 	    
@@ -155,6 +183,29 @@ class Product extends BaseModel
     public function metas()
     {
         return $this->hasMany(ProductMeta::class);
+    }
+
+    public function getStockAttribute()
+    {
+        $daily = StockDaily::where('product_id', $this->id)->orderBy('created_at', 'desc')->first();
+
+        if (\Carbon::createFromFormat('Y-m-d H:i:s', $daily->created_at)->diffInDays() > 1)
+        {
+            $quantity = $daily->quantity + floatval(Stock::where('product_id', $this->id)->where('created_at', '>=', $daily->created_at)->sum('quantity'));
+            $daily = StockDaily::create([
+                'product_id' => $created->id,
+                'unit' => $created->unit,
+                'quantity' => $quantity,
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,                    
+            ]);
+
+            return $quantity;
+        }
+
+        $quantity = $daily->quantity + floatval(Stock::where('product_id', $this->id)->where('created_at', '>=', $daily->created_at)->sum('quantity'));
+
+        return $quantity;
     }
 
 }

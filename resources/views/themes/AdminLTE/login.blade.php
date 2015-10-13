@@ -17,7 +17,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ livepos_themeAsset('dist/css/skins/skin-yellow-v2.min.css') }}">
     <!-- iCheck -->
-    <link rel="stylesheet" href="{{ livepos_themeAsset('plugins/iCheck/square/GREY.css') }}">
+    <link rel="stylesheet" href="{{ livepos_themeAsset('plugins/iCheck/square/grey.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -56,7 +56,7 @@
               </div>
             </div><!-- /.col -->
             <div class="col-xs-4">
-              <button type="submit" class="btn btn-primary btn-block btn-flat bg-yellow-v2 text-black">{{ trans('livepos.login.button') }}</button>
+              <button type="submit" class="btn btn-block btn-flat bg-yellow-v2 text-black">{{ trans('livepos.login.button') }}</button>
             </div><!-- /.col -->
           </div>
         </form>

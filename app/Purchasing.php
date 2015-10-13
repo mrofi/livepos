@@ -53,6 +53,8 @@ class Purchasing extends BaseModel
 
     public function update(Array $attributes = []) 
     {
+        if ($this->done == '1') return ['error' => 'Not Allowed'];
+        
         if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $attributes['bill_date'])) $attributes['bill_date'] = livepos_dateToDB($attributes['bill_date']);
         
         $updated = parent::update($attributes);
@@ -60,6 +62,21 @@ class Purchasing extends BaseModel
         $this->calculate();
 
         return $updated;
+    }
+
+    public function delete()
+    {
+        if ($this->done == '1') return ['error' => 'Not Allowed'];
+
+        DB::transaction(function () {
+
+            PurchasingDetail::where('purchasing_id', $this->id)->delete();
+
+            $deleted = parent::delete();
+
+            return $deleted;
+
+        });
     }
 
     public function supplier()
