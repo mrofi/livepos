@@ -1,45 +1,11 @@
-@extends('master')
+<html>
+<!-- License:  LGPL 2.1 or QZ INDUSTRIES SOURCE CODE LICENSE -->
+<head><title>QZ Print Plugin</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-@section('mid')
-
-</head>
-<body>
-@endsection
-
-@section('header')
-
-@endsection
-
-@section('sidebarLeft')
-@endsection
-
-@section('contentInit')
-      <section id="qz-status" class="invoice">
-@endsection
-
-@section('contentHeader')
-@endsection
-
-@section('sidebarRight')
-@endsection
-
-@section('footer')
-@endsection
-
-@section('bottom')
-</body>
-<canvas id="hidden_screenshot" style="display:none;"></canvas>
-
-</html>
-@endsection
-
-@push('scriptJs')
-<script type="text/javascript" src="{{ livepos_asset('qz') }}/js/3rdparty/deployJava.js"></script>
-<!-- <script type="text/javascript" src="{{ livepos_asset('qz') }}/js/3rdparty/jquery-1.10.2.js"></script> -->
-<script type="text/javascript" src="{{ livepos_asset('qz') }}/js/qz-websocket.js"></script>
-<script type="text/javascript" src="{{ livepos_asset('qz') }}/js/3rdparty/html2canvas.js"></script>
-<script type="text/javascript" src="{{ livepos_asset('qz') }}/js/3rdparty/jquery.plugin.html2canvas.js"></script>
-
+<script type="text/javascript" src="js/3rdparty/deployJava.js"></script>
+<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/qz-websocket.js"></script>
 <script type="text/javascript">
 
 /**
@@ -168,10 +134,11 @@ function qzReady() {
     if (!qz) {
         window["qz"] = document.getElementById('qz');
     }
-            // qz.findPrinter();
-            // setTimeout(printHTML5Page(), 100000);
+    var title = document.getElementById("title");
     if (qz) {
         try {
+            title.innerHTML = title.innerHTML + " " + qz.getVersion();
+            document.getElementById("qz-status").style.background = "#F0F0F0";
         } catch(err) { // LiveConnect error, display a detailed message
             document.getElementById("qz-status").style.background = "#F5A9A9";
             alert("ERROR:  \nThe applet did not load correctly.  Communication to the " +
@@ -230,9 +197,8 @@ function notReady() {
     }
     // If a printer hasn't been selected, display a message.
     else if (!qz.getPrinter()) {
-    	qz.findPrinter();
-        // alert('Please select a printer first by using the "Detect Printer" button.');
-        return false;
+        alert('Please select a printer first by using the "Detect Printer" button.');
+        return true;
     }
     return false;
 }
@@ -385,7 +351,7 @@ function findPrinter(name) {
 
     if (isLoaded()) {
         // Searches for locally installed printer with specified name
-        qz.findPrinter();
+        qz.findPrinter(p.value);
 
         // Automatically gets called when "qz.findPrinter()" is finished.
         window['qzDoneFinding'] = function() {
@@ -860,12 +826,20 @@ function printHTML() {
     // HTML image
     var colB = '<img src="' + getPath() + 'assets/img/image_sample.png">';
 
-    qz.setCopies(1);
-    // qz.setCopies(parseInt(document.getElementById("copies").value));
+    //qz.setCopies(3);
+    qz.setCopies(parseInt(document.getElementById("copies").value));
 
     // Append our image (only one image can be appended per print)
-    var canvas = $('#receipt').html();
-    qz.appendHTML(canvas);
+    qz.appendHTML(
+            '<html>' +
+                '<table face="monospace" border="1px">' +
+                '<tr height="6cm">' +
+                    '<td valign="top">' + colA + '</td>' +
+                    '<td valign="top">' + colB + '</td>' +
+                '</tr>' +
+                '</table>' +
+            '</html>'
+    );
 
     qz.printHTML();
 }
@@ -909,12 +883,12 @@ function printHTML5Page() {
             if (notReady()) { return; }
             // Optional, set up custom page size.  These only work for PostScript printing.
             // setPaperSize() must be called before setAutoSize(), setOrientation(), etc.
-            qz.setPaperSize("in", 0);  // US Letter
+            qz.setPaperSize("8.5in", "11.0in");  // US Letter
             qz.setAutoSize(true);
             qz.appendImage($("canvas")[0].toDataURL('image/png'));
 
-            qz.setCopies(1);
-            // qz.setCopies(parseInt(document.getElementById("copies").value));
+            //qz.setCopies(3);
+            qz.setCopies(parseInt(document.getElementById("copies").value));
 
             // Automatically gets called when "qz.appendFile()" is finished.
             window['qzDoneAppending'] = function() {
@@ -1115,7 +1089,75 @@ function chr(i) {
     return String.fromCharCode(i);
 }
 
-
-
 </script>
-@endpush
+<script type="text/javascript" src="js/3rdparty/html2canvas.js"></script>
+<script type="text/javascript" src="js/3rdparty/jquery.plugin.html2canvas.js"></script>
+</head>
+
+<body id="qz-status" bgcolor="#FFF380">
+<div style="margin: 0 1em;"><h1 id="title" style="margin:0;">QZ Print Plugin</h1></div>
+
+<table border="1px" cellpadding="5px" cellspacing="0px">
+<tr>
+    <td valign="top"><h2>All Printers</h2>
+        <input type="button" onClick="findPrinter()" value="Detect Printer"><br />
+        <input id="printer" type="text" value="zebra" size="15"><br />
+        <input type="button" onClick="findPrinters()" value="List All Printers"><br />
+        <input type="button" onClick="useDefaultPrinter()" value="Use Default Printer"><br /><br />
+    </td>
+
+    <td valign="top"><h2>Raw Printers Only</h2>
+        <a href="http://qzindustries.com/WhatIsRawPrinting" target="new">What is Raw Printing?</a><br /><br />
+        <input type="button" onClick="printEPL()" value="Print EPL" /><br />
+        <input type="button" onClick="printZPL()" value="Print ZPL" /><br /><br />
+
+        <input type="button" onClick="printESCP()" value="Print ESCP" /><br />
+        <a href="javascript:findPrinter('Epson');">Epson</a>&nbsp;
+        <a href="javascript:findPrinter('Citizen');">Citizen</a>&nbsp;
+        <a href="javascript:findPrinter('Star');">Star</a> <br /><br />
+
+        <input type="button" onClick="printEPCL()" value="Print EPCL" /><br />
+        (Zebra Card Printer)<br /><br />
+
+        <input type="button" onClick="print64()" value="Print Base64" /><br />
+        <input type="button" onClick="printPages()" value="Print Spooling Every 2" /><br />
+        <input type="button" onClick="printXML()" value="Print XML" /><br />
+        <input type="button" onClick="printHex()" value="Print Hex" /><br /><br />
+
+        <input type="button" onClick="printFile('zpl_sample.txt')" value="zpl_sample.txt" /><br />
+        <input type="button" onClick="printFile('fgl_sample.txt')" value="fgl_sample.txt" /><br />
+        <input type="button" onClick="printFile('epl_sample.txt')" value="epl_sample.txt" /><br /><br />
+
+        <input type="button" onClick="printToFile()" value="Print To File" /><br />
+        <input type="button" onClick="printToHost()" value="Print To Host" /><br />
+        <input type="button" onClick="useAlternatePrinting()" value="Use Alternate Printing" /><br />
+    </td>
+
+    <td valign="top"><h2>PostScript Printers Only</h2>
+        <a href="http://qzindustries.com/WhatIsPostScriptPrinting" target="new">What is PostScript Printing?</a><br />
+        <p>First find <a href="javascript:findPrinter('XPS');">Microsoft XPS</a> or <a href="javascript:findPrinter('PDF');">PDF</a> printer</p>
+        <input type="button" onClick="printHTML()" value="Print HTML" /><br />
+        <input type="button" onClick="printPDF()" value="Print PDF" /><br />
+        <input type="button" onClick="printImage(false)" value="Print PostScript Image" /><br />
+        <input type="button" onClick="printImage(true)" value="Print Scaled PostScript Image" /><br />
+        <input type="button" onClick="printHTML5Page()" value="Print Current Page" /><br />
+        <input type="button" onClick="logFeatures()" value="Log Printer Features on Print" /><br />
+        <p>Copies<p><input type="text" id="copies" size="8" value="1" />
+    </td>
+
+    <td valign="top"><h2>Serial</h2>
+        <input type="button" id="list_ports" onClick="listSerialPorts()" value="List Serial Ports" /><br />
+        <input type="text" id="port_name" size="8" /><br />
+        <input type="button" id="open_port"  onClick="openSerialPort()" value="Open Port" /><br />
+        <input type="button" id="send_data" onClick="sendSerialData()" value="Send Port Cmd" /><br />
+        <input type="button" id="close_port"  onClick="closeSerialPort()" value="Close Port" /><br />
+        <hr /><h2>Misc</h2>
+        <input type="button" onClick="listNetworkInfo()" value="List Network Info" /><br />
+    </td>
+</tr>
+</table>
+
+</body>
+<canvas id="hidden_screenshot" style="display:none;"></canvas>
+
+</html>

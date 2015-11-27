@@ -257,6 +257,34 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <!-- modal process -->
+    <div class="modal fade" id="modal-purchasing-unlock">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-yellow-v2">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-center">{{ trans('livepos.purchasing.unlock') }}</h4>
+          </div>
+          <form class="form-horizontal" method="POST">
+            <div class="modal-body">
+              <div class="alert alert-warning alert-dismissable hide">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                <span class="message"></span>
+              </div>
+              <p>{{ trans('livepos.purchasing.confirmUnlock') }} <span id="purchasing"></span>?</p>
+            </div>
+            <div class="modal-footer bg-navy">
+              <input type="hidden" class="input-mask-numeric" name="input-mask" value="0">
+              <input type="hidden" name="_method" id="purchasing-method" value="post">
+              <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.cancel') }}</button>
+              <button type="submit" class="btn btn-primary">{{ trans('livepos.yes') }}</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   
   @if(isset($detail))
     <div class="modal fade" id="detail-edit">
@@ -355,7 +383,7 @@
                 <h4><i class="icon fa fa-warning"></i> Alert!</h4>
                 <span class="message"></span>
               </div>
-              <p>{{ trans('livepos.purchasing.confirmProcess') }} {{ trans('livepos.purchasing.name') }} <span id="purchasing"></span> ?</p>
+              <p>{{ trans('livepos.purchasing.confirmProcess') }} <span id="purchasing"></span>?</p>
             </div>
             <div class="modal-footer bg-navy">
               <input type="hidden" class="input-mask-numeric" name="input-mask" value="0">
@@ -1232,7 +1260,48 @@ $(function() {
       _form = $(this);
       return product_submit_handling(_form, event);
     });
+
+    var modalProses = $('#modal-purchasing-process'),
+        formProcess = modalProses.find('form'),
+        urlProcess = '{{ livepos_asset('api/purchasing/lock/'.$detail->id) }}';
+
+        formProcess.on('submit', function(e) {
+          e.preventDefault();
+          $.post(urlProcess, {}, function(data) {
+            if (data.message == 'ok')
+            {
+              location.href = '{{ livepos_asset('dashboard/purchasing') }}';
+            }
+          }, 'json').error( function(xhr, textStatus, errorThrown) {
+            product_error_handling(formProcess, $.parseJSON(xhr.responseText));
+          });
+          return false;
+        })
+
+
   @endif
+    var modalUnlock = $('#modal-purchasing-unlock'),
+        formUnlock = modalUnlock.find('form'),
+        urlUnlock = '{{ livepos_asset('api/purchasing/unlock/') }}';
+
+        modalUnlock.on('shown.bs.modal', function(e) {
+          button = $(e.relatedTarget);
+          formUnlock.data('id', button.data('id'));
+          console.log(formUnlock)
+        })
+
+        formUnlock.on('submit', function(e) {
+          e.preventDefault();
+          $.post(urlUnlock + formUnlock.data('id'), {}, function(data) {
+            if (data.message == 'ok')
+            {
+              location.href = '{{ livepos_asset('dashboard/purchasing') }}';
+            }
+          }, 'json').error( function(xhr, textStatus, errorThrown) {
+            product_error_handling(formUnlock, $.parseJSON(xhr.responseText));
+          });
+          return false;
+        })
 });
 </script>
 @endpush

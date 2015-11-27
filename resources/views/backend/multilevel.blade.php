@@ -146,6 +146,8 @@ $(function() {
         content.multilevel = button.data('multilevel');
         content.id_type = button.data('id_type');
         content.id_no = button.data('id_no');
+        content.customer = button.data('customer');
+        content.upline = button.data('upline');
         content.address = button.data('address');
         content.contact1 = button.data('contact1');
         content.contact2 = button.data('contact2');
@@ -225,8 +227,8 @@ $(function() {
     }); 
 
 
-    var inputProduct  = $('#customer');
-    inputProduct.typeahead({
+    var inputCustomer  = $('#customer');
+    inputCustomer.typeahead({
       source: function(query, process) {
         $.get('{{ livepos_asset("api/customer/search") }}', {q: query}, function(data) {
           customers = {};
@@ -242,6 +244,29 @@ $(function() {
       }
       , updater: function( item ) {
         $('#customer_id').val( customers[ item ].id );
+        $('#customer')[0].focus();
+        return item;
+      }
+
+    });
+
+    var inputUpline  = $('#upline');
+    inputUpline.typeahead({
+      source: function(query, process) {
+        $.get('{{ livepos_asset("api/customer/search") }}', {q: query}, function(data) {
+          customers = {};
+          customerLabels = [];
+
+          $.each( data, function(i, e) {
+            label = e.customer + ' - ' + e.contact1 + ' (ID = ' + e.id + ')';
+            customerLabels.push(label);
+            customers[ label ] = e;
+          })
+          process(customerLabels);
+        });
+      }
+      , updater: function( item ) {
+        $('#upline_id').val( customers[ item ].id );
         $('#upline')[0].focus();
         return item;
       }

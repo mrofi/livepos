@@ -39,7 +39,7 @@
                       <form action="{{ livepos_asset('api/sellingDetail') }}" id="form-input-product">
                         <div class="form-group">
                           <div class="col-md-4">
-                            <input autocomplete="off" type="text" id="input-product" class="form-control input-lg input-product bg-navy" placeholder="{{ trans('livepos.product.name') }}">
+                            <input autocomplete="off" autofocus="true" type="text" id="input-product" class="form-control input-lg input-product bg-navy" placeholder="{{ trans('livepos.product.name') }}">
                             <input type="hidden" name="selling_id" id="input-selling_id" value="{{ $detail->id or ''}}">
                             <input type="hidden" name="product_id" id="input-product_id">
                             <input type="hidden" name="unit" id="input-unit">
@@ -317,7 +317,7 @@ $(function() {
 
           $.each( data, function(i, e) {
             e.converter = 1;
-            label = e.name + ' - ' + e.unit.toUpperCase();
+            label = e.name + ' - ' + e.unit.toUpperCase() + ' --- '+e.selling_price.toString().toRp();
             productLabels.push(label);
             products[ label ] = e;
             
@@ -347,7 +347,7 @@ $(function() {
                 }
               }
 
-              label = ne.name + ' - ' + ne.unit.toUpperCase();
+              label = ne.name + ' - ' + ne.unit.toUpperCase() + ' --- '+(ne.selling_price * ne.converter).toString().toRp();;
               productLabels.push(label);
               products[ label ] = ne;
             }
@@ -377,6 +377,8 @@ $(function() {
 
     $('#pay').on('keyup', function() {
       $('#payChange').autoNumeric('set', $(this).autoNumeric('get') - $('#total-to-pay').autoNumeric('get') );
+      if ($('#payChange').autoNumeric('get') < 0) $('#form-pay').find('[type=submit]').prop('disabled', true);
+      else $('#form-pay').find('[type=submit]').prop('disabled', false);
     })
 
     var modalPay = $('#modal-pay');
@@ -387,7 +389,10 @@ $(function() {
 
     $('#form-pay').on('submit', function(e) {
       e.preventDefault();
-      if ($('#pay').val() == '') return;
+      var pay = $('#pay').autoNumeric('get');
+      var totalToPay = $('#total-to-pay').autoNumeric('get');
+      // return;
+      if (pay == undefined || pay == '' || pay == 0 || pay < totalToPay) return;
       form = $(this);
       $.post('{{ livepos_asset("api/selling/{$detail->id}") }}', form.autoNumeric('getString'), function( data ) {
         if (data.message == 'ok') {

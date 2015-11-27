@@ -13,4 +13,18 @@ class Purchasing extends ApiController
     {
         parent::__construct($model);
     }
+
+    public function lock(Request $requrest, $id)
+    {
+    	$locked = $this->model->find($id)->lock();
+
+    	return $locked;
+    }
+
+    public function unlock(Request $requrest, $id)
+    {
+    	$unlocked = $this->model->find($id)->unlock();
+
+    	return $unlocked;
+    }
 }

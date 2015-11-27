@@ -189,12 +189,20 @@ class Product extends BaseModel
     {
         $daily = StockDaily::where('product_id', $this->id)->orderBy('created_at', 'desc')->first();
 
+        if (!$daily) $daily = StockDaily::create([
+                'product_id' => $this->id,
+                'unit' => $this->unit,
+                'quantity' => floatval(Stock::where('product_id', $this->id)->sum('quantity')),
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,                    
+            ]);
+
         if (\Carbon::createFromFormat('Y-m-d H:i:s', $daily->created_at)->diffInDays() > 1)
         {
             $quantity = $daily->quantity + floatval(Stock::where('product_id', $this->id)->where('created_at', '>=', $daily->created_at)->sum('quantity'));
             $daily = StockDaily::create([
-                'product_id' => $created->id,
-                'unit' => $created->unit,
+                'product_id' => $this->id,
+                'unit' => $this->unit,
                 'quantity' => $quantity,
                 'created_by' => auth()->user()->id,
                 'updated_by' => auth()->user()->id,                    

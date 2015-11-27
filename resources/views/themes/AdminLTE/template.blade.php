@@ -44,6 +44,12 @@
       .livepos-full {
         width: 90%;
       }
+      
+      @media (min-width: 768px) {
+        .sidebar-collapse .main-header {
+          max-width: 60px;
+        }
+      }
     </style>
     
     <!--pace-->

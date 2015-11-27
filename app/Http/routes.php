@@ -57,6 +57,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
     Route::resource('product', 'Product'); 
         
     Route::resource('purchasing', 'Purchasing'); 
+
+    Route::post('purchasing/lock/{id}', 'Purchasing@lock'); 
+    
+    Route::post('purchasing/unlock/{id}', 'Purchasing@unlock'); 
         
     Route::resource('purchasingDetail', 'PurchasingDetail'); 
         

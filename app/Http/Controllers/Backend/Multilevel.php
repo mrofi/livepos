@@ -25,7 +25,7 @@ class Multilevel extends BackendController
     public function anyData()
     {
         $data  = Model::join('customers', 'multilevels.customer_id', '=', 'customers.id')
-                ->select(['customers.id', 'customers.customer', 'multilevels.upline_id as upline', 'multilevels.level', 'multilevels.created_at']);
+                ->select(['multilevels.id', 'multilevels.customer_id', 'customers.customer', 'multilevels.upline_id as upline', 'multilevels.level', 'multilevels.created_at']);
 
         $collection = [];
         $no = 0;
@@ -39,6 +39,8 @@ class Multilevel extends BackendController
                 $button = '<a href="#edit-'.$data->id.'" ';
                 $button .= ' data-id="'.$data->id.'"';
                 $button .= ' data-customer_id="'.$data->customer_id.'"';
+                $button .= ' data-customer="'.$data->customer.'"';
+                $button .= ' data-upline="'.$data->upline.'"';
                 $button .= ' data-upline_id="'.$data->upline_id.'"';
                 $button .= ' data-level="'.$data->level.'"';
                     
