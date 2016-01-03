@@ -11,6 +11,8 @@ class Selling extends BaseModel
 {
     protected static $created;
 
+    private $mutation_type = 'selling';
+
     protected $fillable = ['transaction_no', 'customer_id', 'amount', 'discount', 'total_amount', 'profit', 'done', 'created_by', 'updated_by'];
     
     protected $rules = [
@@ -81,6 +83,7 @@ class Selling extends BaseModel
 
     public function update(Array $attributes = []) 
     {        
+
         DB::transaction(function () use ($attributes) {
 
             $updated = parent::update($attributes);
@@ -89,9 +92,69 @@ class Selling extends BaseModel
 
             if (isset($attributes['pay']) && is_numeric($attributes['pay']))
             {
+                if ($attributes['pay'] < $this->total_amount) return;
+
+                $details = SellingDetail::where('selling_id', $this->id)->get();
+
+                foreach ($details as $detail) 
+                {
+                    $product = Product::find($detail->product_id);
+
+                    if ($product)
+                    {
+                        $stock = Stock::create([
+                            'product_id' => $product->id,
+                            'mutation_type' => $this->mutation_type, // detail of selling
+                            'reff' => $detail->id, // detail id
+                            'unit' => $product->unit, // unit of product
+                            'quantity' => $detail->quantity * $detail->converter * -1, // quantity * converter
+                            'description' => trans('livepos.stock.description.selling', ['id' => $this->id]),
+                            'created_by' => auth()->user()->id,
+                            'updated_by' => auth()->user()->id,
+                        ]);
+
+                        $stock->created_at = $this->created_at;
+
+                        $stock->save();
+
+                        if (! $stock->id ) 
+                        {
+                            DB::rollback();
+                            return $stock['error'];
+                        }
+                        
+                    }
+
+
+                }
+                
                 $this->cash = $attributes['pay'];
                 $this->change = $attributes['pay'] - $this->total_amount;
+                // $this->save();
+
+                $this->done = '1';
+
                 $this->save();
+
+                if (is_numeric($this->customer_id))
+                {
+                    $multilevel = Multilevel::where('customer_id', $this->customer_id)->first();
+                    
+                    if ($multilevel)
+                    {
+                        Commision::where('selling_id', $this->id)->delete();
+                        Commision::create([
+                            'selling_id' => $this->id,
+                            'multilevel_id' => $multilevel->id,
+                            'commision' => $this->getPointAttribute(),
+                        ]);
+                        
+                    }
+
+                    $this->multilevel = $this->getPointAttribute();
+
+                    $this->save();
+                }
 
             }
 

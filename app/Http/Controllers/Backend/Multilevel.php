@@ -25,7 +25,7 @@ class Multilevel extends BackendController
     public function anyData()
     {
         $data  = Model::join('customers', 'multilevels.customer_id', '=', 'customers.id')
-                ->select(['customers.id', 'customers.customer', 'multilevels.upline_id as upline', 'multilevels.level', 'multilevels.created_at']);
+                ->select(['multilevels.id', 'multilevels.customer_id', 'customers.customer', 'multilevels.upline_id as upline', 'multilevels.level', 'multilevels.created_at']);
 
         $collection = [];
         $no = 0;
@@ -36,13 +36,9 @@ class Multilevel extends BackendController
 
         return Datatables::of($data)
             ->addColumn('action', function ($data) {
-                $button = '<a href="#edit-'.$data->id.'" ';
-                $button .= ' data-id="'.$data->id.'"';
-                $button .= ' data-customer_id="'.$data->customer_id.'"';
-                $button .= ' data-upline_id="'.$data->upline_id.'"';
-                $button .= ' data-level="'.$data->level.'"';
-                    
-                $button .= ' data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs"><i class="fa fa-pencil"></i> '.trans('livepos.edit').'</a>';
+                $commision = Commision::where('multilevel_id', $data->id)->where('redeem', '0')->sum('commision');
+
+                $button = '<a href="#redeem-'.$data->id.'" data-id="'.$data->id.'"  data-action="redeem" data-toggle="modal" data-target="#modal-redeem" data-commision="'.$commision.'" class="btn-link btn btn-xs"><i class="fa fa-money"></i> Pencairan Point</a>';
                 $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-customer="'.$data->customer.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
@@ -60,5 +56,25 @@ class Multilevel extends BackendController
                 return livepos_toCurrency($left, '').' of '.livepos_toCurrency($all, '');
             })
             ->make(true);
+    }
+
+    public function printRedeem(Request $request, $id)
+    {
+        $redeem = \livepos\Commision::where('redeem', '1')->where('multilevel_id', $id)->orderBy('updated_at', 'DESC')->first();
+
+        $nomimal = 0;
+
+        if ($redeem) 
+        {
+            $redeems = \livepos\Commision::where('redeem', '1')->where('multilevel_id', $id)->where('updated_at', $redeem->updated_at);
+    
+            $nomimal = $redeems->sum('commision');
+
+            $multilevel =  \livepos\Multilevel::find($redeem->multilevel_id);
+
+            $customer = \livepos\Customer::find($multilevel->customer_id);
+
+            return view('reports.redeem', ['redeem' => $redeem, 'nominal' => $nomimal, 'customer' => $customer]);
+        }
     }
 }

@@ -34,6 +34,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth', 'namespace' => 'B
 
     Route::controller('selling', 'Selling');
 
+    Route::get('multilevel/redeem/{id}/print', 'Multilevel@printRedeem');
+
     Route::controller('multilevel', 'Multilevel');
 
     Route::controller('/', 'Dashboard');
@@ -57,6 +59,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
     Route::resource('product', 'Product'); 
         
     Route::resource('purchasing', 'Purchasing'); 
+
+    Route::post('purchasing/lock/{id}', 'Purchasing@lock'); 
+    
+    Route::post('purchasing/unlock/{id}', 'Purchasing@unlock'); 
         
     Route::resource('purchasingDetail', 'PurchasingDetail'); 
         
@@ -73,7 +79,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
     Route::resource('customer', 'Customer');
 
     Route::resource('multilevel', 'Multilevel');
-        
+
+    Route::post('multilevel/redeem/{id}', 'Multilevel@redeem');
+    
     Route::resource('user', 'User'); 
 });
 

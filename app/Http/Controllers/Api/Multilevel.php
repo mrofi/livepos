@@ -13,4 +13,16 @@ class Multilevel extends ApiController
     {
         parent::__construct($model);
     }
+
+    public function redeem(Request $request, $id)
+    {
+    	$redeems = \livepos\Commision::where('redeem', '0')->where('multilevel_id', $id);
+    	$nomimal = $redeems->sum('commision');
+
+    	$redeems->update(['redeem' => '1']);
+
+    	return ['message' => 'ok', 'nomimal' => $nomimal];
+    }
+
+    
 }

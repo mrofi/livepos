@@ -15,7 +15,7 @@ return [
     'quantity' => 'Qty',
     'price' => 'Harga',
     'amount' => 'Jumlah',
-    'point' => 'Poin',
+    'point' => 'Nilai Poin',
     'subTotal' => 'Sub Total',
     'total' => 'Total',
     'totalPoint' => 'Total Poin',
@@ -124,6 +124,7 @@ return [
     ],
 
     'customer' => [
+        'id' => 'ID Pelanggan',
         'name' => 'Nama Pelanggan',
         'title' => 'Pelanggan',
         'tagline' => 'Daftar semua pelanggan',
@@ -155,6 +156,10 @@ return [
         'billNumber' => 'No. Nota',
         'detail' => 'Detail Pembelian',
         'billDate' => 'Tanggal Transaksi',
+        'process' => 'Memproses Pembelian',
+        'unlock' => 'Unlock Pembelian',
+        'confirmProcess' => 'Apakah yakin akan memproses pembelian',
+        'confirmUnlock' => 'Apakah yakin akan meng-unlock Pembelian',
     ],
 
     'selling' => [
@@ -195,6 +200,8 @@ return [
         'changeDescription' => 'Alasan Pengubahan',
         'description' => [
             'product' => 'Stok Awal Produk dengan ID Produk :id',
+            'purchasing' => 'Penambahan Produk melalui Pembelian dengan ID :id',
+            'selling' => 'Penambahan Produk melalui Penjualan dengan ID :id',
         ],
     ],
 

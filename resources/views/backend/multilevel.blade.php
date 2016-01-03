@@ -34,7 +34,7 @@
                               <th>{{ trans('livepos.multilevel.level') }}</th>
                               <th>{{ trans('livepos.multilevel.upline') }}</th>
                               <th>{{ trans('livepos.customer.point') }}</th>
-                              <th style="min-width: 100px;"></th>
+                              <th style="min-width: 200px;"></th>
                           </tr>
                       </thead>
                   </table>
@@ -112,6 +112,37 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!-- modal add /edit -->
+    <div class="modal fade" id="modal-redeem">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-yellow-v2">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title text-center">Pencairan</h4>
+          </div>
+          <form class="form-horizontal" method="POST">
+            <div class="modal-body">
+              <div class="alert alert-warning alert-dismissable hide">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                <span class="message"></span>
+              </div>
+              <div class="form-group">
+                <label for="customer" class="col-sm-3 control-label">Jumlah</label>
+                <div class="col-sm-9">
+                  <input autocomplete="off" type="text" class="input-mask-currency form-control " id="jumlah" name="jumlah" autofocus placeholder="Jumlah Pencairan">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer bg-navy">
+              <input type="hidden" name="_method" id="method" value="post" >
+              <button type="reset" class="btn btn-default pull-left" data-dismiss="modal">{{ trans('livepos.close') }}</button>
+              <button type="submit" class="btn btn-primary">Cairkan</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     
 @endsection
 
@@ -146,6 +177,8 @@ $(function() {
         content.multilevel = button.data('multilevel');
         content.id_type = button.data('id_type');
         content.id_no = button.data('id_no');
+        content.customer = button.data('customer');
+        content.upline = button.data('upline');
         content.address = button.data('address');
         content.contact1 = button.data('contact1');
         content.contact2 = button.data('contact2');
@@ -183,7 +216,7 @@ $(function() {
         .find('.alert.cloned').remove();
       
     });
-    
+
     var error_handling = function(_form, data) {
       for (x in data) {
         err = data[x];
@@ -225,8 +258,8 @@ $(function() {
     }); 
 
 
-    var inputProduct  = $('#customer');
-    inputProduct.typeahead({
+    var inputCustomer  = $('#customer');
+    inputCustomer.typeahead({
       source: function(query, process) {
         $.get('{{ livepos_asset("api/customer/search") }}', {q: query}, function(data) {
           customers = {};
@@ -242,12 +275,61 @@ $(function() {
       }
       , updater: function( item ) {
         $('#customer_id').val( customers[ item ].id );
+        $('#customer')[0].focus();
+        return item;
+      }
+
+    });
+
+    var inputUpline  = $('#upline');
+    inputUpline.typeahead({
+      source: function(query, process) {
+        $.get('{{ livepos_asset("api/customer/search") }}', {q: query}, function(data) {
+          customers = {};
+          customerLabels = [];
+
+          $.each( data, function(i, e) {
+            label = e.customer + ' - ' + e.contact1 + ' (ID = ' + e.id + ')';
+            customerLabels.push(label);
+            customers[ label ] = e;
+          })
+          process(customerLabels);
+        });
+      }
+      , updater: function( item ) {
+        $('#upline_id').val( customers[ item ].id );
         $('#upline')[0].focus();
         return item;
       }
 
     });
 
+    var redeem = $('#modal-redeem'), formRedeem = redeem.find('form');
+
+    redeem.on('show.bs.modal', function(e) {
+      var button = $(e.relatedTarget);
+
+      formRedeem.data('id', button.data('id'));
+      formRedeem.find('#jumlah').autoNumeric('set', button.data('commision'));
+    })
+
+    formRedeem.on('submit', function(e) {
+      e.preventDefault();
+      var id= formRedeem.data('id');
+      $.post('{{ livepos_asset("api/multilevel/redeem/") }}' + id, formRedeem.autoNumeric('getString'), function(data) {
+        if (data.message == 'ok') {
+          alert('Pencairan sebesar '+data.nomimal+' Berhasil');
+          location.href = '{{ livepos_asset("dashboard/multilevel/redeem/") }}'+id + '/print';
+          dataTables.draw(false);
+          redeem.modal('hide');
+        }else {
+          error_handling(formRedeem, data);
+        }
+      }, 'json').error( function(xhr, textStatus, errorThrown) {
+        error_handling(formRedeem, $.parseJSON(xhr.responseText));
+      });
+    });
+    
 });
 </script>
 @endpush

@@ -29,6 +29,6 @@ class Multilevel extends BaseModel
 
     public function getTotalCommisionAttribute()
     {
-        return Commisions::where('Multilevel_id', $this->id)->where('redeem', '0')->sum('commisions');
+        return Commision::where('Multilevel_id', $this->id)->where('redeem', '0')->sum('commision');
     }
 }

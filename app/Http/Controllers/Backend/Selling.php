@@ -24,16 +24,20 @@ class Selling extends BackendController
 
     public function detail(Request $request, $id)
     {
-    	$detail = Model::where('done', '0')->where('id', $id)->firstOrFail();
+        $detail = Model::where('id', $id)->firstOrFail();
+    	// $detail = Model::where('done', '0')->where('id', $id)->firstOrFail();
+
+        // if ($detail->cash > 0) return redirect('dashboard/selling/'.$id.'/print'); 
 
     	return view('backend.selling')->with(compact('detail'));
     }
 
     public function toPrint(Request $request, $id)
     {
-        $detail = Model::where('done', '0')->where('id', $id)->firstOrFail();
+        $detail = Model::where('id', $id)->firstOrFail();
+        // $detail = Model::where('done', '1')->where('id', $id)->firstOrFail();
 
-    	return view('reports.bill')->with(compact('detail'));
+    	return view('reports.bill2')->with(compact('detail'));
     }
 
     public function anyDataDetail($id)
