@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use DB;
 use livepos\Selling as SellingModel;
+use livepos\Product;
+use livepos\ProductMeta;
 use livepos\Http\Requests;
 use livepos\Http\Controllers\ApiController;
 
@@ -41,14 +43,24 @@ class SellingDetail extends ApiController
 	        }
 
 
-	        $product = \livepos\Product::find($request->product_id);
+	        $product = Product::find($request->product_id);
 	        $unit = $request->get('unit');
 	        $quantity = $request->get('quantity');
 	        $converter = 1;
 
 	        $selling_price = $product->selling_price;
-	        $cekMultiPrice = json_decode(\livepos\ProductMeta::where('product_id', $product->id)->where('meta_key', 'multi_price')->first()->meta_value, true);
-	        $cekMultiUnit = json_decode(\livepos\ProductMeta::where('product_id', $product->id)->where('meta_key', 'multi_unit')->first()->meta_value, true);
+	        
+	        $cekMultiPrice = [];
+
+	        $multiPrices = ProductMeta::where('product_id', $product->id)->where('meta_key', 'multi_price')->first();
+
+	        if ($multiPrices) $cekMultiPrice = json_decode($multiPrices->meta_value, true);
+
+	        $cekMultiUnit = [];
+
+	        $multiUnits = ProductMeta::where('product_id', $product->id)->where('meta_key', 'multi_unit')->first();
+
+	        if ($multiUnits) $cekMultiUnit = json_decode($multiUnits->meta_value, true);
 
 	        foreach ($cekMultiUnit as $multiUnit) 
 	        {
@@ -77,7 +89,7 @@ class SellingDetail extends ApiController
 
 	        $amount = $selling_price_by_unit * $factQuantity;
 	        $discount = $request->get('discount', 0);
-	        if ($amount > ($factQuantity * $selling_price)) $discount += $amount - ($factQuantity * $selling_price);
+	        // if ($amount > ($factQuantity * $selling_price)) $discount += $amount - ($factQuantity * $selling_price);
 	        if ($discount > $amount) $discount = $amount;
 	        $amount -= $discount;
 
@@ -135,7 +147,7 @@ class SellingDetail extends ApiController
 	        }
 
 
-	        $product = \livepos\Product::find($request->product_id);
+	        $product = Product::find($request->product_id);
 	        $amount = $request->get('selling_price') * $request->get('quantity') * $request->get('converter');
 	        $discount = $request->get('discount', 0);
 	        if ($discount > $amount) $discount = $amount;
