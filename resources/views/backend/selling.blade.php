@@ -10,7 +10,7 @@
               <div class="box box-solid">
                 <div class="box-header bg-gray-light">
                   <div class="box-title">
-                    <a href="#add" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.selling.add')) }}</a>
+                    <a href="{{ url('dashboard/selling') }}" data-action="add" class="btn bg-maroon"><i class="fa fa-plus"></i> {{ ucwords(trans('livepos.selling.add')) }}</a>
                     <a href="#all" data-action="all" class="btn bg-maroon btn-round"><i class="fa fa-list"></i></a>
                   </div>
                   <div class="box-tools .pull-right">

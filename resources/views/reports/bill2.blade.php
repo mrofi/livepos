@@ -128,3 +128,10 @@
       </div>
     </div>
 @endsection
+
+@section('footer')
+<div class="text-center hidden-print">
+  <a href="javascript: history.back()" class="btn btn-danger hidden-print"><i class="fa fa-arrow-left"></i></a>
+  <a href="{{ url('dashboard/selling') }}" class="btn btn-primary hidden-print"><i class="fa fa-shopping-cart"></i> Penjualan Baru</a>
+</div>
+@endsection
