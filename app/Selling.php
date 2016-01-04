@@ -142,7 +142,7 @@ class Selling extends BaseModel
                     
                     if ($multilevel)
                     {
-                        Commision::where('selling_id', $this->id)->delete();
+                        Commision::where('selling_id', $this->id)->where('redeem', '0')->delete();
                         Commision::create([
                             'selling_id' => $this->id,
                             'multilevel_id' => $multilevel->id,

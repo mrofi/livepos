@@ -24,8 +24,10 @@ class Multilevel extends BackendController
 
     public function anyData()
     {
+        $multilevels = Model::with('customer')->get()->keyBy('id')->all();
+
         $data  = Model::join('customers', 'multilevels.customer_id', '=', 'customers.id')
-                ->select(['multilevels.id', 'multilevels.customer_id', 'customers.customer', 'multilevels.upline_id as upline', 'multilevels.level', 'multilevels.created_at']);
+                ->select(['multilevels.id', 'multilevels.customer_id as code', 'customers.customer as customer', 'multilevels.upline_id as upline', 'multilevels.level', 'multilevels.created_at']);
 
         $collection = [];
         $no = 0;
@@ -35,20 +37,17 @@ class Multilevel extends BackendController
         }
 
         return Datatables::of($data)
-            ->addColumn('action', function ($data) {
+            ->addColumn('action', function ($data)  use ($multilevels) {
                 $commision = Commision::where('multilevel_id', $data->id)->where('redeem', '0')->sum('commision');
 
                 $button = '<a href="#redeem-'.$data->id.'" data-id="'.$data->id.'"  data-action="redeem" data-toggle="modal" data-target="#modal-redeem" data-commision="'.$commision.'" class="btn-link btn btn-xs"><i class="fa fa-money"></i> Pencairan Point</a>';
+                $button .= '<a href="#edit-'.$data->id.'" data-id="'.$data->id.'" data-customer="'.$data->customer. ' - (ID = '.$data->code.')" data-customer-id="'.$data->code.'" data-upline="'.($data->upline == '0' ? '-' : $multilevels[$data->upline]->customer->customer. ' - (ID = '.$multilevels[$data->upline]->customer->id.')').'" data-upline-id="'.$data->upline.'" data-upline-customer-id="'.($data->upline == '0' ? '-' : $multilevels[$data->upline]->customer->id).'" data-action="edit" data-toggle="modal" data-target="#modal-add-edit" class="btn-link btn btn-xs pull-right"><i class="fa fa-pencil"></i> '.trans('livepos.edit').'</a>';
                 $button .= '<a href="#delete-'.$data->id.'" data-id="'.$data->id.'" data-customer="'.$data->customer.'" data-action="delete" data-toggle="modal" data-target="#modal-delete" class="btn-link btn btn-xs pull-right"><i class="fa fa-trash-o"></i> '.trans('livepos.delete').'</a>';
                 return $button;        
             })
-            ->editColumn('upline', function($data) {
-                if ($data->upline == '0') return '-';
+            ->editColumn('upline', function($data) use ($multilevels) {
+                return ($data->upline == '0') ? '-' : $multilevels[$data->upline]->customer->customer;
             })
-            ->editColumn('level', function($data) {
-                if ($data->level == '') return '-';
-            })
-            ->addColumn('code', '')
             ->addColumn('commision', function($data) {
                 $commision = Commision::where('multilevel_id', $data->id);
                 $all = $commision->sum('commision');

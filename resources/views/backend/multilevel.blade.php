@@ -63,14 +63,14 @@
               <div class="form-group">
                 <label for="customer" class="col-sm-3 control-label">{{ trans('livepos.customer.name') }}</label>
                 <div class="col-sm-9">
-                  <input autocomplete="off" type="text" class="form-control" id="customer" name="customer" autofocus placeholder="{{ trans('livepos.multilevel.name') }}">
+                  <input autocomplete="off" type="text" class="form-control" id="customer" name="customer" autofocus placeholder="{{ trans('livepos.customer.name') }}">
                   <input type="hidden" id="customer_id" name="customer_id">
                 </div>
               </div>
               <div class="form-group">
-                <label for="upline" class="col-sm-3 control-label">{{ trans('livepos.upline.name') }}</label>
+                <label for="upline" class="col-sm-3 control-label">{{ trans('livepos.multilevel.uplineName') }}</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" id="upline" name="upline" autofocus placeholder="{{ trans('livepos.multilevel.name') }}">
+                  <input autocomplete="off" type="text" class="form-control" id="upline" name="upline" autofocus placeholder="{{ trans('livepos.multilevel.uplineName') }}">
                   <input type="hidden" id="upline_id" name="upline_id">
                 </div>
               </div>
@@ -166,6 +166,8 @@ $(function() {
     
     var modal = $('#modal-add-edit'), modalDelete = $('#modal-delete'), form = modal.find('form'), formDelete = modalDelete.find('form');
     modal.on('show.bs.modal', function( event ) {
+      form[0].reset();
+      $('#customer').prop('readonly', false);
       var button = $(event.relatedTarget), 
           title = '{{ trans('livepos.multilevel.add') }}',
           content = {multilevel: '', id_type: '', id_no: '', address: '', contact1: '', contact2: ''},
@@ -178,12 +180,15 @@ $(function() {
         content.id_type = button.data('id_type');
         content.id_no = button.data('id_no');
         content.customer = button.data('customer');
+        content.customer_id = button.data('customer-id');
         content.upline = button.data('upline');
+        content.upline_id = button.data('upline-id');
         content.address = button.data('address');
         content.contact1 = button.data('contact1');
         content.contact2 = button.data('contact2');
         action += '/'+button.data('id');
         method = 'PUT';
+        $('#customer').prop('readonly', true);
       }
           
       modal.find('.modal-title').text(title);
@@ -206,7 +211,7 @@ $(function() {
         }
       }
 
-    }).on('shown.bs.modal', function() {
+    }).on('shown.bs.modal', function(event) {
       modal.find('.modal-body [autofocus]')[0].focus();
     });
     
@@ -261,7 +266,7 @@ $(function() {
     var inputCustomer  = $('#customer');
     inputCustomer.typeahead({
       source: function(query, process) {
-        $.get('{{ livepos_asset("api/customer/search") }}', {q: query}, function(data) {
+        $.get('{{ livepos_asset("api/multilevel/customer/search") }}', {q: query}, function(data) {
           customers = {};
           customerLabels = [];
 
@@ -284,7 +289,7 @@ $(function() {
     var inputUpline  = $('#upline');
     inputUpline.typeahead({
       source: function(query, process) {
-        $.get('{{ livepos_asset("api/customer/search") }}', {q: query}, function(data) {
+        $.get('{{ livepos_asset("api/multilevel/search") }}', {q: query}, function(data) {
           customers = {};
           customerLabels = [];
 
@@ -297,11 +302,16 @@ $(function() {
         });
       }
       , updater: function( item ) {
-        $('#upline_id').val( customers[ item ].id );
+        $('#upline_id').val( customers[ item ].multilevel.id );
         $('#upline')[0].focus();
         return item;
       }
 
+    }).on('keyup', function(e) {
+      if ($(this).val().length <= 1) {
+        $(this).val('');
+        $('#upline_id').val('0');
+      }
     });
 
     var redeem = $('#modal-redeem'), formRedeem = redeem.find('form');

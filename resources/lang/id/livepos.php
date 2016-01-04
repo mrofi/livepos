@@ -189,6 +189,7 @@ return [
         'id' => 'ID Multilevel',
         'level' => 'Level',
         'upline' => 'Upline',
+        'uplineName' => 'Nama Upline',
 
     
     ],

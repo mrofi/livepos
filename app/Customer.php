@@ -26,6 +26,12 @@ class Customer extends BaseModel
         'contact2' => 'Telp / Hp #2',
     ];
 
+
+    public function multilevel()
+    {
+        return $this->hasOne(Multilevel::class);
+    }
+
     public function getTotalPointAttribute()
     {
         if ( ! $multilevel = Multilevel::where('customer_id', $this->id)->first() ) return 0;

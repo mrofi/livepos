@@ -78,6 +78,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'Api', 'middleware' => 'auth.api
 
     Route::resource('customer', 'Customer');
 
+    Route::get('multilevel/customer/search', 'Multilevel@getCustomerNewSearch');
+
+    Route::get('multilevel/search', 'Multilevel@getCustomerSearch');
+    
     Route::resource('multilevel', 'Multilevel');
 
     Route::post('multilevel/redeem/{id}', 'Multilevel@redeem');

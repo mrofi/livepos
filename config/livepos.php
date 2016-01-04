@@ -14,8 +14,8 @@ return [
     'title' => ENV('LIVEPOS_TITLE', 'live <b>POS</b> App'),
     'shorttitle' => ENV('LIVEPOS_SHORTTITLE', 'l<b>P</b>A'),
 
-    'percentToShop' => 20,  // from Profit
-    'percentToCustomer' => 50,  // from customer allocation
+    'percentToShop' => ENV('PERCENT_TO_SHOP', 20),  // from Profit
+    'percentToCustomer' => ENV('PERCENT_TO_CUSTOMER', 50),  // from customer allocation
     
     'model' => [
 	    'product' => [
