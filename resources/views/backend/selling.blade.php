@@ -394,7 +394,13 @@ $(function() {
       var pay = $('#pay').autoNumeric('get');
       var totalToPay = $('#total-to-pay').autoNumeric('get');
       // return;
-      if (pay == undefined || pay == '' || pay == 0 || pay < totalToPay) return;
+      console.log(pay)
+      console.log(totalToPay)
+      console.log(pay == undefined)
+      console.log(pay == '')
+      console.log(pay == 0)
+      console.log(pay < totalToPay)
+      if (pay == undefined || pay == '' || pay == 0 || Number.parseInt(pay) < Number.parseInt(totalToPay)) return;
       form = $(this);
       $.post('{{ livepos_asset("api/selling/{$detail->id}") }}', form.autoNumeric('getString'), function( data ) {
         if (data.message == 'ok') {

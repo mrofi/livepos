@@ -95,6 +95,7 @@ class AuthController extends Controller
 
         $request->session()->put('commision_of_shop', config('livepos.percentToShop'));
         $request->session()->put('commision_of_customer', config('livepos.percentToCustomer'));
+        $request->session()->put('commision_of_upline', config('livepos.percentToUpline'));
         
         return $this->postLogin($request);
     }

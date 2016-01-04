@@ -3,7 +3,7 @@
 @section('contentMain')
   <style media="print, all">
     body {
-      width: 8cm;
+      width: 7cm;
     }
 
     body {
@@ -123,7 +123,7 @@
       <div class="col-xs-12">
         <p class="text-center">
           <strong>Terima kasih atas kunjungan Anda</strong> <br>
-          <small>Dicetak pada {{ livepos_dateTimeToShow(\Carbon::now()) }}</small>
+          <small>Penukaran Point setiap tgl 14 - 17 tiap bulannya</small>
         </p>
       </div>
     </div>

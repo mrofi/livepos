@@ -52,7 +52,7 @@ function livepos_isRound($value)
     return floor($value) == $value;
 }
 
-function livepos_round($value, $decimal = ',')
+function livepos_round($value, $decimal = '.')
 {
     $value = livepos_isRound($value) ? floor($value) : (!is_numeric($value) ? $value : floatval($value));   
     return preg_replace('/\./', $decimal, $value); 

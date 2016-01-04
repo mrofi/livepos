@@ -43,11 +43,15 @@ class Selling extends BaseModel
         return $this->hasMany(SellingDetail::class);
     }
 
+    public function getShopCommision()
+    {
+        return Session::get('commision_of_shop', 0) / 100 * $this->profit;
+    }
+
     public function getPointAttribute()
     {
-        $shopCommision = Session::get('commision_of_shop', 0) / 100 * $this->profit;
 
-        $customerCommision = Session::get('commision_of_customer', 0) / 100 * ($this->profit - $shopCommision);
+        $customerCommision = Session::get('commision_of_customer', 0) / 100 * ($this->profit - $this->getShopCommision());
 
         return $customerCommision;
     }
@@ -147,6 +151,7 @@ class Selling extends BaseModel
                             'selling_id' => $this->id,
                             'multilevel_id' => $multilevel->id,
                             'commision' => $this->getPointAttribute(),
+                            'rest_commision' => $this->profit - $this->getShopCommision() - $this->getPointAttribute()
                         ]);
                         
                     }

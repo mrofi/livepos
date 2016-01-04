@@ -308,7 +308,7 @@ $(function() {
       }
 
     }).on('keyup', function(e) {
-      if ($(this).val().length <= 1) {
+      if ($(this).val().length < 1) {
         $(this).val('');
         $('#upline_id').val('0');
       }
